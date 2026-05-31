@@ -40,6 +40,11 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class);
+    }
+
     #[Override]
     public function casts()
     {

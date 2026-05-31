@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Cart;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 new class () extends Component {
@@ -20,8 +22,26 @@ new class () extends Component {
      */
     public function addToCart()
     {
-        // This will be wired up later when your cart system is built
-        session()->flash('success', "{$this->product->name} added to cart!");
+        // first check if the user is logeed in or not. If not then redirect to login page with a message to login first
+        if (!Auth::check()) {
+            session()->flash('message', 'Please login to add products to your cart.');
+            return redirect()->route('login');
+        }
+        if (!$this->product->is_available) {
+            session()->flash('message', 'Sorry, this product is currently out of stock.');
+            return;
+        }
+
+        Cart::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'product_id' => $this->product->id,
+            ],
+            [
+                'quantity' => 1,
+            ]
+        );
+
     }
 };
 ?>
