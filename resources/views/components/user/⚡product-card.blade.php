@@ -22,11 +22,11 @@ new class () extends Component {
      */
     public function addToCart()
     {
-        // first check if the user is logeed in or not. If not then redirect to login page with a message to login first
         if (!Auth::check()) {
             session()->flash('message', 'Please login to add products to your cart.');
             return redirect()->route('login');
         }
+
         if (!$this->product->is_available) {
             session()->flash('message', 'Sorry, this product is currently out of stock.');
             return;
@@ -34,14 +34,14 @@ new class () extends Component {
 
         Cart::updateOrCreate(
             [
-                'user_id' => Auth::id(),
+                'user_id'    => Auth::id(),
                 'product_id' => $this->product->id,
             ],
             [
-                'quantity' => 1,
+                'quantity'   => 1,
             ]
         );
-
+        $this->dispatch('cart-updated');
     }
 };
 ?>

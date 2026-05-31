@@ -38,6 +38,10 @@ new #[Layout('layouts.admin')] class extends Component {
         <a href="{{ route('admin.show-all-products') }}" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
             <i class="fa-solid fa-arrow-left mr-2"></i> Back to Products
         </a>
+        <a class="bg-blue-600 px-3 py-1 rounded-xl text-white" href="{{ route('admin.update-product',$product ) }}">
+                <i class="fa-solid fa-pencil mr-2"></i>
+                Update Product
+        </a>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
