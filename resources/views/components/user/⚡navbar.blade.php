@@ -25,10 +25,27 @@ new class () extends Component {
             <div class="flex items-center space-x-2 sm:space-x-4">
                 
                 <div class="hidden md:flex items-center space-x-6 mr-2">
-                    <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ request()->routeIs('user.home') ? 'underline font-bold' : '' }}">Home</a>
-                    @foreach ($categories as $category )
-                        <a href="#" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ">{{ $category->name }}</a>
-                    @endforeach
+                    <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ request()->routeIs('user.home') || request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">Home</a>
+                    <!-- category wise products route for loged in users -->
+                    @auth
+                        @foreach ($categories as $category )
+                            @php
+                                $isActive = request()->routeIs('user.category.products') && request()->route('categoryName') === $category->name;
+                            @endphp
+                            <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                        @endforeach
+                    @endauth
+                    
+                    <!-- category wise products route for loged out users / guest users -->
+                    @if (! auth()->check())
+                        @foreach ($categories as $category )
+                            @php
+                                $isActive = request()->routeIs('guest.category.products') && request()->route('categoryName') === $category->name;
+                            @endphp
+                            <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                        @endforeach
+                    @endif
+
                     @if (! auth()->check())
                         <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Login</a>
                     @endif
@@ -131,9 +148,28 @@ new class () extends Component {
         </div>
 
         <nav class="flex flex-col space-y-3">
-            <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium transition duration-150 flex items-center gap-2 {{ request()->routeIs('user.home') ? 'underline font-bold' : '' }}">
+            <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium transition duration-150 flex items-center gap-2 {{ request()->routeIs('user.home') || request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">
                  Home
             </a>
+             <!-- category wise products route for loged in users -->
+                    @auth
+                        @foreach ($categories as $category )
+                            @php
+                                $isActive = request()->routeIs('user.category.products') && request()->route('categoryName') === $category->name;
+                            @endphp
+                            <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                        @endforeach
+                    @endauth
+                    
+                    <!-- category wise products route for loged out users / guest users -->
+                    @if (! auth()->check())
+                        @foreach ($categories as $category )
+                            @php
+                                $isActive = request()->routeIs('guest.category.products') && request()->route('categoryName') === $category->name;
+                            @endphp
+                            <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                        @endforeach
+                    @endif
             
             @if (! auth()->check())
                 <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium transition duration-150 flex items-center gap-2">
