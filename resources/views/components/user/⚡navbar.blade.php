@@ -82,7 +82,7 @@ new class () extends Component {
                 </div>
 
                 @auth
-                    <a href="#" class="relative p-2 hover:bg-blue-700 rounded-full transition duration-150 group flex items-center justify-center">
+                    <a href="{{ route('user.cart', Auth::id()) }}" wire:navigate class="relative p-2 hover:bg-blue-700 rounded-full transition duration-150 group flex items-center justify-center">
                         <i class="fa-solid fa-cart-shopping text-xl"></i>
                         
                         @if($this->cartCount > 0)
