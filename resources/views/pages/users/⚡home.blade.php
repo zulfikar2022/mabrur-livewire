@@ -13,7 +13,6 @@ new class () extends Component {
         return Product::with(['productImages', 'category'])
             ->where('is_available', true)
             ->whereHas('category', function ($query) {
-                // Only include products whose category is also marked as available
                 $query->where('is_available', true);
             })
             ->orderBy('name', 'asc')
