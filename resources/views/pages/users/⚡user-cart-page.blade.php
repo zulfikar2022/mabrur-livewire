@@ -220,6 +220,10 @@ new class () extends Component {
 };
 ?>
 
+<x-slot:title>
+    Cart - {{ config('app.name') }}
+</x-slot>
+
 <div x-data="{ openItemDeleteModal: null, productNameToDelete: '', openConfirmOrderModal: false }" class="max-w-7xl mx-auto p-4 md:p-6 my-6">
     
     @if (session()->has('success'))
@@ -258,7 +262,7 @@ new class () extends Component {
 
                                 <div class="truncate space-y-0.5">
                                     <h4 class="font-bold text-gray-900 text-base hover:text-blue-600 transition-colors truncate">
-                                        <a href="#">{{ $item->product->name }}</a>
+                                        <a wire:navigate href="{{ route('user.product.details', ['product' => $item->product->id, 'productName' => $item->product->nameModifier()]) }}">{{ $item->product->name }}</a>
                                     </h4>
                                     <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded">
                                         {{ $item->product->category->name }}

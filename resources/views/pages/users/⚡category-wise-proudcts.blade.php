@@ -25,6 +25,10 @@ new class () extends Component {
 };
 ?>
 
+<x-slot:title>
+    {{ $this->categoryName }} - {{ config('app.name') }}
+</x-slot>
+
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8 space-y-6">
    
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">

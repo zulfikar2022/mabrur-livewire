@@ -59,13 +59,13 @@ new class () extends Component {
         @endphp
 
         @if($firstImage)
-            <a href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full block">
+            <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full block">
                 <img src="{{ asset('storage/' . $firstImage->image_link) }}" 
                  alt="{{ $this->product->name }}" 
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             </a>
         @else
-            <a href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-2">
+            <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-2">
                 <i class="fa-solid fa-image text-4xl"></i>
                 <span class="text-xs font-medium text-gray-400">No Image Available</span>
             </a >
@@ -107,7 +107,7 @@ new class () extends Component {
     <!-- CONTENT SPACE -->
     <div class="p-2 flex flex-col grow justify-between">
         <div class="space-y-1">
-            <a href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="block">
+            <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="block">
                 <h3 class="font-semibold text-gray-800 text-base leading-tight hover:text-blue-600 transition-colors line-clamp-2">
                     {{ $this->product->name }}
                 </h3>
