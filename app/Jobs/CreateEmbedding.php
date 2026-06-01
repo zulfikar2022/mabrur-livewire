@@ -47,6 +47,7 @@ class CreateEmbedding implements ShouldQueue
                     // 4. Create a fresh row for each chunk
                     ProductVector::create([
                         'product_id' => $this->product->id,
+                        'category_id' => $this->product->category_id, // Store category_id for better search
                         'content'    => $data['content'],
                         'embedding'  => $data['embedding']
                     ]);

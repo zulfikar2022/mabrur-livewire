@@ -12,6 +12,7 @@ class ProductVector extends Model
     use SoftDeletes;
     protected $fillable = [
         'product_id',
+        'category_id',
         'content',
         'embedding',
     ];
@@ -19,6 +20,11 @@ class ProductVector extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     #[Override]

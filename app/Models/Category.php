@@ -19,6 +19,8 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+
+
     #[Override]
     public function casts()
     {
