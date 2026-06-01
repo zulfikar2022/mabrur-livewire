@@ -43,7 +43,7 @@ new class () extends Component {
 };
 ?>
 
-<div x-data="{ openDrawer: false, openDropdown: false }" class="bg-blue-600 text-white shadow-md relative">
+<div x-data="{ openDrawer: false, openDropdown: false, openLogoutModal: false }" class="bg-blue-600 text-white shadow-md relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             
@@ -139,12 +139,18 @@ new class () extends Component {
                                 <i class="fa-solid fa-shopping-bag w-4 text-center"></i>
                                 My Orders
                             </a>
-                            <a href="{{ route('user.logout') }}" 
+                            <!-- <a href="{{ route('user.logout') }}" 
                                wire:navigate
                                class="flex items-center space-x-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-semibold transition-colors">
                                 <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
                                 <span>Log Out</span>
-                            </a>
+                            </a> -->
+                            <button type="button" 
+                                    @click="openLogoutModal = true; openDropdown = false"
+                                    class="w-full flex items-center space-x-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-semibold transition-colors cursor-pointer">
+                                <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
+                                <span>Log Out</span>
+                            </button>
                         </div>
                     </div>
                 @endauth
@@ -218,4 +224,33 @@ new class () extends Component {
             @endif
         </nav>
     </div>
+    <template x-teleport="body">
+        <div x-show="openLogoutModal" 
+            class="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            x-cloak>
+            
+            <div @click.outside="openLogoutModal = false"
+                class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl space-y-4 border border-gray-100">
+                <h3 class="text-lg font-black text-gray-900">Confirm Logout</h3>
+                <p class="text-sm text-gray-500">Are you sure you want to log out of your account?</p>
+                
+                <div class="flex gap-3 justify-end pt-4">
+                    <button @click="openLogoutModal = false" 
+                            class="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 rounded-xl transition-colors hover:cursor-pointer">
+                        Cancel
+                    </button>
+                    <button @click="window.location.href = '{{ route('user.logout') }}'" 
+                            class="px-6 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-md hover:cursor-pointer">
+                        Yes, Log Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
 </div>
