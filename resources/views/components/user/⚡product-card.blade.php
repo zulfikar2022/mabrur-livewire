@@ -18,7 +18,7 @@ new class () extends Component {
     }
 
     /**
-     * Placeholder method for your future cart implementation
+     * Handles adding the product to the database cart table
      */
     public function addToCart()
     {
@@ -41,24 +41,29 @@ new class () extends Component {
                 'quantity'   => 1,
             ]
         );
+
         $this->dispatch('cart-updated');
     }
 };
 ?>
 
-<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full group">
+<!-- 1. UPDATED: Added global x-data state tracker to manage the temporary success overlay context -->
+<div x-data="{ showSuccessOverlay: false }" 
+     class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full group">
     
-    <!-- 1. PRODUCT IMAGE ZONE (Clickable link to details) -->
-    <a href="#" class="block aspect-square w-full bg-gray-50 overflow-hidden relative">
+    <!-- PRODUCT IMAGE ZONE -->
+    <div class="block aspect-square w-full bg-gray-50 overflow-hidden relative">
         @php
             // Grab the first image from the relationship collection
             $firstImage = $this->product->productImages->first();
         @endphp
 
         @if($firstImage)
-            <img src="{{ asset('storage/' . $firstImage->image_link) }}" 
+            <a href="#" class="w-full h-full block">
+                <img src="{{ asset('storage/' . $firstImage->image_link) }}" 
                  alt="{{ $this->product->name }}" 
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </a>
         @else
             <!-- Placeholder if product has no media assets attached -->
             <div class="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-2">
@@ -67,21 +72,42 @@ new class () extends Component {
             </div>
         @endif
 
+        <div x-show="showSuccessOverlay"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-300"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-95"
+             class="absolute inset-0 bg-emerald-600/80 backdrop-blur-[2px] flex flex-col items-center justify-center text-white z-10"
+             x-cloak>
+            
+            <div x-show="showSuccessOverlay"
+                 x-transition:enter="transition ease-out delay-75 duration-300 transform"
+                 x-transition:enter-start="scale-50 opacity-0"
+                 x-transition:enter-end="scale-100 opacity-100"
+                 class="bg-white text-emerald-600 rounded-full h-14 w-14 flex items-center justify-center shadow-lg border border-emerald-500/20">
+                <i class="fa-solid fa-check text-2xl font-black"></i>
+            </div>
+            
+            <span class="text-xs font-bold uppercase tracking-wider mt-2.5 drop-shadow-sm bg-emerald-700/40 px-2 py-0.5 rounded-md">
+                Added to Cart
+            </span>
+        </div>
+
         <!-- Availability Badge Indicator -->
         @if(!$this->product->is_available)
-            <div class="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
+            <div class="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-20">
                 <span class="bg-gray-800 text-white text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
                     Out of Stock
                 </span>
             </div>
         @endif
-    </a>
+    </div>
 
-    <!-- 2. CONTENT SPACE (Grows to push button uniformly to the bottom) -->
-    <div class="p-4 flex flex-col grow justify-between">
-        
+    <!-- CONTENT SPACE -->
+    <div class="p-2 flex flex-col grow justify-between">
         <div class="space-y-1">
-            <!-- PRODUCT NAME (Clickable link to details) -->
             <a href="#" class="block">
                 <h3 class="font-semibold text-gray-800 text-base leading-tight hover:text-blue-600 transition-colors line-clamp-2">
                     {{ $this->product->name }}
@@ -90,7 +116,7 @@ new class () extends Component {
         </div>
 
         <!-- DYNAMIC PRICING STRATEGY DISPLAY -->
-        <div class="mt-3 pt-2 border-t border-gray-50 flex items-baseline justify-between">
+        <div class="mt-1 border-t border-gray-50 flex items-baseline justify-between">
             <div>
                 @if($this->product->sell_by_piece)
                     <span class="text-xl font-bold text-gray-900">৳{{ number_format($this->product->price_per_piece, 2) }}</span>
@@ -101,12 +127,15 @@ new class () extends Component {
                 @endif
             </div>
         </div>
-
     </div>
 
-    <!-- 3. ACTION CONTROLS FOOTER -->
+    <!-- ACTION CONTROLS FOOTER -->
     <div class="p-4 pt-0">
         <button type="button"
+                @click="if({{ Auth::check() ? 'true' : 'false' }} && {{ $this->product->is_available ? 'true' : 'false' }}) { 
+                            showSuccessOverlay = true; 
+                            setTimeout(() => { showSuccessOverlay = false }, 2000); 
+                        }"
                 wire:click="addToCart"
                 {{ !$this->product->is_available ? 'disabled' : '' }}
                 class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-semibold text-sm py-2.5 px-4 rounded-xl transition-colors cursor-pointer shadow-sm flex items-center justify-center gap-2 group-hover:bg-blue-700">

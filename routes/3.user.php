@@ -8,9 +8,10 @@ Route::middleware(['auth','status', 'user.only'])->prefix('/user')->group(functi
     Route::livewire('/', 'pages::users.home')->name('user.home');
     Route::get('/auth/logout', [GoogleController::class, 'logout'])->name('user.logout');
 
+    Route::livewire('/cart/{user}', 'pages::users.user-cart-page')->name('user.cart');
+
     Route::livewire('/{categoryName}', 'pages::users.category-wise-proudcts')->name('user.category.products');
 
-    Route::livewire('/cart/{user}', 'pages::users.user-cart-page')->name('user.cart');
 
 
 });
