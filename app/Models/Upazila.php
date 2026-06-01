@@ -18,4 +18,9 @@ class Upazila extends Model
     {
         return $this->belongsTo(District::class);
     }
+
+    public function orderAddresses()
+    {
+        return $this->hasMany(OrderAddress::class);
+    }
 }

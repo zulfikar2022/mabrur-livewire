@@ -45,6 +45,11 @@ class Product extends Model
         return $this->hasMany(Cart::class);
     }
 
+    public function orderedProducts(): HasMany
+    {
+        return $this->hasMany(OrderedProduct::class);
+    }
+
     #[Override]
     public function casts()
     {

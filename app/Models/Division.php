@@ -17,4 +17,9 @@ class Division extends Model
     {
         return $this->hasMany(District::class);
     }
+
+    public function orderAddresses()
+    {
+        return $this->hasMany(OrderAddress::class);
+    }
 }

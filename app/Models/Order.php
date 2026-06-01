@@ -26,4 +26,14 @@ class Order extends Model
     {
         return $this->belongsTo(OrderState::class);
     }
+
+    public function orderAddress()
+    {
+        return $this->hasOne(OrderAddress::class);
+    }
+
+    public function orderedProducts()
+    {
+        return $this->hasMany(OrderedProduct::class);
+    }
 }
