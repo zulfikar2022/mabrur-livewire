@@ -163,12 +163,21 @@ new class () extends Component {
             return;
         }
 
+        // a user cannot place more than 3 orders in a single day
+        $todayOrdersCount = Order::where('user_id', $this->user->id)
+            ->whereDate('created_at', now()->toDateString())
+            ->count();
+
+        if ($todayOrdersCount >= 3) {
+            session()->flash('error', 'You cannot place more than 3 orders in a single day.');
+            return;
+        }
+
         // 2. Wrap database inserts in a transaction to prevent partial data creation
         DB::beginTransaction();
 
         try {
-            // Find the pending state (Fallback to finding by name if constant is missing)
-            $pendingState = OrderState::where('name', 'pending')->firstOrFail();
+            $pendingState = OrderState::where('name', OrderState::PENDING)->firstOrFail();
 
             // STEP A: Create the Order
             $order = Order::create([
