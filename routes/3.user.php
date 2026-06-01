@@ -15,6 +15,9 @@ Route::middleware(['auth','status', 'user.only'])->prefix('/user')->group(functi
 
     Route::livewire('/my-orders', 'pages::users.my-orders')->name('user.my.orders');
 
+    Route::livewire('/my-orders/{order}', 'pages::users.order-details')->name('user.order.details');
+    Route::livewire('/profile', 'pages::users.user-profile')->name('user.profile');
+
 
 
 });

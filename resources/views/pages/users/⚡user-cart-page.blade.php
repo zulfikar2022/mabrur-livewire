@@ -336,6 +336,7 @@ new class () extends Component {
 
             @if($this->cartItems->count() > 0)
                 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 sm:p-6">
+                    <p class="text-gray-800 underline">ক্যাশ অন ডেলিভারিতে পণ্য অর্ডার করুন</p>
                     <h3 class="text-base font-bold text-gray-800 mb-4 tracking-tight">Shipping Information</h3>
                     
                     <form class="space-y-4">

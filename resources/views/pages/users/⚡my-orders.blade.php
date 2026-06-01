@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\OrderState;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -31,6 +32,7 @@ new class () extends Component {
             <table class="w-full text-sm text-left">
                 <thead class="text-xs text-gray-500 uppercase bg-gray-50 border-b">
                     <tr>
+                        <th class="px-6 py-4">Order ID</th>
                         <th class="px-6 py-4">Date</th>
                         <th class="px-6 py-4">Items</th>
                         <th class="px-6 py-4">Total Cost</th>
@@ -43,6 +45,9 @@ new class () extends Component {
                 <tbody class="divide-y divide-gray-100">
                     @forelse($this->orders as $order)
                         <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{ $order->id }}    
+                            </td>
                             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $order->created_at->format('d M, Y') }}
                             </td>
@@ -57,17 +62,17 @@ new class () extends Component {
                             </td>
                             <td class="px-6 py-4">
                                 <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider 
-                                    {{ $order->orderState->name === 'delivered' ? 'bg-emerald-100 text-emerald-700' : 
-                                       ($order->orderState->name === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700') }}">
+                                    {{ $order->orderState->name === OrderState::DELIVERED ? 'bg-emerald-100 text-emerald-700' : 
+                                       ($order->orderState->name === OrderState::CANCELLED ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700') }}">
                                     {{ str_replace('_', ' ', $order->orderState->name) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-gray-600 text-xs">
-                                {{ $order->orderAddress->division->name ?? 'N/A' }}, 
-                                {{ $order->orderAddress->district->name ?? 'N/A' }}
+                                {{ $order->orderAddress->district->name ?? 'N/A' }}, 
+                                {{ $order->orderAddress->upazila->name ?? 'N/A' }}
                             </td>
                             <td class="px-6 py-4">
-                                <a href="#" class="text-blue-600 font-semibold hover:underline">Details</a>
+                                <a href="{{ route('user.order.details', $order) }}" class="text-blue-600 font-semibold hover:underline">Details</a>
                             </td>
                         </tr>
                     @empty
