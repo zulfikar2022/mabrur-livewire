@@ -50,6 +50,11 @@ class Product extends Model
         return $this->hasMany(OrderedProduct::class);
     }
 
+    public function nameModifier()
+    {
+        return str_replace(' ', '-', strtolower($this->name));
+    }
+
     #[Override]
     public function casts()
     {

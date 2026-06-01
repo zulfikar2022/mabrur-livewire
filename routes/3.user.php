@@ -11,6 +11,7 @@ Route::middleware(['auth','status', 'user.only'])->prefix('/user')->group(functi
     Route::livewire('/cart/{user}', 'pages::users.user-cart-page')->name('user.cart');
 
     Route::livewire('/category/{categoryName}', 'pages::users.category-wise-proudcts')->name('user.category.products');
+    Route::livewire('/product/{product}/{productName}', 'pages::users.proudct-details')->name('user.product.details');
 
 
 
