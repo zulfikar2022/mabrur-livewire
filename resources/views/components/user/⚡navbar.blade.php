@@ -131,7 +131,10 @@ new class () extends Component {
                             <div class="px-4 py-2 border-b border-gray-50 max-w-full">
                                 <p class="text-sm font-semibold text-gray-800 truncate">{{ auth()->user()->name }}</p>
                             </div>
-
+                            <a href="{{ route('user.my.orders') }}" class="flex items-center space-x-2.5 px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 font-semibold transition-colors">
+                                <i class="fa-solid fa-shopping-bag w-4 text-center"></i>
+                                My Orders
+                            </a>
                             <a href="{{ route('user.logout') }}" 
                                wire:navigate
                                class="flex items-center space-x-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-semibold transition-colors">
