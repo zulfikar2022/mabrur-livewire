@@ -66,7 +66,7 @@ new #[Layout('layouts.admin')] class extends Component {
 
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
         @foreach(['pending', 'approved', 'shipped', 'delivered', 'cancelled', 'deliver_failed', 'returned'] as $state)
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+            <div class="p-4 rounded-xl shadow-sm border border-gray-100 text-center {{ $state == 'delivered' ? 'bg-green-200':'bg-white' }}">
                 <span class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">{{ str_replace('_', ' ', $state) }}</span>
                 <span class="block text-lg font-black text-gray-800">{{ $stats['counts'][$state] ?? 0 }}</span>
             </div>
