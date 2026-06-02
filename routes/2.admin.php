@@ -14,4 +14,16 @@ Route::middleware(['auth','status', 'admin.only'])->prefix('/admin')->group(func
     Route::livewire('/products/{product}/edit', 'pages::admins.update-product')->name('admin.update-product');
     Route::livewire('/users', 'pages::admins.see-all-users')->name('admin.see-all-users');
     Route::livewire('/users/disabled', 'pages::admins.see-disabled-users')->name('admin.see-disabled-users');
+
+    Route::livewire('/orders/pending', 'pages::admins.pending-orders')->name('admin.pending-orders');
+    Route::livewire('/orders/approved', 'pages::admins.approved-orders')->name('admin.approved-orders');
+    Route::livewire('/orders/shipped', 'pages::admins.shipped-orders')->name('admin.shipped-orders');
+    Route::livewire('/orders/delivered', 'pages::admins.delivered-orders')->name('admin.delivered-orders');
+
+    Route::livewire('/orders/cancelled', 'pages::admins.cancelled-orders')->name('admin.cancelled-orders');
+    Route::livewire('/orders/delivery-failed', 'pages::admins.delivery-failed-orders')->name('admin.delivery-failed-orders');
+    Route::livewire('/orders/returned', 'pages::admins.returned-orders')->name('admin.returned-orders');
+
+    Route::livewire('/users/{user}', 'pages::admins.user-details')->name('admin.user-details');
+
 });

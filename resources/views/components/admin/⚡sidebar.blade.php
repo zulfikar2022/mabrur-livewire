@@ -47,7 +47,34 @@ new class () extends Component {
             <a href="{{ route('admin.show-all-products') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-slate-300 hover:text-white transition {{ request()->routeIs('admin.show-all-products') ? 'bg-indigo-900 text-white' : '' }}">
                 <span>All Products</span>
             </a>
+           
             <p class="flex items-center space-x-3 px-1 py-2  rounded-lg text-slate-300 hover:text-white font-bold">
+                <span>Order Management</span>
+            </p>
+            <a href="{{ route('admin.pending-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-slate-300 hover:text-white transition {{ request()->routeIs('admin.pending-orders') ? 'bg-indigo-900 text-white' : '' }}">
+                <span>Pending Orders</span>
+            </a>
+            <a href="{{ route('admin.approved-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-slate-300 hover:text-white transition {{ request()->routeIs('admin.approved-orders') ? 'bg-indigo-900 text-white' : '' }}">
+                <span>Approved Orders</span>
+            </a>
+            <a href="{{ route('admin.shipped-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-slate-300 hover:text-white transition {{ request()->routeIs('admin.shipped-orders') ? 'bg-indigo-900 text-white' : '' }}">
+                <span>Shipped Orders</span>
+            </a>
+            <a href="{{ route('admin.delivered-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-slate-300 hover:text-white transition {{ request()->routeIs('admin.delivered-orders') ? 'bg-indigo-900 text-white' : '' }}">
+                <span>Delivered Orders</span>
+            </a>
+
+            <a href="{{ route('admin.cancelled-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.cancelled-orders') ? 'bg-indigo-900 text-red-600' : '' }}">
+                <span>Cancelled Orders</span>
+            </a>
+            <a href="{{ route('admin.delivery-failed-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.delivery-failed-orders') ? 'bg-indigo-900 text-red-600' : '' }}">
+                <span>Delivery Failed Orders</span>
+            </a>
+            <a href="{{ route('admin.returned-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.returned-orders') ? 'bg-indigo-900 text-red-600' : '' }}">
+                <span>Returned Orders</span>
+            </a>
+
+             <p class="flex items-center space-x-3 px-1 py-2  rounded-lg text-slate-300 hover:text-white font-bold">
                 <span>User Management</span>
             </p>
             <a href="{{ route('admin.see-all-users') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-slate-300 hover:text-white transition {{ request()->routeIs('admin.see-all-users') ? 'bg-indigo-900 text-white' : '' }}">

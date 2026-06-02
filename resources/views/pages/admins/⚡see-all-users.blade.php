@@ -136,17 +136,28 @@ new #[Layout('layouts.admin')] class extends Component {
                     <div class="col-span-1 md:col-span-6 flex items-center space-x-4">
                         <div class="w-12 h-12 rounded-full bg-gray-100 overflow-hidden shrink-0 border border-gray-200 shadow-inner">
                             @if($user->profile_image)
-                                <img src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                               <a href="{{ route('admin.user-details', $user) }}"> <img src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->name }}" class="w-full h-full object-cover"></a>
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-blue-50 text-blue-600 font-bold text-sm tracking-wider uppercase">
-                                    {{ substr($user->name, 0, 2) }}
+                                    <!-- admin.user-details -->
+                                    <a href="{{ route('admin.user-details', $user) }}">
+                                        {{ substr($user->name, 0, 2) }}
+                                    </a>
                                 </div>
                             @endif
                         </div>
 
                         <div class="truncate">
-                            <h4 class="font-semibold text-gray-900 text-base leading-tight">{{ $user->name }}</h4>
-                            <span class="text-sm text-gray-500 font-normal block mt-0.5 truncate">{{ $user->email }}</span>
+                            <h4 class="font-semibold text-gray-900 text-base leading-tight">
+                                <a href="{{ route('admin.user-details', $user) }}">
+                                    {{ $user->name }}
+                                </a>
+                            </h4>
+                            <span class="text-sm text-gray-500 font-normal block mt-0.5 truncate">
+                                <a href="{{ route('admin.user-details', $user) }}">
+                                    {{ $user->email }}
+                                </a>
+                            </span>
                         </div>
                     </div>
 
