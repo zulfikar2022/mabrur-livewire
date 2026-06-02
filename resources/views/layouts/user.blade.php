@@ -12,23 +12,27 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
     
-    <body class="bg-slate-300 flex flex-col min-h-screen relative"
-          x-data="{ isFacebookWebView: false, isIOS: false }"
-          x-init="
-             const ua = navigator.userAgent || navigator.vendor || window.opera;
-             const isFB = ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1 || ua.indexOf('Instagram') > -1;
-             
-             if (isFB) {
-                 isFacebookWebView = true;
-                 isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+<body class="bg-slate-300 flex flex-col min-h-screen relative"
+      x-data="{ isFacebookWebView: false, isIOS: false }"
+      x-init="
+         const ua = navigator.userAgent || navigator.vendor || window.opera;
+         // Added 'LinkedInApp' to the detection logic
+         const isWebView = ua.indexOf('FBAN') > -1 || 
+                           ua.indexOf('FBAV') > -1 || 
+                           ua.indexOf('Instagram') > -1 || 
+                           ua.indexOf('LinkedInApp') > -1;
+         
+         if (isWebView) {
+             isFacebookWebView = true;
+             isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
 
-                 // ANDROID ESCAPE: Instantly force-open Google Chrome
-                 if (!isIOS) {
-                     const cleanUrl = window.location.href.replace(/^https?:\/\//, '');
-                     window.location.href = 'intent://' + cleanUrl + '#Intent;scheme=https;package=com.android.chrome;end';
-                 }
+             // ANDROID ESCAPE: Instantly force-open Google Chrome
+             if (!isIOS) {
+                 const cleanUrl = window.location.href.replace(/^https?:\/\//, '');
+                 window.location.href = 'intent://' + cleanUrl + '#Intent;scheme=https;package=com.android.chrome;end';
              }
-          }">
+         }
+      ">
 
         <template x-if="isFacebookWebView && isIOS">
             <div class="fixed inset-0 bg-slate-900 z-99999 flex flex-col items-center justify-center p-6 text-white text-center">
