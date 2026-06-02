@@ -212,7 +212,7 @@ new #[Layout('layouts.admin')] class extends Component {
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1">Division</label>
-                        <select wire:model.live="division_id" class="w-full text-sm rounded-lg border-gray-200 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                        <select wire:model.live="division_id" class="w-full text-sm rounded-lg border-gray-200 p-3 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm">
                             <option value="">Select Division</option>
                             @foreach($divisions as $div)
                                 <option value="{{ $div->id }}">{{ $div->name }}</option>
@@ -223,7 +223,7 @@ new #[Layout('layouts.admin')] class extends Component {
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1">District</label>
-                        <select wire:model.live="district_id" class="w-full text-sm rounded-lg border-gray-200 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" {{ empty($districts) ? 'disabled' : '' }}>
+                        <select wire:model.live="district_id" class="w-full text-sm rounded-lg border-gray-200 p-3 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" {{ empty($districts) ? 'disabled' : '' }}>
                             <option value="">Select District</option>
                             @foreach($districts as $dis)
                                 <option value="{{ $dis->id }}">{{ $dis->name }}</option>
@@ -234,7 +234,7 @@ new #[Layout('layouts.admin')] class extends Component {
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1">Upazila</label>
-                        <select wire:model="upazila_id" class="w-full text-sm rounded-lg border-gray-200 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" {{ empty($upazilas) ? 'disabled' : '' }}>
+                        <select wire:model="upazila_id" class="w-full text-sm rounded-lg border-gray-200 p-3 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" {{ empty($upazilas) ? 'disabled' : '' }}>
                             <option value="">Select Upazila</option>
                             @foreach($upazilas as $upa)
                                 <option value="{{ $upa->id }}">{{ $upa->name }}</option>
@@ -245,7 +245,7 @@ new #[Layout('layouts.admin')] class extends Component {
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1">Full Address Line</label>
-                        <textarea wire:model="address" rows="3" class="w-full text-sm rounded-lg border-gray-200 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm"></textarea>
+                        <textarea wire:model="address" rows="3" class="w-full text-sm rounded-lg border-gray-200 p-3 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm"></textarea>
                         @error('address') <span class="text-[10px] text-red-500 font-medium">{{ $message }}</span> @enderror
                     </div>
                 </div>

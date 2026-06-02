@@ -46,16 +46,20 @@ new #[Layout('layouts.admin')] class extends Component {
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-100 shrink-0">
                         @if($user->profile_image)
-                            <img src="{{ asset('storage/' . $user->profile_image) }}" class="w-full h-full object-cover">
+                            <a href="{{ route('admin.user-details', $user->id) }}">
+                                <img src="{{ asset('storage/' . $user->profile_image) }}" class="w-full h-full object-cover">
+                            </a>
                         @else
                             <div class="w-full h-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg">
-                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                                <a href="{{ route('admin.user-details', $user->id) }}">{{ strtoupper(substr($user->name, 0, 1)) }}</a>
                             </div>
                         @endif
                     </div>
                     <div>
-                        <h2 class="text-lg font-bold text-gray-900 leading-tight">{{ $user->name }}</h2>
-                        <a href="mailto:{{ $user->email }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">
+                        <h2 class="text-lg font-bold text-gray-900 leading-tight">
+                            <a href="{{ route('admin.user-details', $user->id) }}">{{ $user->name }}</a>
+                        </h2>
+                        <a href="{{ route('admin.user-details', $user->id) }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">
                             {{ $user->email }}
                         </a>
                     </div>

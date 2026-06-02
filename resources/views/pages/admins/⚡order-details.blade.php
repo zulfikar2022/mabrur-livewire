@@ -62,33 +62,32 @@ new #[Layout('layouts.admin')] class extends Component {
 };
 ?>
 <div>
-<div class="max-w-7xl mx-auto p-4 md:p-6 my-6 space-y-6">
-    
-    @if (session()->has('success'))
-        <div class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm font-bold flex items-center gap-2 shadow-sm">
-            <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
-        </div>
-    @endif
-</div>
-
-
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        
-        <div>
-            <div class="flex items-center gap-3">
-                <h1 class="text-2xl font-black text-gray-900">Order #{{ $order->id }}</h1>
-                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700">
-                    {{ str_replace('_', ' ', $order->orderState->name) }}
-                </span>
+    <div class="max-w-7xl mx-auto p-4 md:p-6 my-6 space-y-6">
+        @if (session()->has('success'))
+            <div class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm font-bold flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
             </div>
-            <p class="text-sm text-gray-500 mt-1">Placed on {{ $order->created_at->format('F d, Y, h:i A') }}</p>
-        </div>
+        @endif
+    </div>
 
-        <div class="flex items-center gap-3">
-            <a href="{{route('admin.update-order', $order->id)}}" class="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2">
-                <i class="fa-solid fa-pen-to-square"></i> Edit Order
-            </a>
-        </div>
+
+    <div class="flex-col gap-2">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-5">
+            <div>
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-black text-gray-900">Order #{{ $order->id }}</h1>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700">
+                        {{ str_replace('_', ' ', $order->orderState->name) }}
+                    </span>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Placed on {{ $order->created_at->format('F d, Y, h:i A') }}</p>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="{{route('admin.update-order', $order->id)}}" class="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit Order
+                </a>
+            </div>
     </div>
 
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -109,7 +108,9 @@ new #[Layout('layouts.admin')] class extends Component {
                                 @if($img)
                                     <img src="{{ asset('storage/' . $img->image_link) }}" class="w-full h-full object-cover">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center text-gray-300"><i class="fa-solid fa-image"></i></div>
+                                    <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                        <i class="fa-solid fa-image"></i>
+                                    </div>
                                 @endif
                             </div>
                             
@@ -165,14 +166,20 @@ new #[Layout('layouts.admin')] class extends Component {
                 <div class="flex items-center gap-4 mb-6">
                     <div class="w-14 h-14 rounded-full bg-gray-100 border-2 border-white shadow-sm overflow-hidden shrink-0">
                         @if($order->user->profile_image)
-                            <img src="{{ asset('storage/' . $order->user->profile_image) }}" class="w-full h-full object-cover">
+                            <a href="{{ route('admin.user-details', $order->user->id) }}">
+                                <img src="{{ asset('storage/' . $order->user->profile_image) }}" class="w-full h-full object-cover">
+                            </a>
                         @else
                             <div class="w-full h-full flex items-center justify-center text-gray-400"><i class="fa-solid fa-user text-xl"></i></div>
                         @endif
                     </div>
                     <div>
-                        <h3 class="font-bold text-gray-900">{{ $order->user->name }}</h3>
-                        <p class="text-xs text-gray-500">{{ $order->user->email }}</p>
+                        <h3 class="font-bold text-gray-900">
+                            <a href="{{ route('admin.user-details', $order->user->id) }}">{{ $order->user->name }}</a>
+                        </h3>
+                        <p class="text-xs text-gray-500">
+                            <a href="{{ route('admin.user-details', $order->user->id) }}" class="hover:text-blue-600 transition-colors">{{ $order->user->email }}</a>
+                        </p>
                     </div>
                 </div>
 
@@ -248,6 +255,7 @@ new #[Layout('layouts.admin')] class extends Component {
             </div>
 
         </div>
+    </div>
     </div>
 </div>
 
