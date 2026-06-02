@@ -24,6 +24,11 @@ Route::middleware(['auth','status', 'admin.only'])->prefix('/admin')->group(func
     Route::livewire('/orders/delivery-failed', 'pages::admins.delivery-failed-orders')->name('admin.delivery-failed-orders');
     Route::livewire('/orders/returned', 'pages::admins.returned-orders')->name('admin.returned-orders');
 
+    // route for order details
+    Route::livewire('/orders/detail/{order}', 'pages::admins.order-details')->name('admin.order-details');
+    // route for edit order
+    Route::livewire('/orders/update/{order}', 'pages::admins.update-order')->name('admin.update-order');
+
     Route::livewire('/users/{user}', 'pages::admins.user-details')->name('admin.user-details');
 
 });
