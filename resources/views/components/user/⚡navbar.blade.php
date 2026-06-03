@@ -12,26 +12,13 @@ new class () extends Component {
 
     public function mount()
     {
-        $this->categories = Category::orderBy('name')->where('is_available', true)->get();
+        $this->categories = Cache::remember('nav_categories', null, function () {
+            return Category::orderBy('name')
+                ->where('is_available', true)
+                ->get()->toJson();
+        });
+        $this->categories = Category::hydrate(json_decode($this->categories, true));
     }
-
-    // public function getCategoriesProperty()
-    // {
-    //     $data = Cache::remember('nav_categories', null, function () {
-    //         return Category::orderBy('name')
-    //             ->where('is_available', true)
-    //             ->get();
-    //     });
-
-    //     // If for some reason the cache returned a raw array,
-    //     // re-hydrate it into a Collection of Category models
-    //     if (is_array($data)) {
-    //         return Category::hydrate($data);
-    //     }
-
-    //     return $data;
-    // }
-
 
     #[On('cart-updated')]
     public function handleCartRefresh()

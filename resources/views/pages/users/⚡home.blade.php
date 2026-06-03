@@ -10,7 +10,7 @@ new class () extends Component {
     public function getProductsProperty()
     {
         // Ensure we retrieve the data, then force it into a collection
-        $data = Cache::remember('home_products', 3600, function () {
+        $data = Cache::remember('home_products', null, function () {
             return Product::with(['productImages', 'category'])
                 ->where('is_available', true)
                 ->whereHas('category', function ($query) {

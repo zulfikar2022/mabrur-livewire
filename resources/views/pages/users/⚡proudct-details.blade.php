@@ -2,6 +2,8 @@
 
 use App\Models\Product;
 use App\Models\Cart;
+use App\Models\ProductImage;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Title;
@@ -13,12 +15,20 @@ new class () extends Component {
 
     public function mount(Product $product)
     {
-        // Use Cache to fetch the product with its images
-        // We use the ID to make the cache key specific to this product
-        $this->product = Cache::remember('product_details_' . $product->id, null, function () use ($product) {
-            return $product->load('productImages');
+        $data = Cache::remember('product_details_' . $product->id, null, function () use ($product) {
+            return $product->load('productImages')->toArray();
         });
 
+        if (is_array($data)) {
+            $this->product = new Product($data);
+            if (isset($data['product_images'])) {
+                $this->product->setRelation('productImages', Collection::make(
+                    array_map(fn ($img) => new ProductImage($img), $data['product_images'])
+                ));
+            }
+        } else {
+            $this->product = $data;
+        }
         $this->activeImage = $this->product->productImages->first()?->image_link;
     }
 

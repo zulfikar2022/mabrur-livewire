@@ -11,6 +11,15 @@ class CategoryObserver
 {
     private function clearCache(Category $category)
     {
+        Cache::forget('nav_categories');
+        Cache::forget('home_products');
+        Cache::forget('products_category_' . strtolower(str_replace(' ', '_', $category->name)));
+        // invalidate all the individual product caches that belong to this category
+
+        $category->load('products');
+        foreach ($category->products as $product) {
+            Cache::forget('product_details_' . $product->id);
+        }
 
     }
     /**

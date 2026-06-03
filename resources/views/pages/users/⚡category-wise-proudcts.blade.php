@@ -14,15 +14,19 @@ new class () extends Component {
 
     public function getProductsProperty()
     {
-        return Product::with(['productImages', 'category'])
-            ->where('is_available', true)
-            ->whereHas('category', function ($query) {
-                $query->where('is_available', true)
-                      ->where('name', $this->categoryName);
-            })
-            ->orderBy('name', 'asc')
-            ->get();
+        $data = Cache::remember('products_category_'.str_replace(' ', '_', $this->categoryName), null, function () {
+            return Product::with(['productImages', 'category'])
+                ->where('is_available', true)
+                ->whereHas('category', function ($query) {
+                    $query->where('is_available', true)
+                          ->where('name', $this->categoryName);
+                })
+                ->orderBy('name', 'asc')
+                ->get()->toJson();
+        });
 
+        $hydratedData = Product::hydrate(json_decode($data, true));
+        return $hydratedData;
     }
 };
 ?>
