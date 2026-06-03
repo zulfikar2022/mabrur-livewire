@@ -122,10 +122,10 @@ new class () extends Component {
         <div class="mt-1 border-t border-gray-50 flex items-baseline justify-between">
             <div>
                 @if($this->product->sell_by_piece)
-                    <span class="text-xl font-bold text-gray-900">৳{{ number_format($this->product->price_per_piece, 2) }}</span>
+                    <span class="font-bold text-gray-900">৳{{ number_format($this->product->price_per_piece, 2) }}</span>
                     <span class="text-xs text-gray-500 font-medium">/ piece</span>
                 @else
-                    <span class="text-xl font-bold text-gray-900">৳{{ number_format($this->product->price_per_kg, 2) }}</span>
+                    <span class="font-bold text-gray-900">৳{{ number_format($this->product->price_per_kg, 2) }}</span>
                     <span class="text-xs text-gray-500 font-medium">/ kg</span>
                 @endif
             </div>

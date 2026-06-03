@@ -70,7 +70,7 @@ new class () extends Component {
                 @foreach($userOrders as $order)
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-5 py-4 font-bold text-gray-900">
-                            #{{ $order->id }}
+                            {{ $order->id }}
                             <span class="block text-[10px] text-gray-400 font-normal mt-0.5">{{ $order->created_at->diffForHumans() }}</span>
                         </td>
                         
