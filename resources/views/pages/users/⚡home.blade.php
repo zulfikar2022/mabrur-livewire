@@ -1,22 +1,26 @@
 <?php
 
 use App\Models\Product;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 new class () extends Component {
     public function getProductsProperty()
     {
-        // Passing null means "never expire automatically"
-        return Cache::remember('home_products', null, function () {
+        // Ensure we retrieve the data, then force it into a collection
+        $data = Cache::remember('home_products', 3600, function () {
             return Product::with(['productImages', 'category'])
                 ->where('is_available', true)
                 ->whereHas('category', function ($query) {
                     $query->where('is_available', true);
                 })
                 ->orderBy('name', 'asc')
-                ->get();
+                ->get()->toJson();
         });
+        $hydratedData = Product::hydrate(json_decode($data, true));
+        return $hydratedData;
     }
 };
 ?>

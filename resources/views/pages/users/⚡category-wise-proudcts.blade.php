@@ -14,19 +14,15 @@ new class () extends Component {
 
     public function getProductsProperty()
     {
-        // Create a unique key for this specific category
-        $cacheKey = 'products_category_' . strtolower(str_replace(' ', '_', $this->categoryName));
+        return Product::with(['productImages', 'category'])
+            ->where('is_available', true)
+            ->whereHas('category', function ($query) {
+                $query->where('is_available', true)
+                      ->where('name', $this->categoryName);
+            })
+            ->orderBy('name', 'asc')
+            ->get();
 
-        return Cache::remember($cacheKey, null, function () {
-            return Product::with(['productImages', 'category'])
-                ->where('is_available', true)
-                ->whereHas('category', function ($query) {
-                    $query->where('is_available', true)
-                          ->where('name', $this->categoryName);
-                })
-                ->orderBy('name', 'asc')
-                ->get();
-        });
     }
 };
 ?>

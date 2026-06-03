@@ -42,10 +42,14 @@ new class () extends Component {
             ]
         );
 
+
+
         $this->dispatch('cart-updated');
     }
 };
 ?>
+
+
 
 <!-- 1. UPDATED: Added global x-data state tracker to manage the temporary success overlay context -->
 <div x-data="{ showSuccessOverlay: false }" 

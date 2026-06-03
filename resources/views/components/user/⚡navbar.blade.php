@@ -3,6 +3,7 @@
 use App\Models\Category;
 use App\Models\Cart; // Imported Cart model
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\On; // Imported Livewire On Event Attribute Listener
 use Livewire\Component;
 
@@ -13,6 +14,23 @@ new class () extends Component {
     {
         $this->categories = Category::orderBy('name')->where('is_available', true)->get();
     }
+
+    // public function getCategoriesProperty()
+    // {
+    //     $data = Cache::remember('nav_categories', null, function () {
+    //         return Category::orderBy('name')
+    //             ->where('is_available', true)
+    //             ->get();
+    //     });
+
+    //     // If for some reason the cache returned a raw array,
+    //     // re-hydrate it into a Collection of Category models
+    //     if (is_array($data)) {
+    //         return Category::hydrate($data);
+    //     }
+
+    //     return $data;
+    // }
 
 
     #[On('cart-updated')]
@@ -213,7 +231,7 @@ new class () extends Component {
                     @php
                         $isActive = request()->routeIs('guest.category.products') && request()->route('categoryName') === $category->name;
                     @endphp
-                    $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                    <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
                 @endforeach
             @endif
             
