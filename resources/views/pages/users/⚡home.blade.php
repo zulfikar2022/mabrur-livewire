@@ -1,22 +1,22 @@
 <?php
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 new class () extends Component {
-    /**
-     * Computed Property: Fetches available products along with their images
-     * in a single batch to keep database requests highly optimized.
-     */
     public function getProductsProperty()
     {
-        return Product::with(['productImages', 'category'])
-            ->where('is_available', true)
-            ->whereHas('category', function ($query) {
-                $query->where('is_available', true);
-            })
-            ->orderBy('name', 'asc')
-            ->get();
+        // Passing null means "never expire automatically"
+        return Cache::remember('home_products', null, function () {
+            return Product::with(['productImages', 'category'])
+                ->where('is_available', true)
+                ->whereHas('category', function ($query) {
+                    $query->where('is_available', true);
+                })
+                ->orderBy('name', 'asc')
+                ->get();
+        });
     }
 };
 ?>
