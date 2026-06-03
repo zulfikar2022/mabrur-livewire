@@ -15,6 +15,7 @@ Route::middleware(['auth','status', 'admin.only'])->prefix('/admin')->group(func
     Route::livewire('/users', 'pages::admins.see-all-users')->name('admin.see-all-users');
     Route::livewire('/users/disabled', 'pages::admins.see-disabled-users')->name('admin.see-disabled-users');
 
+    Route::livewire('/orders', 'pages::admins.all-orders')->name('admin.all-orders');
     Route::livewire('/orders/pending', 'pages::admins.pending-orders')->name('admin.pending-orders');
     Route::livewire('/orders/approved', 'pages::admins.approved-orders')->name('admin.approved-orders');
     Route::livewire('/orders/shipped', 'pages::admins.shipped-orders')->name('admin.shipped-orders');

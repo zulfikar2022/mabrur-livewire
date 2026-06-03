@@ -63,6 +63,11 @@ new class () extends Component {
             <a href="{{ route('admin.delivered-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-slate-300 hover:text-white transition {{ request()->routeIs('admin.delivered-orders') ? 'bg-indigo-900 text-white' : '' }}">
                 <span>Delivered Orders</span>
             </a>
+            <a href="{{ route('admin.all-orders') }}" wire:navigate>
+                <span class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-slate-300 hover:text-white transition {{ request()->routeIs('admin.all-orders') ? 'bg-indigo-900 text-white' : '' }}">
+                    <span>All Orders</span>
+                </span>
+            </a>
 
             <a href="{{ route('admin.cancelled-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.cancelled-orders') ? 'bg-indigo-900 text-red-600' : '' }}">
                 <span>Cancelled Orders</span>
@@ -73,6 +78,7 @@ new class () extends Component {
             <a href="{{ route('admin.returned-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.returned-orders') ? 'bg-indigo-900 text-red-600' : '' }}">
                 <span>Returned Orders</span>
             </a>
+
 
              <p class="flex items-center space-x-3 px-1 py-2  rounded-lg text-slate-300 hover:text-white font-bold">
                 <span>User Management</span>

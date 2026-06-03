@@ -25,6 +25,7 @@ new #[Layout('layouts.admin')] class extends Component {
     public function calculateStats()
     {
         $orders = $this->user->orders;
+        $total_orders = $orders->count();
 
         // Calculate count for each status
         $statusCounts = $orders->groupBy('orderState.name')->map->count();
@@ -37,6 +38,7 @@ new #[Layout('layouts.admin')] class extends Component {
         $this->stats = [
             'total_spent' => $totalSpent,
             'counts'      => $statusCounts,
+            'total_orders' => $total_orders
         ];
     }
 };
@@ -57,6 +59,7 @@ new #[Layout('layouts.admin')] class extends Component {
         <div class="flex-1 text-center md:text-left">
             <h1 class="text-2xl font-black text-gray-900">{{ $user->name }}</h1>
             <p class="text-gray-500">{{ $user->email }}</p>
+            <p class="text-sm font-bold mt-4">Total Orders: {{ $stats['total_orders'] }}</p>
         </div>
         <div class="bg-blue-50 rounded-xl p-4 text-center border border-blue-100 min-w-37.5">
             <span class="block text-xs text-blue-600 font-bold uppercase">Total Spent</span>
