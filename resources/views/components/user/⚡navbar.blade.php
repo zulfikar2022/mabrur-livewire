@@ -68,7 +68,7 @@ new class () extends Component {
                             @php
                                 $isActive = request()->routeIs('user.category.products') && request()->route('categoryName') === $category->name;
                             @endphp
-                            <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                            <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
                         @endforeach
                     @endauth
                     
@@ -77,12 +77,12 @@ new class () extends Component {
                             @php
                                 $isActive = request()->routeIs('guest.category.products') && request()->route('categoryName') === $category->name;
                             @endphp
-                            <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                            <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
                         @endforeach
                     @endif
 
                     @if (! auth()->check())
-                        <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Login</a>
+                        <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('login') ? 'underline font-bold' : 'font-medium' }}">Login</a>
                     @endif
                 </div>
 
@@ -144,12 +144,6 @@ new class () extends Component {
                                 <i class="fa-solid fa-shopping-bag w-4 text-center"></i>
                                 My Orders
                             </a>
-                            <!-- <a href="{{ route('user.logout') }}" 
-                               wire:navigate
-                               class="flex items-center space-x-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-semibold transition-colors">
-                                <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
-                                <span>Log Out</span>
-                            </a> -->
                             <button type="button" 
                                     @click="openLogoutModal = true; openDropdown = false"
                                     class="w-full flex items-center space-x-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-semibold transition-colors cursor-pointer">
@@ -209,7 +203,7 @@ new class () extends Component {
                     @php
                         $isActive = request()->routeIs('user.category.products') && request()->route('categoryName') === $category->name;
                     @endphp
-                    <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                    <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
                 @endforeach
             @endauth
             
@@ -218,13 +212,13 @@ new class () extends Component {
                     @php
                         $isActive = request()->routeIs('guest.category.products') && request()->route('categoryName') === $category->name;
                     @endphp
-                    <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ $isActive ? 'underline font-bold' : '' }}">{{ $category->name }}</a>
+                    <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
                 @endforeach
             @endif
             
             @if (! auth()->check())
-                <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium transition duration-150 flex items-center gap-2">
-                    <i class="fa-solid fa-arrow-right-to-bracket text-sm text-blue-300"></i> Login
+                <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base  transition duration-150 flex items-center gap-2 ">
+                    <i class="fa-solid fa-arrow-right-to-bracket text-sm text-blue-300"></i> <span class="{{ request()->routeIs('login') ? 'underline font-bold' : 'font-medium' }}">Login</span>
                 </a>
             @endif
         </nav>

@@ -25,6 +25,7 @@ new #[Layout('layouts.admin')] class extends Component {
     public $price_per_piece;
     public $price_per_kg;
     public $is_available;
+    public $available_quantity;
 
     // File upload structures
     public $images = [];          // New temporary uploads
@@ -43,6 +44,7 @@ new #[Layout('layouts.admin')] class extends Component {
         $this->name            = $product->name;
         $this->description     = $product->description;
         $this->is_available    = (bool) $product->is_available;
+        $this->available_quantity = $product->available_quantity;
 
         // Map database pricing strategy variables back into the select radio toggle state
         $this->sell_type       = $product->sell_by_piece ? 'piece' : 'weight';
@@ -62,6 +64,7 @@ new #[Layout('layouts.admin')] class extends Component {
             'sell_type'       => 'required|in:piece,weight',
             'price_per_piece' => 'required_if:sell_type,piece|nullable|numeric|min:0',
             'price_per_kg'    => 'required_if:sell_type,weight|nullable|numeric|min:0',
+            'available_quantity' => 'required|numeric|min:0',
             'is_available'    => 'boolean',
             'images.*'        => 'image|max:2048',
         ];
@@ -87,20 +90,18 @@ new #[Layout('layouts.admin')] class extends Component {
     public function save()
     {
         $this->validate();
-
-        // 1. Update the central product payload configuration
         $this->product->update([
-            'category_id'     => $this->category_id,
-            'name'            => $this->name,
-            'description'     => $this->description,
-            'sell_by_piece'   => $this->sell_type === 'piece',
-            'sell_by_weight'  => $this->sell_type === 'weight',
-            'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
-            'price_per_kg'    => $this->sell_type === 'weight' ? $this->price_per_kg : null,
-            'is_available'    => $this->is_available,
-        ]);
+                'category_id'     => $this->category_id,
+                'name'            => $this->name,
+                'description'     => $this->description,
+                'available_quantity' => $this->available_quantity,
+                'sell_by_piece'   => $this->sell_type === 'piece',
+                'sell_by_weight'  => $this->sell_type === 'weight',
+                'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
+                'price_per_kg'    => $this->sell_type === 'weight' ? $this->price_per_kg : null,
+                'is_available'    => $this->is_available,
+            ]);
 
-        // 2. Process and attach new image files to the database relationship map
         foreach ($this->images as $image) {
             $path = $image->store('products', 'public');
             ProductImage::create([
@@ -111,7 +112,6 @@ new #[Layout('layouts.admin')] class extends Component {
 
         session()->flash('success', 'Product updated successfully!');
 
-        // Dispatch background job sequence to clear old vectors and regenerate fresh data structures
         CreateEmbedding::dispatch($this->product);
 
         return redirect()->route('admin.show-all-products');
@@ -154,11 +154,18 @@ new #[Layout('layouts.admin')] class extends Component {
 
         <div class="w-full" wire:ignore>
             <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
-            <div x-data="{ value: @entangle('description') }"
-                 @trix-change="value = $event.target.value"
-                 class="w-full">
+            <div x-data="{ 
+                    value: @entangle('description'),
+                    init() {
+                        // Trix editor needs to be explicitly told to load the HTML
+                        this.$refs.trix.editor.loadHTML(this.value);
+                    }
+                }"
+                @trix-change="value = $event.target.value"
+                class="w-full">
+                
                 <input id="x" type="hidden" name="content" :value="value">
-                <trix-editor input="x" class="prose max-w-none border-gray-300 rounded-lg shadow-sm"></trix-editor>
+                <trix-editor input="x" x-ref="trix" class="prose max-w-none border-gray-300 rounded-lg shadow-sm"></trix-editor>
             </div>
         </div>
         @error('description') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
@@ -177,7 +184,7 @@ new #[Layout('layouts.admin')] class extends Component {
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @if($sell_type === 'piece')
                 <div x-transition>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Price Per Piece *</label>
@@ -210,6 +217,13 @@ new #[Layout('layouts.admin')] class extends Component {
                     </button>
                     <span class="text-sm text-gray-600 ml-3 font-medium">{{ $is_available ? 'Available for Customers' : 'Unavailable / Hidden' }}</span>
                 </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Available Quantity *</label>
+                <input type="number" 
+                    wire:model="available_quantity" 
+                    class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-blue-500 @error('available_quantity') border-red-500 @enderror">
+                @error('available_quantity') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
             </div>
         </div>
 

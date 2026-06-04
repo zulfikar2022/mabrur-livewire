@@ -80,7 +80,8 @@ new #[Layout('layouts.admin')] class extends Component {
         
         <div class="divide-y divide-gray-100 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 bg-gray-50 border-b border-gray-100 font-bold text-gray-700 hidden md:grid md:grid-cols-12 gap-4 items-center">
-        <div class="col-span-6">Product Details</div>
+        <div class="col-span-4">Product Details</div>
+        <div class="col-span-2">Quantity</div>
         <div class="col-span-2 text-center">Price</div>
         <div class="col-span-2 text-center">Status</div>
         <div class="col-span-2 text-right">Actions</div>
@@ -89,62 +90,50 @@ new #[Layout('layouts.admin')] class extends Component {
     <div class="divide-y divide-gray-100">
         @forelse($products as $product)
             <div wire:key="product-row-{{ $product->id }}" class="px-6 py-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center hover:bg-gray-50 transition-colors">
-                
-                <div class="col-span-1 md:col-span-6 flex items-center space-x-4">
-                    <div class="w-14 h-14 rounded-lg bg-gray-100 overflow-hidden shrink-0 border border-gray-200">
-                        
-                        @if($product->productImages && $product->productImages->first())
-                            <img src="{{ asset('storage/' . $product->productImages->first()->image_link) }}" 
-                                 alt="{{ $product->name }}" 
-                                 class="w-full h-full object-cover">
-                           
-                        @else
-                            <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
-                                <i class="fa-regular fa-image text-xl"></i>
-                            </div>
-                        @endif
-                    </div>
-
-                    <div>
-                        <h4 class="font-semibold text-gray-900 text-base leading-tight">{{ $product->name }}</h4>
-                        <span class="text-xs text-gray-500 font-medium block mt-0.5">
-                            {{ $product->category->name ?? 'Uncategorized' }}
-                        </span>
-                    </div>
-                </div>
-
-                <div class="col-span-1 md:col-span-2 flex md:justify-center items-center">
-                    <span class="md:hidden text-sm font-medium text-gray-500 mr-2">Price:</span>
-                    <div class="text-sm font-semibold text-gray-800">
-                        @if($product->sell_by_piece)
-                            ${{ number_format($product->price_per_piece, 2) }}<span class="text-gray-500 text-xs font-normal">/piece</span>
-                        @elseif($product->sell_by_weight)
-                            ${{ number_format($product->price_per_kg, 2) }}<span class="text-gray-500 text-xs font-normal">/kg</span>
-                        @else
-                            <span class="text-gray-400 font-normal text-xs">No price set</span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="col-span-1 md:col-span-2 flex md:justify-center items-center">
-                    <span class="md:hidden text-sm font-medium text-gray-500 mr-2">Status:</span>
-                    <button type="button" 
-                            wire:click="toggleProductAvailability({{ $product->id }})"
-                            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {{ $product->is_available ? 'bg-green-600' : 'bg-gray-200' }}">
-                        <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ $product->is_available ? 'translate-x-5' : 'translate-x-0' }}"></span>
-                    </button>
-                </div>
-
-                <div class="col-span-1 md:col-span-2 flex justify-start md:justify-end items-center space-x-3 mt-2 md:mt-0">
-                    <a href="{{ route('admin.see-product-details', $product->id) }}" wire:navigate title="View Details" class="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all cursor-pointer">
-                        <i class="fa-solid fa-eye text-sm"></i>
-                    </a>
-                    <a wire:navigate href="{{ route('admin.update-product', $product->id)}}"  title="Edit Product" class="p-2 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-all cursor-pointer">
-                        <i class="fa-solid fa-pen-to-square text-sm"></i>
-                    </a>
-                </div>
-
+        
+        <div class="col-span-1 md:col-span-4 flex items-center space-x-4">
+            <div class="w-14 h-14 rounded-lg bg-gray-100 overflow-hidden shrink-0 border border-gray-200">
+                @if($product->productImages && $product->productImages->first())
+                    <img src="{{ asset('storage/' . $product->productImages->first()->image_link) }}" class="w-full h-full object-cover">
+                @else
+                    <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400"><i class="fa-regular fa-image text-xl"></i></div>
+                @endif
             </div>
+            <div>
+                <h4 class="font-semibold text-gray-900 text-base leading-tight">{{ $product->name }}</h4>
+                <span class="text-xs text-gray-500 font-medium block mt-0.5">{{ $product->category->name ?? 'Uncategorized' }}</span>
+            </div>
+        </div>
+
+        <div class="col-span-1 md:col-span-2 flex items-center">
+            <span class="md:hidden text-sm font-medium text-gray-500 mr-2">Quantity:</span>
+            <div class="text-sm font-semibold text-gray-800">
+                {{ $product->available_quantity }} {{ $product->sell_by_piece ? 'pcs' : ($product->sell_by_weight ? 'kg' : '') }}
+            </div>
+        </div>
+
+        <div class="col-span-1 md:col-span-2 flex md:justify-center items-center">
+            <span class="md:hidden text-sm font-medium text-gray-500 mr-2">Price:</span>
+            <div class="text-sm font-semibold text-gray-800">
+                @if($product->sell_by_piece)
+                    ${{ number_format($product->price_per_piece, 2) }}<span class="text-gray-500 text-xs">/pc</span>
+                @elseif($product->sell_by_weight)
+                    ${{ number_format($product->price_per_kg, 2) }}<span class="text-gray-500 text-xs">/kg</span>
+                @endif
+            </div>
+        </div>
+
+        <div class="col-span-1 md:col-span-2 flex md:justify-center items-center">
+            <button type="button" wire:click="toggleProductAvailability({{ $product->id }})" class="relative inline-flex h-5 w-11 shrink-0 cursor-pointer rounded-full transition-colors {{ $product->is_available ? 'bg-green-600' : 'bg-gray-300' }}">
+                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-gray-200 transition {{ $product->is_available ? 'translate-x-5' : 'translate-x-0' }}"></span>
+            </button>
+        </div>
+
+        <div class="col-span-1 md:col-span-2 flex justify-start md:justify-end items-center space-x-3">
+             <a href="{{ route('admin.see-product-details', $product->id) }}" wire:navigate class="p-2 text-gray-500 hover:text-blue-600"><i class="fa-solid fa-eye"></i></a>
+             <a href="{{ route('admin.update-product', $product->id)}}" wire:navigate class="p-2 text-gray-500 hover:text-amber-600"><i class="fa-solid fa-pen-to-square"></i></a>
+        </div>
+    </div>
         @empty
             <div class="p-12 text-center text-gray-500">
                 <div class="text-4xl mb-2">📦</div>

@@ -19,6 +19,7 @@ new #[Layout('layouts.admin')] class extends Component {
     public $sell_type = 'weight';
     public $price_per_piece = '';
     public $price_per_kg = '';
+    public $available_quantity = '';
     public $is_available = true;
     public $images = [];
     public $categories = [];
@@ -34,6 +35,7 @@ new #[Layout('layouts.admin')] class extends Component {
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|min:3|max:255',
             'description' => 'required|string|min:5',
+            'available_quantity' => 'required|numeric|min:0',
             'sell_type' => 'required|in:piece,weight',
             'price_per_piece' => 'required_if:sell_type,piece|nullable|numeric|min:0',
             'price_per_kg' => 'required_if:sell_type,weight|nullable|numeric|min:0',
@@ -53,15 +55,16 @@ new #[Layout('layouts.admin')] class extends Component {
 
         // 1. Create the product map
         $product = Product::create([
-            'category_id' => $this->category_id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'sell_by_piece' => $this->sell_type === 'piece',
-            'sell_by_weight' => $this->sell_type === 'weight',
-            'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
-            'price_per_kg' => $this->sell_type === 'weight' ? $this->price_per_kg : null,
-            'is_available' => $this->is_available,
-        ]);
+        'category_id' => $this->category_id,
+        'name' => $this->name,
+        'description' => $this->description,
+        'available_quantity' => $this->available_quantity,
+        'sell_by_piece' => $this->sell_type === 'piece',
+        'sell_by_weight' => $this->sell_type === 'weight',
+        'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
+        'price_per_kg' => $this->sell_type === 'weight' ? $this->price_per_kg : null,
+        'is_available' => $this->is_available,
+    ]);
 
         // 2. Handle batch image uploads if files exist
         foreach ($this->images as $image) {
@@ -90,7 +93,7 @@ new #[Layout('layouts.admin')] class extends Component {
 
     <style>
         trix-toolbar .trix-button-group { border: 1px solid #e5e7eb !important; border-radius: 0.375rem !important; }
-        trix-editor { border: 1px solid #gray-300 !important; border-radius: 0.5rem !important; padding: 0.75rem !important; min-height: 150px !important; outline: none !important; }
+        trix-editor { border: 1px solid #d1d5db !important; border-radius: 0.5rem !important; padding: 0.75rem !important; min-height: 150px !important; outline: none !important; }
         trix-editor:focus { border-color: #3b82f6 !important; ring: 1px #3b82f6 !important; }
         .trix-button--icon-attach { display: none !important; } /* Hide file attachment button for safety */
     </style>
@@ -155,10 +158,10 @@ new #[Layout('layouts.admin')] class extends Component {
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             @if($sell_type === 'piece')
                 <div x-transition>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Price Per Piece *</label>
+                    <label class="block text-sm font-medium text-gray-700">Price Per Piece *</label>
                     <div class="relative">
                         <span class="absolute left-3 top-2.5 text-gray-500">$</span>
                         <input type="number" 
@@ -193,6 +196,16 @@ new #[Layout('layouts.admin')] class extends Component {
                         <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ $is_available ? 'translate-x-5' : 'translate-x-0' }}"></span>
                     </button>
                     <span class="text-sm text-gray-600 ml-3 font-medium">{{ $is_available ? 'Available for Customers' : 'Unavailable / Hidden' }}</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-1  gap-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Available Quantity *</label>
+                    <input type="number" 
+                        wire:model="available_quantity" 
+                        placeholder="Enter quantity"
+                        class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-blue-500 @error('available_quantity') border-red-500 @enderror">
+                    @error('available_quantity') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
                 </div>
             </div>
         </div>
