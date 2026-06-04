@@ -22,6 +22,21 @@ new #[Layout('layouts.admin')] class extends Component {
         $this->calculateStats();
     }
 
+    public function toggleStatus()
+    {
+        // 1. Prevent admin from modifying other admins
+        if ($this->user->hasRole('admin')) {
+            session()->flash('error', 'Cannot modify administrator accounts.');
+            return;
+        }
+
+        // 2. Toggle status
+        $this->user->status = ($this->user->status === 'disabled') ? 'active' : 'disabled';
+        $this->user->save();
+
+        session()->flash('success', 'User status updated to ' . $this->user->status);
+    }
+
     public function calculateStats()
     {
         $orders = $this->user->orders;
@@ -56,9 +71,31 @@ new #[Layout('layouts.admin')] class extends Component {
                 </div>
             @endif
         </div>
-        <div class="flex-1 text-center md:text-left">
+        <!-- <div class="flex-1 text-center md:text-left">
             <h1 class="text-2xl font-black text-gray-900">{{ $user->name }}</h1>
             <p class="text-gray-500">{{ $user->email }}</p>
+            <p class="text-sm font-bold mt-4">Total Orders: {{ $stats['total_orders'] }}</p>
+        </div> -->
+        <div class="flex-1 text-center md:text-left">
+            <div class="flex items-center justify-center md:justify-start gap-3">
+                <h1 class="text-2xl font-black text-gray-900">{{ $user->name }}</h1>
+                
+                <button type="button" 
+                        wire:click="toggleStatus"
+                        class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {{ $user->status === 'active' ? 'bg-green-600' : 'bg-gray-200' }}">
+                    <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ $user->status === 'active' ? 'translate-x-5' : 'translate-x-0' }}"></span>
+                </button>
+                <span class="text-xs font-bold uppercase {{ $user->status === 'active' ? 'text-green-600' : 'text-gray-400' }}">
+                    {{ $user->status }}
+                </span>
+            </div>
+            <p class="text-gray-500">{{ $user->email }}</p>
+            <!-- SHOW USER'status from role -->
+            @if($user->hasRole('admin'))
+                <span class="text-sm font-bold mt-1 text-green-600">Admin</span>
+            @elseif($user->hasRole('user'))
+                <span class="text-sm font-bold mt-1 text-blue-600">User</span>
+            @endif
             <p class="text-sm font-bold mt-4">Total Orders: {{ $stats['total_orders'] }}</p>
         </div>
         <div class="bg-blue-50 rounded-xl p-4 text-center border border-blue-100 min-w-37.5">

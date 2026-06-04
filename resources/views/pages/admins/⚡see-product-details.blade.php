@@ -102,10 +102,16 @@ new #[Layout('layouts.admin')] class extends Component {
                         @endif
                     </div>
                 </div>
+                <div>
+                    <span class="text-sm font-medium text-gray-500 block mb-1">Available Quantity</span>
+                    <div class="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-1">
+                        {{ $product->available_quantity }} {{ $product->sell_by_piece ? 'pcs' : ($product->sell_by_weight ? 'kg' : '') }}
+                    </div>
+                </div>
             </div>
 
             <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs text-gray-500 grid grid-cols-2 gap-4">
-                <div><span class="font-medium text-gray-700 block">System Identifier</span> #{{ $product->id }}</div>
+                <div><span class="font-medium text-gray-700 block">Product Id</span> #{{ $product->id }}</div>
                 <div><span class="font-medium text-gray-700 block">Created On</span> {{ $product->created_at->format('M d, Y') }}</div>
             </div>
         </div>
