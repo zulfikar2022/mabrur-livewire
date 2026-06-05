@@ -72,7 +72,7 @@ new class () extends Component {
             <a href="{{ route('admin.cancelled-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.cancelled-orders') ? 'bg-indigo-900 text-red-600' : '' }}">
                 <span>Cancelled Orders</span>
             </a>
-            <a href="{{ route('admin.delivery-failed-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.delivery-failed-orders') ? 'bg-indigo-900 text-red-600' : '' }}">
+            <a href="{{ route('admin.deliver_failed-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.delivery-failed-orders') ? 'bg-indigo-900 text-red-600' : '' }}">
                 <span>Delivery Failed Orders</span>
             </a>
             <a href="{{ route('admin.returned-orders') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-indigo-900 text-red-600 hover:text-red-500 transition {{ request()->routeIs('admin.returned-orders') ? 'bg-indigo-900 text-red-600' : '' }}">

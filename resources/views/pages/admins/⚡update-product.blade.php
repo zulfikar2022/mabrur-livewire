@@ -66,7 +66,7 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_kg'    => 'required_if:sell_type,weight|nullable|numeric|min:0',
             'available_quantity' => 'required|numeric|min:0',
             'is_available'    => 'boolean',
-            'images.*'        => 'image|max:2048',
+            'images.*'        => 'image',
         ];
     }
 
@@ -83,7 +83,17 @@ new #[Layout('layouts.admin')] class extends Component {
      */
     public function deleteExistingImage($id, $index)
     {
-        ProductImage::where('id', $id)->where('product_id', $this->product->id)->delete();
+        // 1. Find the specific model instance
+        $image = ProductImage::where('id', $id)
+            ->where('product_id', $this->product->id)
+            ->first();
+
+        // 2. If found, call delete() on the instance
+        if ($image) {
+            $image->delete(); // This WILL trigger the ProductImageObserver events
+        }
+
+        // 3. Update your array
         array_splice($this->existingImages, $index, 1);
     }
 
@@ -215,7 +225,7 @@ new #[Layout('layouts.admin')] class extends Component {
                             class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {{ $is_available ? 'bg-green-600' : 'bg-gray-200' }}">
                         <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ $is_available ? 'translate-x-5' : 'translate-x-0' }}"></span>
                     </button>
-                    <span class="text-sm text-gray-600 ml-3 font-medium">{{ $is_available ? 'Available for Customers' : 'Unavailable / Hidden' }}</span>
+                    <span class="text-sm text-gray-600 ml-3 font-medium">{{ $is_available ? 'Available for Customers' : 'Unavailable' }}</span>
                 </div>
             </div>
             <div>

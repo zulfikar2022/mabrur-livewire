@@ -40,7 +40,7 @@ new #[Layout('layouts.admin')] class extends Component {
 <div>
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-black text-gray-800 tracking-tight flex items-center gap-3">
-            <i class="fa-solid fa-times text-amber-500"></i>
+            <i class="fa-solid fa-clock text-amber-500"></i>
             Pending Orders
         </h1>
     </div>

@@ -26,6 +26,7 @@ async function initializeModel() {
 
 app.post("/embed", async (req, res) => {
     const { content } = req.body;
+    console.log("Received embedding request for content:", content);
 
     if (!content || typeof content !== "string" || content.trim() === "") {
         return res.status(400).json({
