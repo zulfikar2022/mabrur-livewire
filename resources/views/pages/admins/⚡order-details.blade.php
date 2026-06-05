@@ -2,6 +2,7 @@
 
 use App\Models\Order;
 use App\Models\OrderState;
+use App\Models\Product;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -52,6 +53,16 @@ new #[Layout('layouts.admin')] class extends Component {
         $this->order->update([
             'order_state_id' => $this->selectedState
         ]);
+
+        Product::withoutEvents(function () {
+            // if the changed state is 'approved', reduce the stock quantity of the ordered products
+            if ($this->order->orderState->name === OrderState::APPROVED) {
+                foreach ($this->order->orderedProducts as $orderedProduct) {
+                    $product = $orderedProduct->product;
+                    $product->decrement('available_quantity', $orderedProduct->quantity);
+                }
+            }
+        });
 
         // Refresh the local relationship to update the UI badges instantly
         $this->order->load('orderState');

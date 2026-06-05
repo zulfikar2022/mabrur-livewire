@@ -26,7 +26,6 @@ class ProductImageObserver
      */
     public function updated(ProductImage $productImage): void
     {
-        dd("instance updated");
         $this->clearCache($productImage);
     }
 
