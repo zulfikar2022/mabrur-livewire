@@ -325,7 +325,8 @@ new class () extends Component {
                     </div>
                     <div class="flex justify-between text-gray-500">
                         <span>Shipping Charge</span>
-                        <span class="font-semibold text-gray-800">৳0.00</span>
+                        <!-- <span class="font-semibold text-gray-800">৳0.00</span> -->
+                         <span class="font-semibold text-gray-800">আগে শিপিং ইনফরমেশন দিন </span>
                     </div>
                 </div>
                 <div class="pt-4 flex items-baseline justify-between">
