@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\OrderState;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -22,6 +23,34 @@ new class () extends Component {
 
         session()->flash('success', 'Profile updated successfully!');
         $this->dispatch('close-modal'); // Dispatch event to close Alpine modal
+    }
+
+    // ... inside your component class
+    public function getStatsProperty()
+    {
+        // Total orders
+        $totalOrders = $this->user->orders()->count();
+
+        // Total products in cart (must be available)
+        $cartItemsCount = $this->user->carts()
+            ->whereHas('product', function ($query) {
+                $query->where('is_available', true);
+            })
+            ->count();
+
+        // Total spent on 'delivered' orders
+        // We join with order_state to filter by 'delivered'
+        $totalSpent = $this->user->orders()
+            ->whereHas('orderState', function ($query) {
+                $query->where('name', OrderState::DELIVERED);
+            })
+            ->sum('total_price');
+
+        return [
+            'total_orders'     => $totalOrders,
+            'cart_count'       => $cartItemsCount,
+            'total_spent'      => $totalSpent,
+        ];
     }
 };
 ?>
@@ -49,6 +78,23 @@ new class () extends Component {
                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl transition-colors">
             Update Name
         </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6 ">
+        <a href="{{ route('user.my.orders') }}" wire:navigate class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <span class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Total Orders</span>
+            <span class="text-3xl font-black text-gray-900 mt-2">{{ $this->stats['total_orders'] }}</span>
+        </a>
+
+        <a href="{{ route('user.cart', Auth::user()) }}" wire:navigate class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <span class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Items in Cart</span>
+            <span class="text-3xl font-black text-blue-600 mt-2">{{ $this->stats['cart_count'] }}</span>
+        </a>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <span class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Total Spent</span>
+            <span class="text-3xl font-black text-emerald-600 mt-2">৳{{ number_format($this->stats['total_spent'], 2) }}</span>
+        </div>
     </div>
 
     <template x-teleport="body">

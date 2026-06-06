@@ -41,7 +41,7 @@ new class () extends Component {
                             ->whereHas('category', function ($query) {
                                 $query->where('is_available', true);
                             })
-                            ->oderBy('id', 'asc')
+                            ->oderBy('id', 'desc')
                             ->get();
                         return $matchedProducts;
                     }
@@ -60,7 +60,7 @@ new class () extends Component {
                 ->whereHas('category', function ($query) {
                     $query->where('is_available', true);
                 })
-                ->orderBy('id', 'asc')
+                ->orderBy('id', 'desc')
                 ->get()->toJson();
         });
 

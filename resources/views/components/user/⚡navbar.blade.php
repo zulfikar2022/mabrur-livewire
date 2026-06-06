@@ -60,7 +60,7 @@ new class () extends Component {
 
             <div class="flex items-center space-x-2 sm:space-x-4">
                 
-                <div class="hidden md:flex items-center space-x-6 mr-2">
+                <div class="hidden md:flex items-center space-x-2 mr-2">
                     <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ request()->routeIs('user.home') || request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">Home</a>
                     
                     @auth
