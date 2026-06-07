@@ -55,7 +55,9 @@ class GoogleController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('home');
+        // return redirect()->route('home');
+        // check if there is any intended route or not, if the user was intended to go any specific route then redirect them to that route, otherwise send them to the home page
+        return redirect()->intended(route('home'));
     }
     public function logout(Request $request)
     {

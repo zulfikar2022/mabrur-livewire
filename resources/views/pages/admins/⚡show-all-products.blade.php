@@ -13,8 +13,6 @@ new #[Layout('layouts.admin')] class extends Component {
     #[Url(as: 'cat')]
     public $category = '';
 
-    // Look mom, no render method!
-
     public function toggleProductAvailability($id)
     {
         $product = Product::findOrFail($id);
@@ -40,7 +38,7 @@ new #[Layout('layouts.admin')] class extends Component {
             ->when($category, function ($query) use ($category) {
                 $query->where('category_id', $category);
             })
-            ->orderBy('name', 'asc')
+            ->orderBy('id', 'desc')
             ->get();
     @endphp
 

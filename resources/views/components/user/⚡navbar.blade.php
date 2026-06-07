@@ -53,8 +53,9 @@ new class () extends Component {
         <div class="flex items-center justify-between h-16">
             
             <div class="shrink-0 flex items-center">
+                <!-- site-logo.png -->
                 <a href="{{ route('home') }}" wire:navigate class="font-bold text-xl tracking-wider">
-                    MYLOGO
+                    <img src="{{ asset('storage/logos/site-logo.png') }}" alt="Site Logo" class="h-14 w-auto">
                 </a>
             </div>
 

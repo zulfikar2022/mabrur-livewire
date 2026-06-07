@@ -10,6 +10,10 @@ class ProductObserver
 {
     private function clearCache(Product $product)
     {
+        // clear the entire cache
+        Cache::flush();
+
+
         // 1. Always clear the homepage cache
         Cache::forget('home_products');
 
@@ -19,6 +23,7 @@ class ProductObserver
         // 3. Clear the category cache if the product belongs to a category
         // We load the category relation to get the name
         $product->load('category');
+        // dd($product->category);
 
         if ($product->category) {
             $catName = strtolower(str_replace(' ', '_', $product->category->name));

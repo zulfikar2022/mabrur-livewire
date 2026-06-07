@@ -29,9 +29,10 @@ new class () extends Component {
                     $similarProductIds = ProductVector::query()
                         ->select('product_id')
                         ->orderByRaw('embedding <=> ?::vector', [$queryEmbedding])
-                        ->limit(value: 20) // Limit to top 20 most relevant slices
+                        ->limit(6) // Limit to top 20 most relevant slices
                         ->pluck('product_id')
                         ->unique(); // Keep only unique product IDs
+                    // dd($similarProductIds);
 
                     // If we found matching IDs, fetch those specific products
                     if ($similarProductIds->isNotEmpty()) {
@@ -41,7 +42,7 @@ new class () extends Component {
                             ->whereHas('category', function ($query) {
                                 $query->where('is_available', true);
                             })
-                            ->oderBy('id', 'desc')
+                            ->orderBy('id', 'desc')
                             ->get();
                         return $matchedProducts;
                     }
@@ -69,7 +70,7 @@ new class () extends Component {
 };
 ?>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  space-y-6">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  space-y-6 mb-3">
     
     <div class="max-w-xl mx-auto relative my-[-4]">
         <input type="text" 

@@ -326,7 +326,7 @@ new class () extends Component {
                     <div class="flex justify-between text-gray-500">
                         <span>Shipping Charge</span>
                         <!-- <span class="font-semibold text-gray-800">৳0.00</span> -->
-                         <span class="font-semibold text-gray-800">আগে শিপিং ইনফরমেশন দিন </span>
+                         <span class="font-semibold text-gray-800">Provide Shipping Information first </span>
                     </div>
                 </div>
                 <div class="pt-4 flex items-baseline justify-between">
@@ -337,7 +337,7 @@ new class () extends Component {
 
             @if($this->cartItems->count() > 0)
                 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 sm:p-6">
-                    <p class="text-gray-800 underline">ক্যাশ অন ডেলিভারিতে পণ্য অর্ডার করুন</p>
+                    <p class="text-gray-800 underline">Order Product On COD</p>
                     <h3 class="text-base font-bold text-gray-800 mb-4 tracking-tight">Shipping Information</h3>
                     
                     <form class="space-y-4">

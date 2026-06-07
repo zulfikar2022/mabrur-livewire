@@ -166,6 +166,7 @@ new #[Layout('layouts.admin')] class extends Component {
                         <span class="absolute left-3 top-2.5 text-gray-500">$</span>
                         <input type="number" 
                             step="0.01" 
+                            min="1"
                             wire:model.live.number="price_per_piece" 
                             class="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 outline-none focus:border-blue-500 @error('price_per_piece') border-red-500 @enderror">
                     </div>
@@ -180,6 +181,7 @@ new #[Layout('layouts.admin')] class extends Component {
                         <span class="absolute left-3 top-2.5 text-gray-500">$</span>
                         <input type="number" 
                             step="0.01" 
+                            min="1"
                             wire:model.live.number="price_per_kg" 
                             class="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 outline-none focus:border-blue-500 @error('price_per_kg') border-red-500 @enderror">
                     </div>
