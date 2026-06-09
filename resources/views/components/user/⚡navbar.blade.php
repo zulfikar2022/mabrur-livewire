@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\On; // Imported Livewire On Event Attribute Listener
 use Livewire\Component;
+use Livewire\Attributes\Reactive;
 
 new class () extends Component {
     public $categories;
+
+    public $time;
 
     public function mount()
     {
@@ -24,6 +27,12 @@ new class () extends Component {
     public function handleCartRefresh()
     {
         // Keeping this method blank is correct! It triggers the dynamic UI update cycle.
+    }
+
+    #[On('echo:demo-channel,DemoEvent')]
+    public function getTime($event)
+    {
+        $this->time = $event['time'];
     }
 
     public function getCartCountProperty()
@@ -58,7 +67,7 @@ new class () extends Component {
                     <img src="{{ asset('storage/logos/site-logo.png') }}" alt="Site Logo" class="h-14 w-auto">
                 </a>
             </div>
-
+        <!-- {{ $this->time }} -->
             <div class="flex items-center space-x-2 sm:space-x-4">
                 
                 <div class="hidden md:flex items-center space-x-2 mr-2">
