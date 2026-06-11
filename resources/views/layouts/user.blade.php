@@ -35,7 +35,7 @@
       ">
 
         <template x-if="isFacebookWebView && isIOS">
-            <div class="fixed inset-0 bg-slate-900 z-99999 flex flex-col items-center justify-center p-6 text-white text-center">
+            <div class="fixed inset-0 bg-slate-900 z-[99999] flex flex-col items-center justify-center p-6 text-white text-center">
                 <div class="absolute top-4 right-4 animate-bounce text-amber-400 flex flex-col items-center">
                     <i class="fa-solid fa-arrow-up text-2xl"></i>
                     <span class="text-xs font-bold mt-1">Tap Menu here</span>
@@ -67,23 +67,37 @@
             </div>
         </template>
         
-        <div class="sticky top-0 z-50">
+        <div x-data="{ 
+                showNavbar: true, 
+                lastScrollY: window.scrollY 
+             }"
+             @scroll.window="
+                let currentScrollY = window.scrollY;
+                // If scrolling down AND past the height of the navbar (approx 80px), hide it. Otherwise show it.
+                if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                    showNavbar = false;
+                } else {
+                    showNavbar = true;
+                }
+                lastScrollY = currentScrollY;
+             "
+             class="sticky top-0 z-50 transition-transform duration-300 ease-in-out"
+             :class="showNavbar ? 'translate-y-0' : '-translate-y-full'">
             <livewire:user.navbar />
         </div>
-
         <div class="container mx-auto mt-8 grow px-4 md:px-8">
             {{ $slot }}
         </div>
 
         @livewireScripts
         
-        <footer>
+        <footer class="mt-6">
             <div data-key="{{ ! config('services.is_for_department') }}" class="bg-slate-800 text-white py-1">
                 @if (config('services.is_for_department'))
                     <p class="text-center">All rights reserved</p>
                 @else
                     <div class="container mx-auto text-center">
-                        This application is created by <a href="https://github.com/zulfikar2022" target="_blank" class="underline">Sayed Zulfikar Mahmud</a> | WhatsApp me on +8801309417042
+                        This website is created by <a href="https://github.com/zulfikar2022" target="_blank" class="underline">Sayed Zulfikar Mahmud</a> | WhatsApp: +8801309417042
                     </div>
                 @endif
             </div>

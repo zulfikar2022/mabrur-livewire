@@ -176,6 +176,13 @@ new class () extends Component {
             </div>
         </div>
     </div>
+     @if (!config('services.is_for_department'))
+        <div class="bg-orange-500 text-white text-center text-xs py-1">
+            <p>
+                অর্ডার আপডেট করতে, ডিলিট করতে বা অন্য যেকোনো সমস্যায় কল দিন অথবা হোয়াটসঅ্যাপ করুন: <a href="tel:+8801234567890" class="underline font-bold">+8801677-520339</a>
+            </p>        
+        </div>
+    @endif
 
     <div x-show="openDrawer" 
          x-transition:opacity

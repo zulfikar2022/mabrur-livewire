@@ -70,7 +70,7 @@ new class () extends Component {
 };
 ?>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  space-y-6 mb-3">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  space-y-6">
     
     <div class="max-w-xl mx-auto relative my-[-4]">
         <input type="text" 
