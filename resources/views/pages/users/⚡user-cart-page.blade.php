@@ -269,11 +269,11 @@ new class () extends Component {
                                     @endif
                                 </div>
 
-                                <div class="truncate space-y-0.5">
-                                    <h4 class="font-bold text-gray-900 text-base hover:text-blue-600 transition-colors truncate">
+                                <div class="space-y-1 min-w-0 pr-2 sm:pr-4"> 
+                                    <p class="font-bold text-gray-900 text-base hover:text-blue-600 transition-colors wrap-break-word leading-tight">
                                         <a wire:navigate href="{{ route('user.product.details', ['product' => $item->product->id, 'productName' => $item->product->nameModifier()]) }}">{{ $item->product->name }}</a>
-                                    </h4>
-                                    <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded">
+                                    </p>
+                                    <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded mt-0.5">
                                         {{ $item->product->category->name }}
                                     </span>
                                 </div>

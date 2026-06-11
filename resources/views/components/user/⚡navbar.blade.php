@@ -62,13 +62,11 @@ new class () extends Component {
         <div class="flex items-center justify-between h-16">
             
             <div class="shrink-0 flex items-center">
-                <!-- site-logo.png -->
                 <a href="{{ route('home') }}" wire:navigate class="font-bold text-xl tracking-wider">
                     <img src="{{ asset('storage/logos/site-logo.png') }}" alt="Site Logo" class="h-14 w-auto">
                 </a>
             </div>
-        <!-- {{ $this->time }} -->
-            <div class="flex items-center space-x-2 sm:space-x-4">
+        <div class="flex items-center space-x-2 sm:space-x-4">
                 
                 <div class="hidden md:flex items-center space-x-2 mr-2">
                     <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ request()->routeIs('user.home') || request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">Home</a>
@@ -176,70 +174,76 @@ new class () extends Component {
             </div>
         </div>
     </div>
-     @if (!config('services.is_for_department'))
-        <div class="bg-orange-500 text-white text-center text-xs py-1">
+    
+    @if (!config('services.is_for_department'))
+        <div class="bg-orange-500 text-white text-center text-xs py-1 px-4">
             <p>
-                অর্ডার আপডেট করতে, ডিলিট করতে বা অন্য যেকোনো সমস্যায় কল দিন অথবা হোয়াটসঅ্যাপ করুন: <a href="tel:+8801234567890" class="underline font-bold">+8801677-520339</a>
+                অর্ডার আপডেট করতে, ডিলিট করতে বা অন্য যেকোনো সমস্যায় কল দিন অথবা হোয়াটসঅ্যাপ করুন: <a href="tel:+8801234567890" class="underline font-bold">+8801677-520339</a>
             </p>        
         </div>
     @endif
 
-    <div x-show="openDrawer" 
-         x-transition:opacity
-         @click="openDrawer = false" 
-         class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" 
-         x-cloak>
-    </div>
+    <template x-teleport="body">
+        <div>
+            <div x-show="openDrawer" 
+                 x-transition:opacity
+                 @click="openDrawer = false" 
+                 class="fixed inset-0 bg-black bg-opacity-50 z-100 md:hidden" 
+                 x-cloak>
+            </div>
 
-    <div x-show="openDrawer"
-         x-transition:enter="transition ease-out duration-300 transform"
-         x-transition:enter-start="-translate-x-full"
-         x-translate-x-end="translate-x-0"
-         x-transition:leave="transition ease-in duration-200 transform"
-         x-transition:leave-start="translate-x-0"
-         x-transition:leave-end="-translate-x-full"
-         class="fixed inset-y-0 left-0 w-64 bg-blue-700 text-white z-50 p-6 shadow-xl md:hidden"
-         x-cloak>
-        
-        <div class="flex items-center justify-between mb-8">
-            <span class="font-bold text-xl tracking-wider">MYLOGO</span>
-            <button @click="openDrawer = false" type="button" class="rounded-full p-2 hover:bg-blue-800 focus:outline-none transition duration-150">
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+            <div x-show="openDrawer"
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="-translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="-translate-x-full"
+                 class="fixed inset-y-0 left-0 w-64 bg-blue-700 text-white z-101 p-6 shadow-xl md:hidden"
+                 x-cloak>
+                
+                <div class="flex items-center justify-between mb-8">
+                    <span class="font-bold text-xl tracking-wider">MYLOGO</span>
+                    <button @click="openDrawer = false" type="button" class="rounded-full p-2 hover:bg-blue-800 focus:outline-none transition duration-150">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <nav class="flex flex-col space-y-3">
+                    <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium transition duration-150 flex items-center gap-2 {{ request()->routeIs('user.home') || request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">
+                         Home
+                    </a>
+                    
+                    @auth
+                        @foreach ($categories as $category )
+                            @php
+                                $isActive = request()->routeIs('user.category.products') && request()->route('categoryName') === $category->name;
+                            @endphp
+                            <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
+                        @endforeach
+                    @endauth
+                    
+                    @if (! auth()->check())
+                        @foreach ($categories as $category )
+                            @php
+                                $isActive = request()->routeIs('guest.category.products') && request()->route('categoryName') === $category->name;
+                            @endphp
+                            <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
+                        @endforeach
+                    @endif
+                    
+                    @if (! auth()->check())
+                        <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base  transition duration-150 flex items-center gap-2 ">
+                            <i class="fa-solid fa-arrow-right-to-bracket text-sm text-blue-300"></i> <span class="{{ request()->routeIs('login') ? 'underline font-bold' : 'font-medium' }}">Login</span>
+                        </a>
+                    @endif
+                </nav>
+            </div>
         </div>
+    </template>
 
-        <nav class="flex flex-col space-y-3">
-            <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium transition duration-150 flex items-center gap-2 {{ request()->routeIs('user.home') || request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">
-                 Home
-            </a>
-            
-            @auth
-                @foreach ($categories as $category )
-                    @php
-                        $isActive = request()->routeIs('user.category.products') && request()->route('categoryName') === $category->name;
-                    @endphp
-                    <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
-                @endforeach
-            @endauth
-            
-            @if (! auth()->check())
-                @foreach ($categories as $category )
-                    @php
-                        $isActive = request()->routeIs('guest.category.products') && request()->route('categoryName') === $category->name;
-                    @endphp
-                    <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
-                @endforeach
-            @endif
-            
-            @if (! auth()->check())
-                <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base  transition duration-150 flex items-center gap-2 ">
-                    <i class="fa-solid fa-arrow-right-to-bracket text-sm text-blue-300"></i> <span class="{{ request()->routeIs('login') ? 'underline font-bold' : 'font-medium' }}">Login</span>
-                </a>
-            @endif
-        </nav>
-    </div>
     <template x-teleport="body">
         <div x-show="openLogoutModal" 
             class="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm"
