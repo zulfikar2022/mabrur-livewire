@@ -31,8 +31,9 @@ new #[Layout('layouts.admin')] class extends Component {
         ->with(['category', 'productImages'])
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($subQuery) use ($search) {
-                    $subQuery->where('name', 'like', "%{$search}%")
-                             ->orWhere('description', 'like', "%{$search}%");
+                    // Using ILIKE for PostgreSQL case-insensitive search
+                    $subQuery->where('name', 'ILIKE', "%{$search}%")
+                             ->orWhere('description', 'ILIKE', "%{$search}%");
                 });
             })
             ->when($category, function ($query) use ($category) {
@@ -79,7 +80,7 @@ new #[Layout('layouts.admin')] class extends Component {
         <div class="px-6 py-4 bg-gray-50 border-b border-gray-100 font-bold text-gray-700">
             <p>Product List</p>
             <p class="text-sm text-gray-500 font-normal mt-1">
-               Total {{ $products->count() }}, {{ $numberOfAvailableProducts }} Available, {{ $numberOfInAvailableProucts }} Unavailable
+               Total: {{ $products->count() }}, Available: {{ $numberOfAvailableProducts }}, Unavailable: {{ $numberOfInAvailableProucts }} 
             </p>
         </div>
         
