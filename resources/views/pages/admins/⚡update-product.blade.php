@@ -180,7 +180,7 @@ new #[Layout('layouts.admin')] class extends Component {
         </div>
         @error('description') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
 
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+        <!-- <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <span class="block text-sm font-semibold text-gray-700 mb-3">Pricing Calculation Strategy</span>
             <div class="flex items-center space-x-6">
                 <label class="flex items-center cursor-pointer text-sm font-medium text-gray-700">
@@ -192,7 +192,7 @@ new #[Layout('layouts.admin')] class extends Component {
                     Sell By Weight (KG)
                 </label>
             </div>
-        </div>
+        </div> -->
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @if($sell_type === 'piece')

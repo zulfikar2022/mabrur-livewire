@@ -66,8 +66,8 @@
         
         <header class="h-16 bg-slate-800 border-b border-slate-700 px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-md">
             <div class="flex items-center space-x-3 pl-12 lg:pl-0">
-                <i class="fa-solid fa-cubes text-emerald-400 text-2xl"></i>
-                <span class="font-bold tracking-wider uppercase text-slate-200">BrandLogo</span>
+                <i class="fa-solid fa-compass text-emerald-400 text-2xl"></i>
+                <span class="font-bold tracking-wider uppercase text-slate-200">MabrurHut</span>
             </div>
 
             @auth
