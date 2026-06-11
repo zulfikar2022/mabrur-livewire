@@ -40,6 +40,10 @@ new #[Layout('layouts.admin')] class extends Component {
             })
             ->orderBy('id', 'desc')
             ->get();
+
+        $numberOfAvailableProducts = $products->where('is_available', true)->count();
+        $numberOfInAvailableProucts = $products->where('is_available', false)->count();
+
     @endphp
 
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -73,7 +77,10 @@ new #[Layout('layouts.admin')] class extends Component {
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 bg-gray-50 border-b border-gray-100 font-bold text-gray-700">
-            Product List
+            <p>Product List</p>
+            <p class="text-sm text-gray-500 font-normal mt-1">
+               Total {{ $products->count() }}, {{ $numberOfAvailableProducts }} Available, {{ $numberOfInAvailableProucts }} Unavailable
+            </p>
         </div>
         
         <div class="divide-y divide-gray-100 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVector;
 use Illuminate\Support\Facades\Cache;
@@ -14,6 +15,16 @@ new class () extends Component {
     public function mount($categoryName)
     {
         $this->categoryName = $categoryName;
+
+        // check that if the product category is unavailable then redirect to 404 page
+        $categoryExists = Category::where('name', $this->categoryName)
+            ->where('is_available', true)
+            ->exists();
+
+        if (!$categoryExists) {
+            // return redirect()->route('404');
+            abort(404);
+        }
     }
 
     public function getProductsProperty()

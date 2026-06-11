@@ -67,7 +67,7 @@
         <header class="h-16 bg-white border-b border-slate-200 px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm">
             <div class="flex items-center space-x-3 pl-12 lg:pl-0">
                 <i class="fa-solid fa-store text-blue-600 text-2xl"></i>
-                <span class="font-bold tracking-wider uppercase text-slate-700">StoreAdmin</span>
+                <span class="font-bold tracking-wider uppercase text-slate-700">MabrurHut</span>
             </div>
 
             @auth

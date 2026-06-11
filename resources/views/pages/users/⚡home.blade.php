@@ -29,7 +29,7 @@ new class () extends Component {
                     $similarProductIds = ProductVector::query()
                         ->select('product_id')
                         ->orderByRaw('embedding <=> ?::vector', [$queryEmbedding])
-                        ->limit(6) // Limit to top 20 most relevant slices
+                        ->limit(20) // Limit to top 20 most relevant slices
                         ->pluck('product_id')
                         ->unique(); // Keep only unique product IDs
                     // dd($similarProductIds);

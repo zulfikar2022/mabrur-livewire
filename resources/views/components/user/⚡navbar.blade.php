@@ -16,8 +16,8 @@ new class () extends Component {
     public function mount()
     {
         $this->categories = Cache::remember('nav_categories', null, function () {
-            return Category::orderBy('name')
-                ->where('is_available', true)
+            return Category::where('is_available', true)
+                ->orderBy('id', 'desc')
                 ->get()->toJson();
         });
         $this->categories = Category::hydrate(json_decode($this->categories, true));
