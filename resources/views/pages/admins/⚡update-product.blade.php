@@ -66,7 +66,7 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_kg'    => 'required_if:sell_type,weight|nullable|numeric|min:0',
             'available_quantity' => 'required|numeric|min:0',
             'is_available'    => 'boolean',
-            'images.*' => 'image|max:16384',        // Limits each individual file to 16MB
+            'images.*' => 'image',        // Limits each individual file to 16MB
         ];
     }
 
