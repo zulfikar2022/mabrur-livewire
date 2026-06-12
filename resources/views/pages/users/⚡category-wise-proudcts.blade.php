@@ -93,7 +93,7 @@ new class () extends Component {
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  space-y-6">
    
-    <div class="max-w-xl mx-auto relative">
+    <div class="max-w-xl mx-auto relative mb-4">
         <input type="text" 
                wire:model.live.debounce.500ms="search" 
                placeholder="Search products..." 
@@ -112,7 +112,7 @@ new class () extends Component {
         @forelse($this->products as $product)
             <livewire:user.product-card :product="$product" :key="'prod-grid-'.$product->id" />
         @empty
-            <div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-5 p-12 text-center bg-white rounded-2xl border border-dashed border-gray-200 text-gray-400">
+            <div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-5 p-12 text-center bg-white rounded-2xl border border-dashed border-gray-200 text-gray-400 mt-3">
                 <i class="fa-solid fa-magnifying-glass text-4xl mb-3 block text-gray-300"></i>
                 <p class="font-semibold text-gray-600 text-base">
                     {{ !empty($search) ? 'No matches found in this category.' : 'No Products Found' }}
