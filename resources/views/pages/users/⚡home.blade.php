@@ -72,7 +72,7 @@ new class () extends Component {
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  space-y-6">
     
-    <div class="max-w-xl mx-auto relative my-[-4]">
+    <div class="max-w-xl mx-auto relative mb-4">
         <input type="text" 
                wire:model.live.debounce.500ms="search" 
                placeholder="Search Products..." 
