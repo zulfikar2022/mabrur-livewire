@@ -63,7 +63,7 @@ new class () extends Component {
             
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('home') }}" wire:navigate class="font-bold text-xl tracking-wider">
-                    <img src="{{ asset('storage/logos/site-logo.png') }}" alt="Site Logo" class="h-14 w-auto">
+                    <img src="https://res.cloudinary.com/dq7jdy5xy/image/upload/v1781240989/site-logo_bbgfvz.png" alt="Site Logo" class="h-14 w-auto">
                 </a>
             </div>
         <div class="flex items-center space-x-2 sm:space-x-4">
