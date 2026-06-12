@@ -40,7 +40,7 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_piece' => 'required_if:sell_type,piece|nullable|numeric|min:0',
             'price_per_kg' => 'required_if:sell_type,weight|nullable|numeric|min:0',
             'is_available' => 'boolean',
-            'images.*' => 'image',        // Limits each individual file to 16MB
+            'images.*' => 'image|max:16384',        // Limits each individual file to 16MB
         ];
     }
 
