@@ -87,7 +87,7 @@ new class () extends Component {
         
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    <div class="grid {{ count($this->products) > 0 ? 'grid-cols-2' : 'grid-cols-1' }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         @forelse($this->products as $product)
             <livewire:user.product-card :product="$product" :key="'prod-grid-'.$product->id" />
         @empty
