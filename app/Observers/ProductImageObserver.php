@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Support\Facades\Cache;
 
@@ -11,6 +12,18 @@ class ProductImageObserver
     {
         $productId = $productImage->product_id;
         Cache::forget('product_details_' . $productId);
+        Cache::forget('home_products');
+        // delete the category cache for the product's category
+        $product = Product::find($productId);
+        if ($product) {
+            $category = $product->category;
+            if ($category) {
+                $categoryName = $category->name;
+                $modifiedCategoryName = strtolower(str_replace(' ', '_', $categoryName));
+                Cache::forget('products_category_' . $modifiedCategoryName);
+            }
+        }
+
     }
     /**
      * Handle the ProductImage "created" event.

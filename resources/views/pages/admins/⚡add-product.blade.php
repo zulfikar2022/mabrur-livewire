@@ -163,7 +163,7 @@ new #[Layout('layouts.admin')] class extends Component {
                 <div x-transition>
                     <label class="block text-sm font-medium text-gray-700">Price Per Piece *</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-2.5 text-gray-500">$</span>
+                        <span class="absolute left-3 top-2.5 text-gray-500">৳</span>
                         <input type="number" 
                             step="0.01" 
                             min="1"
@@ -218,14 +218,14 @@ new #[Layout('layouts.admin')] class extends Component {
         handleFiles(event) {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.localPreviews.push(e.target.result);
-                };
-                reader.readAsDataURL(files[i]);
+                // Use ObjectURL instead of Base64 for massive performance improvement on large files
+                const url = URL.createObjectURL(files[i]);
+                this.localPreviews.push(url);
             }
         },
         removeLocal(index) {
+            // Revoke the URL to prevent memory leaks
+            URL.revokeObjectURL(this.localPreviews[index]);
             this.localPreviews.splice(index, 1);
             $wire.removeImage(index);
         }
@@ -246,6 +246,11 @@ new #[Layout('layouts.admin')] class extends Component {
             <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Select Multiple Images
         </label>
     </div>
+
+    <div wire:loading wire:target="images" class="mt-3 text-sm font-bold text-blue-600 flex items-center">
+        <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Uploading large files to server... Please wait.
+    </div>
+
     @error('images.*') <span class="text-xs text-red-500 mt-2 block">{{ $message }}</span> @enderror
 
     <template x-if="localPreviews.length > 0">
@@ -265,10 +270,19 @@ new #[Layout('layouts.admin')] class extends Component {
     </template>
 </div>
 
-        <div class="flex justify-end border-t pt-4">
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors cursor-pointer shadow-sm">
-                <i class="fa-solid fa-floppy-disk mr-2"></i> Save Product
-            </button>
-        </div>
+<div class="flex justify-end border-t pt-4">
+    <button type="submit" 
+            wire:loading.attr="disabled"
+            wire:target="images, save"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors cursor-pointer shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+        
+        <span wire:loading.remove wire:target="save">
+            <i class="fa-solid fa-floppy-disk mr-2"></i> Save Product
+        </span>
+        <span wire:loading wire:target="save">
+            <i class="fa-solid fa-spinner fa-spin mr-2"></i> Saving...
+        </span>
+    </button>
+</div>
 </form>
 </div>
