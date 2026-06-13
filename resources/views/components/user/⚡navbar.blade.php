@@ -57,7 +57,7 @@ new class () extends Component {
 };
 ?>
 
-<div x-data="{ openDrawer: false, openDropdown: false, openLogoutModal: false }" class="bg-blue-600 text-white shadow-md relative">
+<div x-data="{ openDrawer: false, openDropdown: false, openLogoutModal: false }" class="bg-[#1a63fb] text-white shadow-md relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             
@@ -199,11 +199,12 @@ new class () extends Component {
                  x-transition:leave="transition ease-in duration-200 transform"
                  x-transition:leave-start="translate-x-0"
                  x-transition:leave-end="-translate-x-full"
-                 class="fixed inset-y-0 left-0 w-64 bg-blue-700 text-white z-101 p-6 shadow-xl md:hidden"
+                 class="fixed inset-y-0 left-0 w-64 bg-[#1a63fb] text-white z-101 p-6 shadow-xl md:hidden"
                  x-cloak>
                 
                 <div class="flex items-center justify-between mb-8">
-                    <span class="font-bold text-xl tracking-wider">MYLOGO</span>
+                    <!-- <span class="font-bold text-xl tracking-wider">MYLOGO</span> -->
+                     <img src="https://res.cloudinary.com/dq7jdy5xy/image/upload/v1781357545/final_naviga_ospfgu.png" alt="Site Logo" class="h-14 w-auto">
                     <button @click="openDrawer = false" type="button" class="rounded-full p-2 hover:bg-blue-800 focus:outline-none transition duration-150">
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
