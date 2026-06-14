@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Override;
+use Illuminate\Support\Str;
 use App\Observers\ProductObserver;
 
 #[ObservedBy([ProductObserver::class])]
@@ -57,7 +58,7 @@ class Product extends Model
 
     public function nameModifier()
     {
-        return str_replace(' ', '-', strtolower($this->name));
+        return Str::slug($this->name, '-', app()->getLocale());
     }
 
     #[Override]
