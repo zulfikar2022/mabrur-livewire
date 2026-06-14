@@ -141,7 +141,7 @@ new class () extends Component {
                         }"
                 wire:click="addToCart"
                 {{ !$this->product->is_available ? 'disabled' : '' }}
-                class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-semibold text-sm py-2.5 px-4 rounded-xl transition-colors cursor-pointer shadow-sm flex items-center justify-center gap-2 group-hover:bg-blue-700">
+                class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-semibold text-sm py-2.5 px-1 rounded-xl transition-colors cursor-pointer shadow-sm flex items-center justify-center gap-1 group-hover:bg-blue-700">
             <i class="fa-solid fa-cart-plus text-xs"></i>
             <span>Add to Cart</span>
         </button>
