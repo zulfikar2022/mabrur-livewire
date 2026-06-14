@@ -11,10 +11,14 @@ use Livewire\Component;
 
 new class () extends Component {
     public Product $product;
+    public int $product_id ;
     public $activeImage;
+
 
     public function mount(Product $product)
     {
+        $this->product_id = $product->id;
+
         $data = Cache::remember('product_details_' . $product->id, null, function () use ($product) {
             if (!$product->category->is_available) {
                 return null;
@@ -44,8 +48,13 @@ new class () extends Component {
         }
 
         Cart::updateOrCreate(
-            ['user_id' => Auth::id(), 'product_id' => $this->product->id],
-            ['quantity' => 1]
+            [
+                'user_id'    => Auth::id(),
+                'product_id' => $this->product_id,
+            ],
+            [
+                'quantity'   => 1,
+            ]
         );
 
         $this->dispatch('cart-updated');
