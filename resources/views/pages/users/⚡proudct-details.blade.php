@@ -20,6 +20,12 @@ new class () extends Component {
         $this->product_id = $product->id;
         $this->product = $product;
         $this->activeImage = $this->product->productImages->first()?->image_link;
+
+
+        // check if the category of the product is available or not. if not then redirect to the 404 page
+        if (!$this->product->category || !$this->product->category->is_available) {
+            abort(404);
+        }
     }
 
 
