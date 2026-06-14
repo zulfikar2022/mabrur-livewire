@@ -16,6 +16,9 @@ new class () extends Component {
     public function mount(Product $product)
     {
         $data = Cache::remember('product_details_' . $product->id, null, function () use ($product) {
+            if (!$product->category->is_available) {
+                return null;
+            }
             return $product->load('productImages')->toArray();
         });
 
