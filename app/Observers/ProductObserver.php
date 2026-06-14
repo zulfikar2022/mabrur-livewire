@@ -18,7 +18,7 @@ class ProductObserver
         Cache::forget('home_products');
 
         // 2. Clear the specific product detail cache
-        Cache::forget('product_details_' . $product->id);
+        // Cache::forget('product_details_' . $product->id);
 
         // 3. Clear the category cache if the product belongs to a category
         // We load the category relation to get the name

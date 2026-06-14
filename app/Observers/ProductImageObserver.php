@@ -11,7 +11,7 @@ class ProductImageObserver
     private function clearCache(ProductImage $productImage)
     {
         $productId = $productImage->product_id;
-        Cache::forget('product_details_' . $productId);
+        // Cache::forget('product_details_' . $productId);
         Cache::forget('home_products');
         // delete the category cache for the product's category
         $product = Product::find($productId);

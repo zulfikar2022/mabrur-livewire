@@ -19,24 +19,6 @@ new class () extends Component {
     {
         $this->product_id = $product->id;
         $this->product = $product;
-
-        $data = Cache::remember('product_details_' . $product->id, null, function () use ($product) {
-            if (!$product->category->is_available) {
-                return null;
-            }
-            return $product->load('productImages')->toArray();
-        });
-
-        if (is_array($data)) {
-            $this->product = new Product($data);
-            if (isset($data['product_images'])) {
-                $this->product->setRelation('productImages', Collection::make(
-                    array_map(fn ($img) => new ProductImage($img), $data['product_images'])
-                ));
-            }
-        } else {
-            $this->product = $data;
-        }
         $this->activeImage = $this->product->productImages->first()?->image_link;
     }
 

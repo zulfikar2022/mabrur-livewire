@@ -17,9 +17,9 @@ class CategoryObserver
         // invalidate all the individual product caches that belong to this category
 
         $category->load('products');
-        foreach ($category->products as $product) {
-            Cache::forget('product_details_' . $product->id);
-        }
+        // foreach ($category->products as $product) {
+        //     Cache::forget('product_details_' . $product->id);
+        // }
 
     }
     /**
