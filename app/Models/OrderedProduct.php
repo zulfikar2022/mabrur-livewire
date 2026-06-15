@@ -27,4 +27,17 @@ class OrderedProduct extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function calculatePrice()
+    {
+        $this->price = $this->unit_price * $this->quantity;
+        $this->save();
+    }
+
+    public function calculateShippingCharge($destination, $isHomeDelivery = true)
+    {
+        $productsPerPieceWeight = $this->product->weight_per_piece;
+        $totalWeight = $productsPerPieceWeight * $this->quantity;
+        // Calculate shipping charge based on total weight and destination
+    }
 }

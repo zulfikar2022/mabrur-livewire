@@ -29,6 +29,7 @@ class Product extends Model
         'price_per_kg',
         'is_available',
         'available_quantity',
+        'weight_per_piece'
     ];
 
     public function productVectors(): HasMany
