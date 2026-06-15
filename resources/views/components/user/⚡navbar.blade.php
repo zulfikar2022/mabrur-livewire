@@ -176,7 +176,7 @@ new class () extends Component {
     </div>
     
     @if (!config('services.is_for_department'))
-        <div class="bg-orange-500 text-white text-center text-xl py-1 px-4">
+        <div class="bg-orange-500 text-white text-center text-sm py-1 px-4">
             <p>
                 অর্ডার আপডেট করতে, ডিলিট করতে বা অন্য যেকোনো সমস্যায় কল দিন অথবা হোয়াটসঅ্যাপ করুন: <a href="tel:+8801234567890" class="underline font-bold">+8801677-520339</a>
             </p>        
