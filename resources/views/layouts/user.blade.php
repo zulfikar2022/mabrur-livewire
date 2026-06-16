@@ -18,6 +18,8 @@
     <meta property="og:url" content="{{ request()->url() }}" />
     <meta property="og:site_name" content="{{ config('app.name') }}" />
     <meta property="og:image" content="{{ $metaImage ?? asset('images/default-social-share.jpg') }}" />
+    <meta property="og:image:width" content="{{ $imageWidth ?? '1200' }}" />
+    <meta property="og:image:height" content="{{ $imageHeight ?? '630' }}" />
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $title ?? config('app.name') }}">

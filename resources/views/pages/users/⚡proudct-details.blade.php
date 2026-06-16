@@ -63,6 +63,8 @@ new class () extends Component {
 <x-slot:metaImage>
     {{ $this->product->productImages->first() ? config('services.imagekit.url_endpoint') . $this->product->productImages->first()->image_link . '?tr=w-1200,h-630,fo-auto' : '' }}
 </x-slot:metaImage>
+<x-slot:imageWidth>1200</x-slot:imageWidth>
+<x-slot:imageHeight>630</x-slot:imageHeight>
 
 <x-slot:ogType>product</x-slot:ogType>
 
