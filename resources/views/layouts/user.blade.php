@@ -91,16 +91,7 @@
 
         @livewireScripts
         
-        <footer class="mt-6">
-            <div data-key="{{ ! config('services.is_for_department') }}" class="bg-slate-800 text-white py-1">
-                @if (config('services.is_for_department'))
-                    <p class="text-center">All rights reserved</p>
-                @else
-                    <div class="container mx-auto text-center">
-                        This website is created by <a href="https://github.com/zulfikar2022" target="_blank" class="underline">Sayed Zulfikar Mahmud</a> | WhatsApp: +8801309417042
-                    </div>
-                @endif
-            </div>
-        </footer>
+       <!-- footer will go here -->
+        <livewire:user.footer />
     </body>
 </html>
