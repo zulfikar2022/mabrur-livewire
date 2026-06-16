@@ -28,6 +28,12 @@ class CleanupOrphanedImages extends Command
      */
     public function handle()
     {
+        // check the environment before proceeding. if the environment is not production, we will not run this command to prevent accidental data loss.
+        if (!app()->environment('production')) {
+            $this->error('This command can only be run in the production environment to prevent accidental data loss.');
+            return Command::FAILURE;
+        }
+
         $this->info('Starting ImageKit storage optimization cleanup...');
 
         // 1. Initialize ImageKit SDK

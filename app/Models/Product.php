@@ -29,7 +29,8 @@ class Product extends Model
         'price_per_kg',
         'is_available',
         'available_quantity',
-        'weight_per_piece'
+        'weight_per_piece',
+        'is_mango',
     ];
 
     public function productVectors(): HasMany
@@ -68,6 +69,7 @@ class Product extends Model
         return [
             'is_available' => 'boolean',
             'available_quantity' => 'decimal:2',
+            'is_mango' => 'boolean',
         ];
     }
 

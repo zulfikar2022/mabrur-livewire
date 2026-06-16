@@ -6,7 +6,6 @@ use App\Jobs\CreateEmbedding;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -15,10 +14,8 @@ use ImageKit\ImageKit;
 new #[Layout('layouts.admin')] class extends Component {
     use WithFileUploads;
 
-    // The model instance binder
     public Product $product;
 
-    // Form fields prefilled with existing data
     public $category_id;
     public $name;
     public $description;
@@ -28,14 +25,14 @@ new #[Layout('layouts.admin')] class extends Component {
     public $is_available;
     public $available_quantity;
 
-    // File upload structures
-    public $images = [];          // New temporary uploads
-    public $existingImages = [];  // Images fetched from database
+    // NEW: Added properties for the new fields
+    public $weight_per_piece;
+    public $is_mango;
+
+    public $images = [];
+    public $existingImages = [];
     public $categories = [];
 
-    /**
-     * Mounts and loads the existing product model data dynamically
-     */
     public function mount(Product $product)
     {
         $this->product = $product->load('productImages');
@@ -47,12 +44,14 @@ new #[Layout('layouts.admin')] class extends Component {
         $this->is_available    = (bool) $product->is_available;
         $this->available_quantity = $product->available_quantity;
 
-        // Map database pricing strategy variables back into the select radio toggle state
+        // NEW: Load existing values into the component
+        $this->weight_per_piece = $product->weight_per_piece;
+        $this->is_mango         = (bool) $product->is_mango;
+
         $this->sell_type       = $product->sell_by_piece ? 'piece' : 'weight';
         $this->price_per_piece = $product->price_per_piece;
         $this->price_per_kg    = $product->price_per_kg;
 
-        // Load existing image relationship mapping
         $this->existingImages  = $product->productImages->toArray();
     }
 
@@ -67,37 +66,24 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_kg'    => 'required_if:sell_type,weight|nullable|numeric|min:0',
             'available_quantity' => 'required|numeric|min:0',
             'is_available'    => 'boolean',
-            'images.*' => 'image|max:16384',        // Limits each individual file to 16MB
+            'weight_per_piece' => 'nullable|numeric|min:0', // NEW: Validation
+            'is_mango'        => 'boolean',                 // NEW: Validation
+            'images.*'        => 'image|max:16384',
         ];
     }
 
-    /**
-     * Discards a new unsaved image file asset upload item from the queue list index
-     */
     public function removeImage($index)
     {
         array_splice($this->images, $index, 1);
     }
 
-    /**
-     * Instantly deletes an image from the database relationship mapping collection
-     */
     public function deleteExistingImage($id, $index)
     {
         $image = ProductImage::where('id', $id)->where('product_id', $this->product->id)->first();
 
         if ($image) {
-            // 1. Delete from ImageKit
-            $imageKit = new ImageKit(
-                config('services.imagekit.public_key'),
-                config('services.imagekit.private_key'),
-                config('services.imagekit.url_endpoint')
-            );
-
-            // We assume image_link stores the file path in ImageKit
-            $imageKit->deleteFile($image->image_link);
-
-            // 2. Delete from Database
+            // Replaced API call with simple database deletion.
+            // Your 4:00 AM Cron Job will clean this up from ImageKit!
             $image->delete();
         }
 
@@ -108,7 +94,6 @@ new #[Layout('layouts.admin')] class extends Component {
     {
         $this->validate();
 
-        // 1. Update product details
         $this->product->update([
             'category_id'     => $this->category_id,
             'name'            => $this->name,
@@ -119,9 +104,10 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
             'price_per_kg'    => $this->sell_type === 'weight' ? $this->price_per_kg : null,
             'is_available'    => $this->is_available,
+            'weight_per_piece' => $this->weight_per_piece ?: null, // NEW: Save field
+            'is_mango'        => $this->is_mango,                  // NEW: Save field
         ]);
 
-        // 2. Handle new image uploads to ImageKit
         if (!empty($this->images)) {
             $imageKit = new ImageKit(
                 config('services.imagekit.public_key'),
@@ -192,7 +178,6 @@ new #[Layout('layouts.admin')] class extends Component {
             <div x-data="{ 
                     value: @entangle('description'),
                     init() {
-                        // Trix editor needs to be explicitly told to load the HTML
                         this.$refs.trix.editor.loadHTML(this.value);
                     }
                 }"
@@ -205,26 +190,27 @@ new #[Layout('layouts.admin')] class extends Component {
         </div>
         @error('description') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
 
-        <!-- <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <span class="block text-sm font-semibold text-gray-700 mb-3">Pricing Calculation Strategy</span>
+        <div class="bg-orange-50 p-4 rounded-xl border border-orange-200">
+            <span class="block text-sm font-semibold text-gray-800 mb-3">পণ্যটি কি আম? (Is this product a mango?)</span>
             <div class="flex items-center space-x-6">
                 <label class="flex items-center cursor-pointer text-sm font-medium text-gray-700">
-                    <input type="radio" wire:model.live="sell_type" value="piece" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 mr-2">
-                    Sell By Piece
+                    <input type="radio" wire:model="is_mango" value="1" class="h-4 w-4 text-orange-600 border-gray-300 focus:ring-orange-500 mr-2">
+                    হ্যাঁ
                 </label>
                 <label class="flex items-center cursor-pointer text-sm font-medium text-gray-700">
-                    <input type="radio" wire:model.live="sell_type" value="weight" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 mr-2">
-                    Sell By Weight (KG)
+                    <input type="radio" wire:model="is_mango" value="0" class="h-4 w-4 text-orange-600 border-gray-300 focus:ring-orange-500 mr-2">
+                    না
                 </label>
             </div>
-        </div> -->
+            @error('is_mango') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @if($sell_type === 'piece')
                 <div x-transition>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Price Per Piece *</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-2.5 text-gray-500">$</span>
+                        <span class="absolute left-3 top-2.5 text-gray-500">৳</span>
                         <input type="number" step="0.01" wire:model.live.number="price_per_piece" class="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 outline-none focus:border-blue-500 @error('price_per_piece') border-red-500 @enderror">
                     </div>
                     @error('price_per_piece') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
@@ -235,12 +221,35 @@ new #[Layout('layouts.admin')] class extends Component {
                 <div x-transition>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Price Per KG *</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-2.5 text-gray-500">$</span>
+                        <span class="absolute left-3 top-2.5 text-gray-500">৳</span>
                         <input type="number" step="0.01" wire:model.live.number="price_per_kg" class="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 outline-none focus:border-blue-500 @error('price_per_kg') border-red-500 @enderror">
                     </div>
                     @error('price_per_kg') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
                 </div>
             @endif
+
+            <div class="grid grid-cols-1 gap-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Available Quantity *</label>
+                    <input type="number" 
+                        wire:model="available_quantity" 
+                        class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-blue-500 @error('available_quantity') border-red-500 @enderror">
+                    @error('available_quantity') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Weight Per Piece (KG)</label>
+                    <input type="number" 
+                        step="0.01" 
+                        min="0"
+                        wire:model="weight_per_piece" 
+                        placeholder="e.g. 1.5"
+                        class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-blue-500 @error('weight_per_piece') border-red-500 @enderror">
+                    @error('weight_per_piece') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                </div>
+            </div>
 
             <div class="flex flex-col justify-end">
                 <span class="block text-sm font-medium text-gray-700 mb-2">Product Status</span>
@@ -252,13 +261,6 @@ new #[Layout('layouts.admin')] class extends Component {
                     </button>
                     <span class="text-sm text-gray-600 ml-3 font-medium">{{ $is_available ? 'Available for Customers' : 'Unavailable' }}</span>
                 </div>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Available Quantity *</label>
-                <input type="number" 
-                    wire:model="available_quantity" 
-                    class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-blue-500 @error('available_quantity') border-red-500 @enderror">
-                @error('available_quantity') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
             </div>
         </div>
 

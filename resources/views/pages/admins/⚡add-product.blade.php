@@ -14,7 +14,6 @@ use Livewire\WithFileUploads;
 new #[Layout('layouts.admin')] class extends Component {
     use WithFileUploads;
 
-
     public $category_id = '';
     public $name = '';
     public $description = '';
@@ -23,6 +22,11 @@ new #[Layout('layouts.admin')] class extends Component {
     public $price_per_kg = '';
     public $available_quantity = '';
     public $is_available = true;
+
+    // New fields
+    public $weight_per_piece = '';
+    public $is_mango = false; // Default to 'না' (false)
+
     public $images = [];
     public $categories = [];
 
@@ -42,7 +46,9 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_piece' => 'required_if:sell_type,piece|nullable|numeric|min:0',
             'price_per_kg' => 'required_if:sell_type,weight|nullable|numeric|min:0',
             'is_available' => 'boolean',
-            'images.*' => 'image|max:16384',        // Limits each individual file to 16MB
+            'weight_per_piece' => 'nullable|numeric|min:0', // Optional numeric value
+            'is_mango' => 'boolean',
+            'images.*' => 'image|max:16384',
         ];
     }
 
@@ -66,6 +72,8 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
             'price_per_kg' => $this->sell_type === 'weight' ? $this->price_per_kg : null,
             'is_available' => $this->is_available,
+            'weight_per_piece' => $this->weight_per_piece ?: null, // Save the new field
+            'is_mango' => $this->is_mango,                         // Save the new field
         ]);
 
         // 2. Initialize ImageKit
@@ -77,21 +85,18 @@ new #[Layout('layouts.admin')] class extends Component {
 
         // 3. Handle batch image uploads
         foreach ($this->images as $image) {
-            // Upload to ImageKit
             $uploadResult = $imageKit->upload([
                 'file' => base64_encode(file_get_contents($image->getRealPath())),
                 'fileName' => $image->getClientOriginalName(),
                 'folder' => '/products'
             ]);
 
-            // THE FIX: Check if error is null to determine success
             if ($uploadResult->error === null) {
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_link' => $uploadResult->result->filePath,
                 ]);
             } else {
-                // Optional: It is good practice to log the error if ImageKit rejects the file
                 \Illuminate\Support\Facades\Log::error('ImageKit Upload Failed: ', (array) $uploadResult->error);
             }
         }
@@ -103,6 +108,7 @@ new #[Layout('layouts.admin')] class extends Component {
 };
 ?>
 
+
 <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-gray-100 my-6">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script>
@@ -111,7 +117,7 @@ new #[Layout('layouts.admin')] class extends Component {
         trix-toolbar .trix-button-group { border: 1px solid #e5e7eb !important; border-radius: 0.375rem !important; }
         trix-editor { border: 1px solid #d1d5db !important; border-radius: 0.5rem !important; padding: 0.75rem !important; min-height: 150px !important; outline: none !important; }
         trix-editor:focus { border-color: #3b82f6 !important; ring: 1px #3b82f6 !important; }
-        .trix-button--icon-attach { display: none !important; } /* Hide file attachment button for safety */
+        .trix-button--icon-attach { display: none !important; } 
     </style>
 
     <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Add New Product</h2>
@@ -160,24 +166,25 @@ new #[Layout('layouts.admin')] class extends Component {
         </div>
         @error('description') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
 
-        <!-- <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-            <span class="block text-sm font-semibold text-gray-700 mb-3">Pricing Calculation Strategy</span>
+        <div class="bg-orange-50 p-4 rounded-xl border border-orange-200">
+            <span class="block text-sm font-semibold text-gray-800 mb-3">পণ্যটি কি আম? (Is this product a mango?)</span>
             <div class="flex items-center space-x-6">
                 <label class="flex items-center cursor-pointer text-sm font-medium text-gray-700">
-                    <input type="radio" wire:model.live="sell_type" value="piece" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 mr-2">
-                    Sell By Piece
+                    <input type="radio" wire:model="is_mango" value="1" class="h-4 w-4 text-orange-600 border-gray-300 focus:ring-orange-500 mr-2">
+                    হ্যাঁ
                 </label>
                 <label class="flex items-center cursor-pointer text-sm font-medium text-gray-700">
-                    <input type="radio" wire:model.live="sell_type" value="weight" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 mr-2">
-                    Sell By Weight (KG)
+                    <input type="radio" wire:model="is_mango" value="0" class="h-4 w-4 text-orange-600 border-gray-300 focus:ring-orange-500 mr-2">
+                    না
                 </label>
             </div>
-        </div> -->
+            @error('is_mango') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             @if($sell_type === 'piece')
                 <div x-transition>
-                    <label class="block text-sm font-medium text-gray-700">Price Per Piece *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Price Per Piece *</label>
                     <div class="relative">
                         <span class="absolute left-3 top-2.5 text-gray-500">৳</span>
                         <input type="number" 
@@ -194,7 +201,7 @@ new #[Layout('layouts.admin')] class extends Component {
                 <div x-transition>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Price Per KG *</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-2.5 text-gray-500">$</span>
+                        <span class="absolute left-3 top-2.5 text-gray-500">৳</span>
                         <input type="number" 
                             step="0.01" 
                             min="1"
@@ -204,6 +211,30 @@ new #[Layout('layouts.admin')] class extends Component {
                     @error('price_per_kg') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
                 </div>
             @endif
+
+            <div class="grid grid-cols-1 gap-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Available Quantity *</label>
+                    <input type="number" 
+                        wire:model="available_quantity" 
+                        placeholder="Enter quantity"
+                        class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-blue-500 @error('available_quantity') border-red-500 @enderror">
+                    @error('available_quantity') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Weight Per Piece (KG)</label>
+                    <input type="number" 
+                        step="0.01" 
+                        min="0"
+                        wire:model="weight_per_piece" 
+                        placeholder="e.g. 1.5"
+                        class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-blue-500 @error('weight_per_piece') border-red-500 @enderror">
+                    @error('weight_per_piece') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                </div>
+            </div>
 
             <div class="flex flex-col justify-end">
                 <span class="block text-sm font-medium text-gray-700 mb-2">Product Status</span>
@@ -216,16 +247,6 @@ new #[Layout('layouts.admin')] class extends Component {
                     <span class="text-sm text-gray-600 ml-3 font-medium">{{ $is_available ? 'Available for Customers' : 'Unavailable / Hidden' }}</span>
                 </div>
             </div>
-            <div class="grid grid-cols-1  gap-3">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Available Quantity *</label>
-                    <input type="number" 
-                        wire:model="available_quantity" 
-                        placeholder="Enter quantity"
-                        class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-blue-500 @error('available_quantity') border-red-500 @enderror">
-                    @error('available_quantity') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
-                </div>
-            </div>
         </div>
 
        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 bg-gray-50"
@@ -234,13 +255,11 @@ new #[Layout('layouts.admin')] class extends Component {
         handleFiles(event) {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
-                // Use ObjectURL instead of Base64 for massive performance improvement on large files
                 const url = URL.createObjectURL(files[i]);
                 this.localPreviews.push(url);
             }
         },
         removeLocal(index) {
-            // Revoke the URL to prevent memory leaks
             URL.revokeObjectURL(this.localPreviews[index]);
             this.localPreviews.splice(index, 1);
             $wire.removeImage(index);

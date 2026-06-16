@@ -108,6 +108,12 @@ new #[Layout('layouts.admin')] class extends Component {
                         {{ $product->available_quantity }} {{ $product->sell_by_piece ? 'pcs' : ($product->sell_by_weight ? 'kg' : '') }}
                     </div>
                 </div>
+                <div>
+                    <span class="text-sm font-medium text-gray-500 block mb-1">Weight per Piece</span>
+                    <div class="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-1">
+                        {{ $product->weight_per_piece ? number_format($product->weight_per_piece, 2) . ' kg' : 'N/A' }}
+                    </div>
+                </div>
             </div>
 
             <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-xs text-gray-500 grid grid-cols-2 gap-4">
