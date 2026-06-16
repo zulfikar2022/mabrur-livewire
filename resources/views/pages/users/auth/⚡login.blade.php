@@ -11,6 +11,10 @@ new class () extends Component {
 };
 ?>
 
+<x-slot:title>
+    Login
+</x-slot>
+
 <div class="flex flex-col gap-3.5 items-center justify-center mt-10">
     <p>পণ্য অর্ডার করার জন্য আপনাকে আগে লগইন করতে হবে। </p>
     <button 

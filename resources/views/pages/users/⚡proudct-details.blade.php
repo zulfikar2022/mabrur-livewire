@@ -2,32 +2,31 @@
 
 use App\Models\Product;
 use App\Models\Cart;
-use App\Models\ProductImage;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Livewire\Attributes\Title;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 new class () extends Component {
-    public Product $product;
-    public int $product_id ;
+    public int $product_id;
     public $activeImage;
-
 
     public function mount(Product $product)
     {
         $this->product_id = $product->id;
-        $this->product = $product;
-        $this->activeImage = $this->product->productImages->first()?->image_link;
-
+        $this->activeImage = $product->productImages->first()?->image_link;
 
         // check if the category of the product is available or not. if not then redirect to the 404 page
-        if (!$this->product->category || !$this->product->category->is_available) {
+        if (!$product->category || !$product->category->is_available) {
             abort(404);
         }
     }
 
+    // THE FIX: Computed property prevents the "Vanishing Details" bug on Add to Cart
+    #[Computed]
+    public function product()
+    {
+        return Product::with(['category', 'productImages'])->findOrFail($this->product_id);
+    }
 
     public function addToCart()
     {
@@ -52,10 +51,23 @@ new class () extends Component {
 };
 ?>
 
+<!-- 1. SEO SLOTS: This securely pushes data to your layout's <head> section -->
 <x-slot:title>
-    {{ $product->name }} - {{ config('app.name') }}
-</x-slot>
+    {{ $this->product->name }} - {{ config('app.name') }}
+</x-slot:title>
 
+<x-slot:metaDescription>
+    {{ \Illuminate\Support\Str::limit(strip_tags($this->product->description), 160) }}
+</x-slot:metaDescription>
+
+<x-slot:metaImage>
+    {{ $this->product->productImages->first() ? config('services.imagekit.url_endpoint') . $this->product->productImages->first()->image_link . '?tr=w-1200,h-630,fo-auto' : '' }}
+</x-slot:metaImage>
+
+<x-slot:ogType>product</x-slot:ogType>
+
+
+<!-- 2. MAIN VIEW -->
 <div class="max-w-6xl mx-auto p-6 my-8" 
      x-data="{ activeImg: '{{ $activeImage ? config('services.imagekit.url_endpoint') . $activeImage . '?tr=w-600,h-600,fo-auto' : '' }}', showSuccessOverlay: false }">
     
@@ -67,7 +79,7 @@ new class () extends Component {
                 <!-- Main Image -->
                 <img :src="activeImg" class="w-full h-full object-cover">
 
-                <!-- 2. The Success Overlay -->
+                <!-- The Success Overlay -->
                 <div x-show="showSuccessOverlay"
                      x-transition:enter="transition ease-out duration-300"
                      x-transition:enter-start="opacity-0"
@@ -86,7 +98,7 @@ new class () extends Component {
 
             <!-- Thumbnail Slider -->
             <div class="flex gap-3 overflow-x-auto pb-2">
-                @foreach($product->productImages as $img)
+                @foreach($this->product->productImages as $img)
                     <button @click="activeImg = '{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-600,h-600,fo-auto'"
                             class="w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all">
                         <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-300,h-300,fo-auto" class="w-full h-full object-cover">
@@ -97,10 +109,10 @@ new class () extends Component {
 
         <!-- Right: Details -->
         <div class="space-y-6">
-            <h1 class="text-3xl font-black text-gray-900">{{ $product->name }}</h1>
+            <h1 class="text-3xl font-black text-gray-900">{{ $this->product->name }}</h1>
             
-            <!-- 3. Updated Add to Cart Button with temporary overlay trigger -->
-            @if($product->is_available)
+            <!-- Updated Add to Cart Button with temporary overlay trigger -->
+            @if($this->product->is_available)
                 <div wire:click="addToCart"
                      @click="showSuccessOverlay = true; setTimeout(() => { showSuccessOverlay = false }, 2000)"
                      class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-[1.02] flex items-center gap-2 w-max cursor-pointer">
@@ -113,19 +125,29 @@ new class () extends Component {
                 </button>
             @endif
             
-            <!-- Pricing and Description remain unchanged -->
+            <!-- Pricing and Description -->
             <div class="p-4 bg-gray-50 rounded-xl">
-                @if($product->sell_by_piece)
-                    <p class="text-2xl font-bold text-blue-600">৳{{ number_format($product->price_per_piece, 2) }} <span class="text-sm text-gray-500 font-normal">/ piece</span></p>
-                @elseif($product->sell_by_weight)
-                    <p class="text-2xl font-bold text-blue-600">৳{{ number_format($product->price_per_kg, 2) }} <span class="text-sm text-gray-500 font-normal">/ kg</span></p>
+                @if($this->product->sell_by_piece)
+                    <p class="text-2xl font-bold text-blue-600">৳{{ number_format($this->product->price_per_piece, 2) }} <span class="text-sm text-gray-500 font-normal">/ piece</span></p>
+                @elseif($this->product->sell_by_weight)
+                    <p class="text-2xl font-bold text-blue-600">৳{{ number_format($this->product->price_per_kg, 2) }} <span class="text-sm text-gray-500 font-normal">/ kg</span></p>
+                @endif
+            </div>
+            
+            <div>
+                <!-- if the product is mango then show some text conditionally -->
+                @if($this->product->is_mango)
+                    <div class="px-4 py-2 text-red-700 border border-yellow-200 rounded-md text-sm font-medium inline-flex items-center mb-4 bg-yellow-50">
+                        <i class="fa-solid fa-info-circle mr-2"></i> 
+                        <p>এই পণ্যটির হোম ডেলিভারি করা হয় না। আপনাকে এটি সংগ্রহ করতে হবে আপনার নিকটস্থ <b>স্টেডফাস্ট কুরিয়ারের</b> শাখা থেকে।</p>
+                    </div>
                 @endif
             </div>
 
             <div class="text-gray-600 leading-relaxed">
                 <h3 class="font-bold text-gray-900 mb-2">Description</h3>
                 <div class="prose max-w-none">
-                    {!! $product->description !!}
+                    {!! $this->product->description !!}
                 </div>
             </div>
         </div>

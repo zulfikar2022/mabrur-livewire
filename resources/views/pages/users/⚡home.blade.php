@@ -8,14 +8,12 @@ use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 new class () extends Component {
-    // 1. Add the search property
     public $search = '';
 
     public function getProductsProperty()
     {
         if (!empty(trim($this->search))) {
             try {
-                // Request the embedding from your Node.js microservice
                 $response = Http::post('http://127.0.0.1:5000/embed', [
                     'content' => $this->search,
                 ]);
@@ -23,20 +21,15 @@ new class () extends Component {
                 if ($response->successful() && $response->json('success')) {
                     $queryEmbedding = json_encode($response->json('embedding'));
 
-                    // Perform the Vector Similarity Search
-                    // NOTE: The <=> operator assumes you are using PostgreSQL with the pgvector extension.
-                    // If you are using MySQL or another DB, you will need to adjust this raw SQL.
                     $similarProductIds = ProductVector::query()
                         ->select('product_id')
                         ->orderByRaw('embedding <=> ?::vector', [$queryEmbedding])
-                        ->limit(20) // Limit to top 20 most relevant slices
+                        ->limit(20)
                         ->pluck('product_id')
-                        ->unique(); // Keep only unique product IDs
-                    // dd($similarProductIds);
+                        ->unique();
 
-                    // If we found matching IDs, fetch those specific products
                     if ($similarProductIds->isNotEmpty()) {
-                        $matchedProducts = Product::with(['productImages', 'category'])
+                        return Product::with(['productImages', 'category'])
                             ->whereIn('id', $similarProductIds)
                             ->where('is_available', true)
                             ->whereHas('category', function ($query) {
@@ -44,10 +37,8 @@ new class () extends Component {
                             })
                             ->orderBy('id', 'desc')
                             ->get();
-                        return $matchedProducts;
                     }
 
-                    // Return empty collection if the search yielded no close vector matches
                     return collect();
                 }
             } catch (\Exception $e) {
@@ -70,12 +61,30 @@ new class () extends Component {
 };
 ?>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  space-y-6">
+<x-slot:title>
+    Welcome to {{ config('app.name') }} - Best Products Online
+</x-slot:title>
+
+<x-slot:metaDescription>
+    Browse our extensive collection of high-quality products. Use our AI-powered search to find exactly what you are looking for at the best prices.
+</x-slot:metaDescription>
+
+<x-slot:ogType>website</x-slot:ogType>
+
+<x-slot:metaImage>
+    {{ "https://ik.imagekit.io/mabrurhut/logos/mabrur-banner.jpg" }}
+</x-slot:metaImage>
+
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
     
+    <h1 class="sr-only">Browse all products at {{ config('app.name') }}</h1>
+
     <div class="max-w-xl mx-auto relative mb-4">
         <input type="text" 
                wire:model.live.debounce.500ms="search" 
                placeholder="Search Products..." 
+               aria-label="Search through our products"
                class="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-shadow text-gray-700 ">
         <div class="absolute left-4 top-3.5 text-gray-400">
              <i class="fa-solid fa-search"></i>
@@ -84,10 +93,9 @@ new class () extends Component {
         <div wire:loading wire:target="search" class="absolute right-4 top-3.5">
             <i class="fa-solid fa-circle-notch fa-spin text-blue-500"></i>
         </div>
-        
     </div>
 
-    <div class="grid {{ count($this->products) > 0 ? 'grid-cols-2' : 'grid-cols-1' }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    <main class="grid {{ count($this->products) > 0 ? 'grid-cols-2' : 'grid-cols-1' }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         @forelse($this->products as $product)
             <livewire:user.product-card :product="$product" :key="'prod-grid-'.$product->id" />
         @empty
@@ -101,6 +109,5 @@ new class () extends Component {
                 </p>
             </div>
         @endforelse
-    </div>
-    
+    </main>
 </div>

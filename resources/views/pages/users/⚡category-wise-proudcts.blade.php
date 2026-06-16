@@ -10,7 +10,7 @@ use Livewire\Component;
 
 new class () extends Component {
     public $categoryName;
-    public $search = ''; // 1. Add search property
+    public $search = '';
 
     public function mount($categoryName)
     {
@@ -22,14 +22,13 @@ new class () extends Component {
             ->exists();
 
         if (!$categoryExists) {
-            // return redirect()->route('404');
             abort(404);
         }
     }
 
     public function getProductsProperty()
     {
-        // 2. Vector Search Logic for this specific category
+        // 1. Vector Search Logic for this specific category
         if (!empty(trim($this->search))) {
             try {
                 $response = Http::post('http://127.0.0.1:5000/embed', [
@@ -39,11 +38,15 @@ new class () extends Component {
                 if ($response->successful() && $response->json('success')) {
                     $queryEmbedding = json_encode($response->json('embedding'));
 
-                    // Perform Vector Search restricted by category
+                    // BUG FIX: Vectors belong to Products, Products belong to Categories.
+                    // You must query through the 'product' relationship first.
                     $similarProductIds = ProductVector::query()
-                        ->whereHas('categories', function ($q) {
-                            $q->where('name', $this->categoryName)
-                              ->where('is_available', true);
+                        ->whereHas('product', function ($q) {
+                            $q->where('is_available', true)
+                              ->whereHas('category', function ($q2) {
+                                  $q2->where('name', $this->categoryName)
+                                     ->where('is_available', true);
+                              });
                         })
                         ->select('product_id')
                         ->orderByRaw('embedding <=> ?::vector', [$queryEmbedding])
@@ -54,12 +57,6 @@ new class () extends Component {
                     if ($similarProductIds->isNotEmpty()) {
                         return Product::with(['productImages', 'category'])
                             ->whereIn('id', $similarProductIds)
-                            ->where('is_available', true)
-                            // Double check category and availability
-                            ->whereHas('category', function ($query) {
-                                $query->where('is_available', true)
-                                      ->where('name', $this->categoryName);
-                            })
                             ->get();
                     }
 
@@ -70,7 +67,7 @@ new class () extends Component {
             }
         }
 
-        // 3. Your untouched original caching logic
+        // 2. Your untouched original caching logic
         $data = Cache::remember('products_category_'.str_replace(' ', '_', $this->categoryName), null, function () {
             return Product::with(['productImages', 'category'])
                 ->where('is_available', true)
@@ -88,18 +85,31 @@ new class () extends Component {
 ?>
 
 <x-slot:title>
-    {{ $this->categoryName }} - {{ config('app.name') }}
-</x-slot>
+    {{ $this->categoryName }} Products - {{ config('app.name') }}
+</x-slot:title>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  space-y-6">
+<x-slot:metaDescription>
+    Browse our premium selection of {{ $this->categoryName }} products at {{ config('app.name') }}. Top quality items delivered directly to you.
+</x-slot:metaDescription>
+
+<x-slot:metaImage>
+    {{ "https://ik.imagekit.io/mabrurhut/logos/mabrur-banner.jpg" }}
+</x-slot:metaImage>
+
+<x-slot:ogType>website</x-slot:ogType>
+
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
    
+    <h1 class="sr-only">Shop {{ $this->categoryName }} at {{ config('app.name') }}</h1>
+
     <div class="max-w-xl mx-auto relative mb-4">
         <input type="text" 
                wire:model.live.debounce.500ms="search" 
-               placeholder="Search products..." 
+               placeholder="Search {{ strtolower($this->categoryName) }}..." 
+               aria-label="Search within the {{ $this->categoryName }} category"
                class="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-shadow text-gray-700">
         <div class="absolute left-4 top-3.5 text-gray-400">
-            <!-- <i class="fa-solid fa-wand-magic-sparkles"></i> -->
              <i class="fa-solid fa-search"></i>
         </div>
         
@@ -108,7 +118,7 @@ new class () extends Component {
         </div>
     </div>
 
-    <div class="grid {{ count($this->products) > 0 ? 'grid-cols-2' : 'grid-cols-1' }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    <main class="grid {{ count($this->products) > 0 ? 'grid-cols-2' : 'grid-cols-1' }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         @forelse($this->products as $product)
             <livewire:user.product-card :product="$product" :key="'prod-grid-'.$product->id" />
         @empty
@@ -122,6 +132,6 @@ new class () extends Component {
                 </p>
             </div>
         @endforelse
-    </div>
+    </main>
     
 </div>

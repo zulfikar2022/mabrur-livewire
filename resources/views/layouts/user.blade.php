@@ -1,35 +1,49 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title wire:navigate.update>{{ $title ?? config('app.name') }}</title>
+    <title wire:navigate.update>{{ $title ?? config('app.name') }}</title>
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <meta name="description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '. Shop the best products at the best prices.' }}">
+    
+    <meta name="robots" content="{{ $robots ?? 'index, follow' }}">
+    
+    <link rel="canonical" href="{{ $canonical ?? request()->url() }}">
 
-        @livewireStyles
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        @if(env('GA_MEASUREMENT_ID'))
-            <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GA_MEASUREMENT_ID') }}"></script>
-            <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
+    <meta property="og:type" content="{{ $ogType ?? 'website' }}" />
+    <meta property="og:title" content="{{ $title ?? config('app.name') }}" />
+    <meta property="og:description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '. Shop the best products at the best prices.' }}" />
+    <meta property="og:url" content="{{ request()->url() }}" />
+    <meta property="og:site_name" content="{{ config('app.name') }}" />
+    <meta property="og:image" content="{{ $metaImage ?? asset('images/default-social-share.jpg') }}" />
 
-                // Initial page load tracking
-                gtag('config', '{{ env("GA_MEASUREMENT_ID") }}');
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $title ?? config('app.name') }}">
+    <meta name="twitter:description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '.' }}">
+    <meta name="twitter:image" content="{{ $metaImage ?? asset('images/default-social-share.jpg') }}">
 
-                // Livewire navigation tracking (SPA mode)
-                document.addEventListener('livewire:navigated', () => {
-                    gtag('event', 'page_view', {
-                        page_location: window.location.href,
-                        page_title: document.title
-                    });
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    @if(env('GA_MEASUREMENT_ID'))
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GA_MEASUREMENT_ID') }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ env("GA_MEASUREMENT_ID") }}');
+            document.addEventListener('livewire:navigated', () => {
+                gtag('event', 'page_view', {
+                    page_location: window.location.href,
+                    page_title: document.title
                 });
-            </script>
-        @endif
-    </head>
+            });
+        </script>
+    @endif
+</head>
     
 <body class="bg-slate-300 flex flex-col min-h-screen relative"
       x-data="{ isFacebookWebView: false, isIOS: false }"
