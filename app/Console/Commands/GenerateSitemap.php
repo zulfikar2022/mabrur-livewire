@@ -45,7 +45,14 @@ class GenerateSitemap extends Command
         }
 
         // 3. Add Dynamic Products (under /guest/product/...)
-        $products = Product::where('is_available', true)->get();
+        // add only those products which category is also available
+
+        // $products = Product::where('is_available', true)->get();
+        $products = Product::where('is_available', true)
+            ->whereHas('category', function ($query) {
+                $query->where('is_available', true);
+            })
+            ->get();
         foreach ($products as $product) {
             $productUrl = "/guest/product/{$product->id}/{$product->nameModifier()}";
 
