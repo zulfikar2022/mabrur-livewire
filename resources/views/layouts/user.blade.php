@@ -10,6 +10,25 @@
 
         @livewireStyles
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        @if(env('GA_MEASUREMENT_ID'))
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GA_MEASUREMENT_ID') }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                // Initial page load tracking
+                gtag('config', '{{ env("GA_MEASUREMENT_ID") }}');
+
+                // Livewire navigation tracking (SPA mode)
+                document.addEventListener('livewire:navigated', () => {
+                    gtag('event', 'page_view', {
+                        page_location: window.location.href,
+                        page_title: document.title
+                    });
+                });
+            </script>
+        @endif
     </head>
     
 <body class="bg-slate-300 flex flex-col min-h-screen relative"
