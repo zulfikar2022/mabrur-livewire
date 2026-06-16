@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use ImageKit\ImageKit;
 
 new #[Layout('layouts.admin')] class extends Component {
     use WithFileUploads;
@@ -83,47 +84,71 @@ new #[Layout('layouts.admin')] class extends Component {
      */
     public function deleteExistingImage($id, $index)
     {
-        // 1. Find the specific model instance
-        $image = ProductImage::where('id', $id)
-            ->where('product_id', $this->product->id)
-            ->first();
+        $image = ProductImage::where('id', $id)->where('product_id', $this->product->id)->first();
 
-        // 2. If found, call delete() on the instance
         if ($image) {
-            $image->delete(); // This WILL trigger the ProductImageObserver events
+            // 1. Delete from ImageKit
+            $imageKit = new ImageKit(
+                config('services.imagekit.public_key'),
+                config('services.imagekit.private_key'),
+                config('services.imagekit.url_endpoint')
+            );
+
+            // We assume image_link stores the file path in ImageKit
+            $imageKit->deleteFile($image->image_link);
+
+            // 2. Delete from Database
+            $image->delete();
         }
 
-        // 3. Update your array
         array_splice($this->existingImages, $index, 1);
     }
 
     public function save()
     {
         $this->validate();
-        $this->product->update([
-                'category_id'     => $this->category_id,
-                'name'            => $this->name,
-                'description'     => $this->description,
-                'available_quantity' => $this->available_quantity,
-                'sell_by_piece'   => $this->sell_type === 'piece',
-                'sell_by_weight'  => $this->sell_type === 'weight',
-                'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
-                'price_per_kg'    => $this->sell_type === 'weight' ? $this->price_per_kg : null,
-                'is_available'    => $this->is_available,
-            ]);
 
-        foreach ($this->images as $image) {
-            $path = $image->store('products', 'public');
-            ProductImage::create([
-                'product_id' => $this->product->id,
-                'image_link' => $path,
-            ]);
+        // 1. Update product details
+        $this->product->update([
+            'category_id'     => $this->category_id,
+            'name'            => $this->name,
+            'description'     => $this->description,
+            'available_quantity' => $this->available_quantity,
+            'sell_by_piece'   => $this->sell_type === 'piece',
+            'sell_by_weight'  => $this->sell_type === 'weight',
+            'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
+            'price_per_kg'    => $this->sell_type === 'weight' ? $this->price_per_kg : null,
+            'is_available'    => $this->is_available,
+        ]);
+
+        // 2. Handle new image uploads to ImageKit
+        if (!empty($this->images)) {
+            $imageKit = new ImageKit(
+                config('services.imagekit.public_key'),
+                config('services.imagekit.private_key'),
+                config('services.imagekit.url_endpoint')
+            );
+
+            foreach ($this->images as $image) {
+                $uploadResult = $imageKit->upload([
+                    'file' => base64_encode(file_get_contents($image->getRealPath())),
+                    'fileName' => $image->getClientOriginalName(),
+                    'folder' => '/products'
+                ]);
+
+                if ($uploadResult->error === null) {
+                    ProductImage::create([
+                        'product_id' => $this->product->id,
+                        'image_link' => $uploadResult->result->filePath,
+                    ]);
+                } else {
+                    \Illuminate\Support\Facades\Log::error('ImageKit Update Upload Failed: ', (array) $uploadResult->error);
+                }
+            }
         }
 
         session()->flash('success', 'Product updated successfully!');
-
         CreateEmbedding::dispatch($this->product);
-
         return redirect()->route('admin.show-all-products');
     }
 };
@@ -243,7 +268,8 @@ new #[Layout('layouts.admin')] class extends Component {
                 <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
                     @foreach($existingImages as $index => $img)
                         <div wire:key="existing-img-{{ $img['id'] }}" class="relative group aspect-square rounded-lg overflow-hidden border border-gray-200 bg-white">
-                            <img src="{{ asset('storage/' . $img['image_link']) }}" class="w-full h-full object-cover">
+                            <img src="{{ config('services.imagekit.url_endpoint') . $img['image_link'] }}?tr=w-300,h-300,fo-auto" 
+                                class="w-full h-full object-cover">
                             <button type="button" 
                                     wire:click="deleteExistingImage({{ $img['id'] }}, {{ $index }})" 
                                     class="absolute top-1.5 right-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full h-6 w-6 flex items-center justify-center transition-colors shadow shadow-red-900/40 z-10">

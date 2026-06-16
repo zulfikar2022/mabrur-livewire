@@ -64,7 +64,8 @@ new class () extends Component {
 
         @if($firstImage)
             <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full block">
-                <img src="{{ asset('storage/' . $firstImage->image_link) }}" 
+                <!-- <img src="{{ asset('storage/' . $firstImage->image_link) }}"  -->
+                 <img src="{{ config('services.imagekit.url_endpoint') . $firstImage->image_link }}"
                  alt="{{ $this->product->name }}" 
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             </a>

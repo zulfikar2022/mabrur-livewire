@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Jobs\CreateEmbedding;
+use ImageKit\ImageKit;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -12,6 +13,7 @@ use Livewire\WithFileUploads;
 
 new #[Layout('layouts.admin')] class extends Component {
     use WithFileUploads;
+
 
     public $category_id = '';
     public $name = '';
@@ -53,35 +55,49 @@ new #[Layout('layouts.admin')] class extends Component {
     {
         $this->validate();
 
-        // 1. Create the product map
+        // 1. Create the product record first
         $product = Product::create([
-        'category_id' => $this->category_id,
-        'name' => $this->name,
-        'description' => $this->description,
-        'available_quantity' => $this->available_quantity,
-        'sell_by_piece' => $this->sell_type === 'piece',
-        'sell_by_weight' => $this->sell_type === 'weight',
-        'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
-        'price_per_kg' => $this->sell_type === 'weight' ? $this->price_per_kg : null,
-        'is_available' => $this->is_available,
-    ]);
+            'category_id' => $this->category_id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'available_quantity' => $this->available_quantity,
+            'sell_by_piece' => $this->sell_type === 'piece',
+            'sell_by_weight' => $this->sell_type === 'weight',
+            'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
+            'price_per_kg' => $this->sell_type === 'weight' ? $this->price_per_kg : null,
+            'is_available' => $this->is_available,
+        ]);
 
-        // 2. Handle batch image uploads if files exist
+        // 2. Initialize ImageKit
+        $imageKit = new ImageKit(
+            config('services.imagekit.public_key'),
+            config('services.imagekit.private_key'),
+            config('services.imagekit.url_endpoint')
+        );
+
+        // 3. Handle batch image uploads
         foreach ($this->images as $image) {
-            $path = $image->store('products', 'public');
-            ProductImage::create([
-                'product_id' => $product->id,
-                'image_link' => $path,
+            // Upload to ImageKit
+            $uploadResult = $imageKit->upload([
+                'file' => base64_encode(file_get_contents($image->getRealPath())),
+                'fileName' => $image->getClientOriginalName(),
+                'folder' => '/products'
             ]);
+
+            // THE FIX: Check if error is null to determine success
+            if ($uploadResult->error === null) {
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_link' => $uploadResult->result->filePath,
+                ]);
+            } else {
+                // Optional: It is good practice to log the error if ImageKit rejects the file
+                \Illuminate\Support\Facades\Log::error('ImageKit Upload Failed: ', (array) $uploadResult->error);
+            }
         }
 
-        // Set the success message for the next page to flash
         session()->flash('success', 'Product created successfully!');
-
-        // Dispatch background embedding generation
         CreateEmbedding::dispatch($product);
-
-        // Clean redirection sequence to prevent property lifecycle clashes
         return redirect()->route('admin.show-all-products');
     }
 };

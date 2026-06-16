@@ -1,6 +1,6 @@
 <?php
 
-namespace App\App\Livewire\Admin;
+namespace App\Livewire\Admin; // Note: Fixed the double App\App\ namespace typo
 
 use App\Models\Product;
 use Livewire\Attributes\Layout;
@@ -22,14 +22,14 @@ new #[Layout('layouts.admin')] class extends Component {
 
 <div class="max-w-6xl mx-auto p-4 md:p-6 my-6" 
      x-data="{ 
-        // Populate thumbnails directly from the eager-loaded relationship
+        // 1. THE FIX: Populate thumbnails using ImageKit endpoint and transformations
         images: [
             @foreach($product->productImages as $img)
-                '{{ asset('storage/' . $img->image_link) }}',
+                '{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-800,h-800,fo-auto',
             @endforeach
         ],
-        // Default to the first uploaded image, fallback to a placeholder if none exist
-        activeImage: '{{ $product->productImages->first() ? asset('storage/' . $product->productImages->first()->image_link) : '' }}',
+        // 2. THE FIX: Default to the first uploaded image from ImageKit
+        activeImage: '{{ $product->productImages->first() ? config('services.imagekit.url_endpoint') . $product->productImages->first()->image_link . '?tr=w-800,h-800,fo-auto' : '' }}',
         fallback: 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%239ca3af\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'/></svg>'
      }"
      x-init="if(images.length === 0) activeImage = fallback">
@@ -38,9 +38,9 @@ new #[Layout('layouts.admin')] class extends Component {
         <a href="{{ route('admin.show-all-products') }}" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
             <i class="fa-solid fa-arrow-left mr-2"></i> Back to Products
         </a>
-        <a class="bg-blue-600 px-3 py-1 rounded-xl text-white" href="{{ route('admin.update-product',$product ) }}">
-                <i class="fa-solid fa-pencil mr-2"></i>
-                Update Product
+        <a class="bg-blue-600 px-3 py-1 rounded-xl text-white hover:bg-blue-700 transition-colors" href="{{ route('admin.update-product', $product) }}">
+            <i class="fa-solid fa-pencil mr-2"></i>
+            Update Product
         </a>
     </div>
 
@@ -92,10 +92,10 @@ new #[Layout('layouts.admin')] class extends Component {
                     <span class="text-sm font-medium text-gray-500 block mb-1">Pricing Specification</span>
                     <div class="text-3xl font-extrabold text-gray-900 flex items-baseline">
                         @if($product->sell_by_piece)
-                            ${{ number_format($product->price_per_piece, 2) }}
+                            ৳{{ number_format($product->price_per_piece, 2) }}
                             <span class="text-gray-500 text-base font-normal ml-1">/ piece</span>
                         @elseif($product->sell_by_weight)
-                            ${{ number_format($product->price_per_kg, 2) }}
+                            ৳{{ number_format($product->price_per_kg, 2) }}
                             <span class="text-gray-500 text-base font-normal ml-1">/ kg</span>
                         @else
                             <span class="text-gray-400 text-xl font-medium">Pricing configuration pending</span>

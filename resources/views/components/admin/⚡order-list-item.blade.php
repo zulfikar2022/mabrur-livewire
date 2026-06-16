@@ -22,7 +22,8 @@ new class () extends Component {
         <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-100 shrink-0">
             @if($user->profile_image)
                 <a href="{{ route('admin.user-details', $user->id) }}">
-                    <img src="{{ asset('storage/' . $user->profile_image) }}" class="w-full h-full object-cover">
+                    <!-- <img src="{{ asset('storage/' . $user->profile_image) }}" class="w-full h-full object-cover"> -->
+                    <img src="{{ config('services.imagekit.url_endpoint') . $user->profile_image }}" class="w-full h-full object-cover">
                 </a>
             @else
                 <div class="w-full h-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg">

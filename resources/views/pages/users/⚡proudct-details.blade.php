@@ -57,7 +57,7 @@ new class () extends Component {
 </x-slot>
 
 <div class="max-w-6xl mx-auto p-6 my-8" 
-     x-data="{ activeImg: '{{ asset('storage/' . $activeImage) }}', showSuccessOverlay: false }">
+     x-data="{ activeImg: '{{ $activeImage ? config('services.imagekit.url_endpoint') . $activeImage . '?tr=w-600,h-600,fo-auto' : '' }}', showSuccessOverlay: false }">
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         
@@ -87,9 +87,9 @@ new class () extends Component {
             <!-- Thumbnail Slider -->
             <div class="flex gap-3 overflow-x-auto pb-2">
                 @foreach($product->productImages as $img)
-                    <button @click="activeImg = '{{ asset('storage/' . $img->image_link) }}'"
+                    <button @click="activeImg = '{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-600,h-600,fo-auto'"
                             class="w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all">
-                        <img src="{{ asset('storage/' . $img->image_link) }}" class="w-full h-full object-cover">
+                        <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-300,h-300,fo-auto" class="w-full h-full object-cover">
                     </button>
                 @endforeach
             </div>

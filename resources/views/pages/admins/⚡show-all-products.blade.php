@@ -100,7 +100,8 @@ new #[Layout('layouts.admin')] class extends Component {
         <div class="col-span-1 md:col-span-4 flex items-center space-x-4">
             <div class="w-14 h-14 rounded-lg bg-gray-100 overflow-hidden shrink-0 border border-gray-200">
                 @if($product->productImages && $product->productImages->first())
-                    <img src="{{ asset('storage/' . $product->productImages->first()->image_link) }}" class="w-full h-full object-cover">
+                    <!-- <img src="{{ asset('storage/' . $product->productImages->first()->image_link) }}" class="w-full h-full object-cover"> -->
+                    <img src="{{ config('services.imagekit.url_endpoint') . $product->productImages->first()->image_link }}" class="w-full h-full object-cover">
                 @else
                     <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400"><i class="fa-regular fa-image text-xl"></i></div>
                 @endif
