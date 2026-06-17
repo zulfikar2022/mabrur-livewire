@@ -9,7 +9,7 @@ new class () extends Component {
 
  <footer class="mt-6 w-full bg-[#1a63fb] text-white">
     @if (!config('services.is_for_department'))
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-between container mx-auto px-4 md:px-8 py-6 bg-[#1a63fb] ">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4  justify-items-center px-4 md:px-8 py-6 bg-[#1a63fb] ">
         
         <div class="flex flex-col gap-5 md:gap-15 items-center md:items-start">
             <div class="flex justify-center space-x-4 text-white">
