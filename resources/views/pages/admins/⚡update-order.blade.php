@@ -370,7 +370,7 @@ new #[Layout('layouts.admin')] class extends Component {
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1">Manual Override Charge (৳)</label>
-                        <div class="flex items-center gap-3">
+                        <div class="flex flex-col md:flex-row items-start md:items-center gap-3">
                             <input type="number" wire:model="shipping_charge" step="1" class="flex-1 text-sm rounded-lg border-gray-200 p-3 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm font-bold text-gray-900">
                             
                             <button type="button" wire:click="autoRecalculateShipping" class="shrink-0 bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-3 px-4 rounded-xl transition-colors shadow-sm text-xs flex items-center gap-2 cursor-pointer" title="Calculate based on weight and district">

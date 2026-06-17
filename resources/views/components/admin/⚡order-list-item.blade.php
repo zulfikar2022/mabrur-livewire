@@ -18,12 +18,12 @@ new class () extends Component {
 
 <div class="space-y-4">
                 
-    <div class="flex items-center gap-4">
+    <div class="flex flex-col md:flex-row items-center gap-4">
         <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-100 shrink-0">
             @if($user->profile_image)
                 <a href="{{ route('admin.user-details', $user->id) }}">
-                    <!-- <img src="{{ asset('storage/' . $user->profile_image) }}" class="w-full h-full object-cover"> -->
-                    <img src="{{ config('services.imagekit.url_endpoint') . $user->profile_image }}" class="w-full h-full object-cover">
+                    <img src="{{ asset('storage/' . $user->profile_image) }}" class="w-full h-full object-cover">
+                    <!-- <img src="{{ config('services.imagekit.url_endpoint') . $user->profile_image }}" class="w-full h-full object-cover"> -->
                 </a>
             @else
                 <div class="w-full h-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg">
@@ -40,14 +40,14 @@ new class () extends Component {
             </a>
         </div>
         @if($status)
-            <div class="ml-auto">
-                <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            <div class="ml-0 md:ml-auto">
+                <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full uppercase ">
                     {{ $userOrders->count() }} {{ $status }} {{ Str::plural('Order', $userOrders->count()) }}
                 </span>
             </div>
         @else
-            <div class="ml-auto">
-                <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            <div class="ml-0 md:ml-auto">
+                <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full uppercase ">
                     {{ $userOrders->count() }} Orders
                 </span>
             </div>
