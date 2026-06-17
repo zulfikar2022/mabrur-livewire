@@ -51,7 +51,12 @@ new class () extends Component {
                             <div class="w-16 h-16 rounded-lg bg-gray-50 border overflow-hidden shrink-0">
                                 @php $img = $item->product->productImages->first(); @endphp
                                 @if($img)
-                                    <img src="{{ asset('storage/' . $img->image_link) }}" class="w-full h-full object-cover">
+                                    <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">
+                                        No Image
+                                    </div>
+
                                 @endif
                             </div>
                             <div class="flex-1">
