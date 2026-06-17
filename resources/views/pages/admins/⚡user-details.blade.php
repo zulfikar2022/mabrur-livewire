@@ -113,10 +113,11 @@ new #[Layout('layouts.admin')] class extends Component {
         @endforeach
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-50 font-bold text-gray-800">Order History</div>
-        <table class="w-full text-sm">
-            <thead class="bg-gray-50 text-gray-500 uppercase text-[10px]">
+   <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-50 font-bold text-gray-800">Order History</div>
+    
+    <div class="overflow-x-auto"> 
+        <table class="w-full text-sm min-w-[600px]"> <thead class="bg-gray-50 text-gray-500 uppercase text-[10px]">
                 <tr>
                     <th class="px-6 py-3">Order ID</th>
                     <th class="px-6 py-3">Date</th>
@@ -130,7 +131,7 @@ new #[Layout('layouts.admin')] class extends Component {
                     <tr>
                         <td class="px-6 py-4 font-bold text-gray-900 text-center">#{{ $order->id }}</td>
                         <td class="text-center px-6 py-4 text-gray-600">{{ $order->created_at->format('M d, Y') }}</td>
-                        <td class=" text-center px-6 py-4">
+                        <td class="text-center px-6 py-4">
                             <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-600">
                                 {{ str_replace('_', ' ', $order->orderState->name) }}
                             </span>
@@ -144,9 +145,9 @@ new #[Layout('layouts.admin')] class extends Component {
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="4" class="px-6 py-8 text-center text-gray-400">No orders found for this user.</td></tr>
+                    <tr><td colspan="5" class="px-6 py-8 text-center text-gray-400">No orders found for this user.</td></tr>
                 @endforelse
             </tbody>
         </table>
-    </div>
+    </div> </div>
 </div>
