@@ -11,6 +11,7 @@ use App\Models\District;
 use App\Models\Upazila;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 
@@ -273,7 +274,7 @@ new class () extends Component {
                 'upazila_id'   => $this->upazila_id,
                 'address'      => $this->address,
                 'phone'        => $this->phone,
-                'second_phone' => $this->second_phone,
+                'alternative_phone' => $this->second_phone,
             ]);
 
             // STEP D: Calculate accurate shipping charge & weights using the Model logic
@@ -289,6 +290,19 @@ new class () extends Component {
 
         } catch (\Exception $e) {
             DB::rollBack();
+            // log the erorr
+            Log::error('Order Placement Failed: ' . $e->getMessage(), [
+                'user_id' => $this->user->id,
+                'cart_items' => $cartItems->pluck('id'),
+                'form_data' => [
+                    'division_id' => $this->division_id,
+                    'district_id' => $this->district_id,
+                    'upazila_id' => $this->upazila_id,
+                    'address' => $this->address,
+                    'phone' => $this->phone,
+                    'second_phone' => $this->second_phone,
+                ],
+            ]);
             session()->flash('error', 'Something went wrong while processing your order. Please try again.');
         }
     }
