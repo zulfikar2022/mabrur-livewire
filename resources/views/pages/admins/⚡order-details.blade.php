@@ -117,7 +117,8 @@ new #[Layout('layouts.admin')] class extends Component {
                             <div class="w-16 h-16 rounded-xl bg-gray-50 border border-gray-100 overflow-hidden shrink-0 shadow-inner">
                                 @php $img = $item->product->productImages->first(); @endphp
                                 @if($img)
-                                    <img src="{{ asset('storage/' . $img->image_link) }}" class="w-full h-full object-cover">
+                                    <!-- <img src="{{ asset('storage/' . $img->image_link) }}" class="w-full h-full object-cover"> -->
+                                    <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-300,h-300,fo-auto" class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-gray-300">
                                         <i class="fa-solid fa-image"></i>
@@ -207,6 +208,7 @@ new #[Layout('layouts.admin')] class extends Component {
                         @if($order->user->profile_image)
                             <a href="{{ route('admin.user-details', $order->user->id) }}">
                                 <img src="{{ asset('storage/' . $order->user->profile_image) }}" class="w-full h-full object-cover">
+                               
                             </a>
                         @else
                             <div class="w-full h-full flex items-center justify-center text-gray-400"><i class="fa-solid fa-user text-xl"></i></div>
