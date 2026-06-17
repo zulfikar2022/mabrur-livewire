@@ -104,7 +104,7 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
             'price_per_kg'    => $this->sell_type === 'weight' ? $this->price_per_kg : null,
             'is_available'    => $this->is_available,
-            'weight_per_piece' => $this->weight_per_piece ?: null, // NEW: Save field
+            'weight_per_piece' => ($this->weight_per_piece === '' || $this->weight_per_piece === null) ? null : $this->weight_per_piece,
             'is_mango'        => $this->is_mango,                  // NEW: Save field
         ]);
 

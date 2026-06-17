@@ -49,22 +49,25 @@ new class () extends Component {
 };
 ?>
 
-
-
-<!-- 1. UPDATED: Added global x-data state tracker to manage the temporary success overlay context -->
 <div x-data="{ showSuccessOverlay: false }" 
      class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full group">
     
-    <!-- PRODUCT IMAGE ZONE -->
     <div class="block aspect-square w-full bg-gray-50 overflow-hidden relative">
         @php
             // Grab the first image from the relationship collection
             $firstImage = $this->product->productImages->first();
         @endphp
 
+        @if($this->product->weight_per_piece <= 0)
+            <div class="absolute top-2 right-2 z-20">
+                <span class="bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-widest px-2 py-1 rounded-lg shadow-sm border border-blue-400">
+                    Free Delivery
+                </span>
+            </div>
+        @endif
+
         @if($firstImage)
             <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full block">
-                <!-- <img src="{{ asset('storage/' . $firstImage->image_link) }}"  -->
                  <img src="{{ config('services.imagekit.url_endpoint') . $firstImage->image_link }}"
                  alt="{{ $this->product->name }}" 
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -83,7 +86,7 @@ new class () extends Component {
              x-transition:leave="transition ease-in duration-300"
              x-transition:leave-start="opacity-100 scale-100"
              x-transition:leave-end="opacity-0 scale-95"
-             class="absolute inset-0 bg-emerald-600/80 backdrop-blur-[2px] flex flex-col items-center justify-center text-white z-10"
+             class="absolute inset-0 bg-emerald-600/80 backdrop-blur-[2px] flex flex-col items-center justify-center text-white z-30"
              x-cloak>
             
             <div x-show="showSuccessOverlay"
@@ -99,7 +102,6 @@ new class () extends Component {
             </span>
         </div>
 
-        <!-- Availability Badge Indicator -->
         @if(!$this->product->is_available)
             <div class="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-20">
                 <span class="bg-gray-800 text-white text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
@@ -109,7 +111,6 @@ new class () extends Component {
         @endif
     </div>
 
-    <!-- CONTENT SPACE -->
     <div class="p-2 flex flex-col grow justify-between">
         <div class="space-y-1">
             <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="block">
@@ -119,21 +120,17 @@ new class () extends Component {
             </a>
         </div>
 
-        <!-- DYNAMIC PRICING STRATEGY DISPLAY -->
         <div class="mt-1 border-t border-gray-50 flex items-baseline justify-between">
             <div>
                 @if($this->product->sell_by_piece)
                     <span class="font-bold text-gray-900">৳{{ number_format($this->product->price_per_piece, 2) }}</span>
-                    <!-- <span class="text-xs text-gray-500 font-medium">/ piece</span> -->
                 @else
                     <span class="font-bold text-gray-900">৳{{ number_format($this->product->price_per_kg, 2) }}</span>
-                    <!-- <span class="text-xs text-gray-500 font-medium">/ kg</span> -->
                 @endif
             </div>
         </div>
     </div>
 
-    <!-- ACTION CONTROLS FOOTER -->
     <div class="p-4 pt-0">
         <button type="button"
                 @click="if({{ Auth::check() ? 'true' : 'false' }} && {{ $this->product->is_available ? 'true' : 'false' }}) { 
@@ -147,5 +144,4 @@ new class () extends Component {
             <span>Add to Cart</span>
         </button>
     </div>
-
 </div>
