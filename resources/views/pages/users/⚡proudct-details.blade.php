@@ -141,7 +141,7 @@ new class () extends Component {
                 @if($this->product->is_mango)
                     <div class="px-4 py-2 text-red-700 border border-yellow-200 rounded-md text-sm font-medium inline-flex items-center mb-4 bg-yellow-50">
                         <i class="fa-solid fa-info-circle mr-2"></i> 
-                        <p>এই পণ্যটির হোম ডেলিভারি করা হয় না। আপনাকে এটি সংগ্রহ করতে হবে আপনার নিকটস্থ <b>স্টেডফাস্ট কুরিয়ারের</b> শাখা থেকে।</p>
+                        <p>এই পণ্যটির হোম ডেলিভারি করা হয় না। আপনাকে এটি সংগ্রহ করতে হবে আপনার নিকটস্থ <b>স্টেডফাস্ট / সুন্দরবন / সওদাগর / এজিআর  </b> কুরিয়ারের শাখা থেকে।</p>
                     </div>
                 @endif
             </div>

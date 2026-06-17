@@ -50,4 +50,15 @@ return [
         'url_endpoint' => env('IMAGEKIT_URL_ENDPOINT'),
     ],
 
+    'courier_charge' => [
+        'first_half_kg_isd' => env('FIRST_HALF_KG_ISD', 65),
+        'first_kg_isd' => env('FIRST_KG_ISD', 75),
+        'later_kgs_isd' => env('LATER_KGS_ISD', 20),
+
+        'first_half_kg_osd' => env('FIRST_HALF_KG_OSD', 115),
+        'first_kg_osd' => env('FIRST_KG_OSD', 135),
+        'later_kgs_osd' => env('LATER_KGS_OSD', 20),
+        'mango_delivery_charge_per_kg' => env('MANGO_DELIVERY_CHARGE_PER_KG', 15)
+    ]
+
 ];

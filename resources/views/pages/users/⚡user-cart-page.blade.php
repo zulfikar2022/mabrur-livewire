@@ -12,6 +12,7 @@ use App\Models\Upazila;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\Attributes\Computed;
 
 new class () extends Component {
     public User $user;
@@ -87,7 +88,8 @@ new class () extends Component {
     /**
      * Computed Property: Fetches valid cart items
      */
-    public function getCartItemsProperty()
+    #[Computed]
+    public function cartItems()
     {
         return Cart::where('user_id', $this->user->id)
             ->with(['product.productImages', 'product.category'])
@@ -99,6 +101,68 @@ new class () extends Component {
             })
             ->orderBy('created_at', 'desc')
             ->get();
+    }
+
+    /**
+     * Computed Property: Real-time calculation of shipping charge for the UI
+     */
+    #[Computed]
+    public function shippingCharge()
+    {
+        if (empty($this->district_id)) {
+            return 0;
+        }
+
+        $weightForMango = 0;
+        $weightForNonMango = 0;
+
+        foreach ($this->cartItems as $item) {
+            $productWeight = ($item->product->weight_per_piece ?? 0) * $item->quantity;
+
+            if ($item->product->is_mango) {
+                $weightForMango += $productWeight;
+            } else {
+                $weightForNonMango += $productWeight;
+            }
+        }
+
+        $charge = 0;
+
+        // Non-Mango Items Logic
+        if ($weightForNonMango > 0) {
+            if ($weightForNonMango <= 0.5) {
+                $weightForNonMango = 0.5;
+            } elseif ($weightForNonMango > 0.5 && $weightForNonMango <= 1.00) {
+                $weightForNonMango = 1.00;
+            } elseif ($weightForNonMango > 1.00) {
+                $weightForNonMango = ceil($weightForNonMango);
+            }
+
+            if ($this->district_id == 1) { // Inside Dhaka
+                if ($weightForNonMango == 0.5) {
+                    $charge += config('services.courier_charge.first_half_kg_isd', 60);
+                } elseif ($weightForNonMango == 1.00) {
+                    $charge += config('services.courier_charge.first_kg_isd', 70);
+                } else {
+                    $charge += config('services.courier_charge.first_kg_isd', 70) + (($weightForNonMango - 1) * config('services.courier_charge.later_kgs_isd', 15));
+                }
+            } else { // Outside Dhaka
+                if ($weightForNonMango == 0.5) {
+                    $charge += config('services.courier_charge.first_half_kg_osd', 110);
+                } elseif ($weightForNonMango == 1.00) {
+                    $charge += config('services.courier_charge.first_kg_osd', 130);
+                } else {
+                    $charge += config('services.courier_charge.first_kg_osd', 130) + (($weightForNonMango - 1) * config('services.courier_charge.later_kgs_osd', 25));
+                }
+            }
+        }
+
+        // Mango Logic
+        if ($weightForMango > 0) {
+            $charge += $weightForMango * config('services.courier_charge.mango_delivery_charge_per_kg', 15);
+        }
+
+        return $charge;
     }
 
     public function incrementQuantity($cartId)
@@ -184,7 +248,7 @@ new class () extends Component {
                 'user_id'               => $this->user->id,
                 'order_state_id'        => $pendingState->id,
                 'total_price'           => $this->getCartTotal(),
-                'total_shipping_charge' => 0, // Placeholder for future logic
+                'total_shipping_charge' => 0, // Will be updated by model methods below
             ]);
 
             // STEP B: Create Ordered Products
@@ -212,14 +276,16 @@ new class () extends Component {
                 'second_phone' => $this->second_phone,
             ]);
 
+            // STEP D: Calculate accurate shipping charge & weights using the Model logic
+            $order->weightCalculationAndDatabaseUpdate();
+            $order->calculateTotalShippingCharge($this->district_id);
+
             DB::commit();
 
             // Reset checkout form state
             $this->reset(['division_id', 'district_id', 'upazila_id', 'address', 'phone', 'second_phone', 'districts', 'upazilas']);
 
             session()->flash('success', 'Your order has been placed successfully!');
-
-            // Intentionally NOT clearing the cart as requested.
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -263,7 +329,7 @@ new class () extends Component {
                                 <div class="w-20 h-20 bg-gray-50 border border-gray-100 rounded-lg overflow-hidden shrink-0 shadow-inner relative">
                                     @php $img = $item->product->productImages->first(); @endphp
                                     @if($img)
-                                        <img src="{{ asset('storage/' . $img->image_link) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
+                                        <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-300,h-300,fo-auto" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50"><i class="fa-solid fa-image text-xl"></i></div>
                                     @endif
@@ -320,18 +386,31 @@ new class () extends Component {
                 <h3 class="text-base font-bold text-gray-800 mb-4 tracking-tight">Order Summary</h3>
                 <div class="space-y-3 text-sm pb-4 border-b border-gray-100">
                     <div class="flex justify-between text-gray-500">
-                        <span>Total Products</span>
-                        <span class="font-semibold text-gray-800">{{ $this->cartItems->count() }}</span>
+                        <span>Products Price</span>
+                        <span class="font-semibold text-gray-800">৳{{ number_format($this->getCartTotal(), 2) }}</span>
                     </div>
-                    <div class="flex justify-between text-gray-500">
+                    <!-- UPDATE: Dynamic Delivery Charge Display -->
+                    <div class="flex justify-between items-center text-gray-500">
                         <span>Shipping Charge</span>
-                        <!-- <span class="font-semibold text-gray-800">৳0.00</span> -->
-                         <span class="font-semibold text-gray-800">Provide Shipping Information first </span>
+                        @if($district_id)
+                            <span class="font-semibold text-gray-800 text-base">৳{{ number_format($this->shippingCharge, 2) }}</span>
+                        @else
+                            <span class="font-semibold text-gray-800 text-xs text-right max-w-32.5 leading-tight bg-gray-100 p-1.5 rounded-lg border border-gray-200">
+                                Select district to calculate
+                            </span>
+                        @endif
                     </div>
                 </div>
                 <div class="pt-4 flex items-baseline justify-between">
                     <span class="text-sm font-bold text-gray-800">Total Payable</span>
-                    <span class="text-2xl font-black text-blue-600">৳{{ number_format($this->getCartTotal(), 2) }}</span>
+                    <!-- UPDATE: Dynamic Total Payable Display -->
+                    @if($district_id)
+                        <span class="text-lg font-extrabold text-gray-900">৳{{ number_format($this->getCartTotal() + $this->shippingCharge, 2) }}</span>
+                    @else
+                        <span class="text-sm font-bold text-gray-800 text-right max-w-37.5 leading-tight bg-gray-100 p-1.5 rounded-lg border border-gray-200">
+                            Select district to calculate
+                        </span>
+                    @endif
                 </div>
             </div>
 
@@ -354,6 +433,7 @@ new class () extends Component {
 
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">District <span class="text-red-500">*</span></label>
+                            <!-- Note: Because this uses wire:model.live, changing it automatically recalculates shipping! -->
                             <select wire:model.live="district_id" class="w-full text-sm p-2 border-gray-200 bg-gray-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" {{ empty($districts) ? 'disabled' : '' }}>
                                 <option value="">Select District</option>
                                 @foreach($districts as $dis)
@@ -407,6 +487,7 @@ new class () extends Component {
 
     </div>
 
+    <!-- Modals remaining unchanged but hidden for brevity... -->
     <div wire:ignore>
         
         <div x-show="openItemDeleteModal !== null" 

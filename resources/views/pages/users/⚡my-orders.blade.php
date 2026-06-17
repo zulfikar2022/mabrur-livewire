@@ -55,7 +55,7 @@ new class () extends Component {
                                 {{ $order->orderedProducts->count() }} items
                             </td>
                             <td class="px-6 py-4 font-bold text-gray-900">
-                                ৳{{ number_format($order->total_price, 2) }}
+                                ৳{{ number_format($order->total_price + $order->total_shipping_charge, 2)  }}
                             </td>
                             <td class="px-6 py-4 text-gray-600">
                                 ৳{{ number_format($order->total_shipping_charge, 2) }}

@@ -34,10 +34,8 @@ class OrderedProduct extends Model
         $this->save();
     }
 
-    public function calculateShippingCharge($destination, $isHomeDelivery = true)
+    public function totalWeight()
     {
-        $productsPerPieceWeight = $this->product->weight_per_piece;
-        $totalWeight = $productsPerPieceWeight * $this->quantity;
-        // Calculate shipping charge based on total weight and destination
+        return $this->product->weight_per_piece * $this->quantity;
     }
 }

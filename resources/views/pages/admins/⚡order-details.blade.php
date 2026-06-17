@@ -173,6 +173,34 @@ new #[Layout('layouts.admin')] class extends Component {
                 </div>
             </div>
 
+             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-truck-fast text-gray-400"></i>
+                    <h3 class="font-bold text-gray-800">Shipping Details</h3>
+                </div>
+                
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Contact Numbers</p>
+                        <p class="font-semibold text-gray-900">{{ $order->orderAddress->phone }}</p>
+                        @if($order->orderAddress->alternative_phone)
+                            <p class="font-semibold text-gray-600">{{ $order->orderAddress->alternative_phone }} <span class="text-xs font-normal">(Alt)</span></p>
+                        @endif
+                    </div>
+                    
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Delivery Address</p>
+                        <p class="font-medium text-gray-900 leading-relaxed">{{ $order->orderAddress->address }}</p>
+                        <p class="text-gray-600 mt-1">
+                            {{ $order->orderAddress->upazila->name ?? 'N/A' }}, 
+                            {{ $order->orderAddress->district->name ?? 'N/A' }},
+                            {{ $order->orderAddress->division->name ?? 'N/A' }}
+                        </p>
+                        <!-- <p class="text-gray-600"> Division</p> -->
+                    </div>
+                </div>
+            </div>
+
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="w-14 h-14 rounded-full bg-gray-100 border-2 border-white shadow-sm overflow-hidden shrink-0">
@@ -237,34 +265,7 @@ new #[Layout('layouts.admin')] class extends Component {
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center gap-2 mb-4">
-                    <i class="fa-solid fa-truck-fast text-gray-400"></i>
-                    <h3 class="font-bold text-gray-800">Shipping Details</h3>
-                </div>
-                
-                <div class="space-y-4 text-sm">
-                    <div>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Contact Numbers</p>
-                        <p class="font-semibold text-gray-900">{{ $order->orderAddress->phone }}</p>
-                        @if($order->orderAddress->alternative_phone)
-                            <p class="font-semibold text-gray-600">{{ $order->orderAddress->alternative_phone }} <span class="text-xs font-normal">(Alt)</span></p>
-                        @endif
-                    </div>
-                    
-                    <div>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Delivery Address</p>
-                        <p class="font-medium text-gray-900 leading-relaxed">{{ $order->orderAddress->address }}</p>
-                        <p class="text-gray-600 mt-1">
-                            {{ $order->orderAddress->upazila->name ?? 'N/A' }}, 
-                            {{ $order->orderAddress->district->name ?? 'N/A' }},
-                            {{ $order->orderAddress->division->name ?? 'N/A' }}
-                        </p>
-                        <!-- <p class="text-gray-600"> Division</p> -->
-                    </div>
-                </div>
-            </div>
-
+           
         </div>
     </div>
     </div>
