@@ -48,6 +48,13 @@ new class () extends Component {
         $this->dispatch('cart-updated');
         session()->flash('success', 'Product added to cart!');
     }
+
+    public function orderNow()
+    {
+        $this->addToCart();
+        return redirect()->route('user.cart', ['user' => Auth::id()]);
+
+    }
 };
 ?>
 
@@ -115,7 +122,7 @@ new class () extends Component {
             @if($this->product->is_available && $this->product->category->is_available)
                 <div wire:click="addToCart"
                      @click="showSuccessOverlay = true; setTimeout(() => { showSuccessOverlay = false }, 2000)"
-                     class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-[1.02] flex items-center gap-2 w-max cursor-pointer">
+                     class="px-8  py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-[1.02] flex items-center gap-2 w-full md:w-max cursor-pointer">
                         <i class="fa-solid fa-cart-plus text-xs"></i>
                         <p>Add to Cart</p>
                 </div>
@@ -142,12 +149,22 @@ new class () extends Component {
                 @endif
             </div>
 
-            <div class="text-gray-600 leading-relaxed">
+            @if($this->product->is_available && $this->product->category->is_available)
+                <div wire:click="orderNow"
+                    class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-[1.02] flex items-center gap-2 w-full md:w-max cursor-pointer">
+                        <i class="fa-solid fa-shopping-bag text-xs "></i>
+                        <p>Order Now</p>
+                </div>
+            @endif
+
+
+           
+        </div>
+         <div class="text-gray-600 leading-relaxed">
                 <h3 class="font-bold text-gray-900 mb-2">Description</h3>
                 <div class="prose max-w-none">
                     {!! $this->product->description !!}
                 </div>
-            </div>
         </div>
     </div>
 </div>
