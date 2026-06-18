@@ -16,9 +16,9 @@ new class () extends Component {
         $this->activeImage = $product->productImages->first()?->image_link;
 
         // check if the category of the product is available or not. if not then redirect to the 404 page
-        if (!$product->category || !$product->category->is_available) {
-            abort(404);
-        }
+        // if (!$product->category || !$product->category->is_available) {
+        //     abort(404);
+        // }
     }
 
     // THE FIX: Computed property prevents the "Vanishing Details" bug on Add to Cart
@@ -76,45 +76,45 @@ new class () extends Component {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         
         <!-- Left: Image Gallery with the success overlay placed inside -->
-        <div class="space-y-4">
-            <div class="w-full aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm relative">
-                <!-- Main Image -->
-                <img :src="activeImg" class="w-full h-full object-cover">
+       <!-- Left: Image Gallery with the success overlay placed inside -->
+<div class="space-y-4">
+    <div class="w-full aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm relative">
+        <!-- Main Image -->
+        <img :src="activeImg" class="w-full h-full object-cover">
 
-                <!-- The Success Overlay -->
-                <div x-show="showSuccessOverlay"
-                     x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0"
-                     x-transition:enter-end="opacity-100"
-                     x-transition:leave="transition ease-in duration-300"
-                     x-transition:leave-start="opacity-100"
-                     x-transition:leave-end="opacity-0"
-                     class="absolute inset-0 bg-emerald-600/90 backdrop-blur-sm flex flex-col items-center justify-center text-white z-10"
-                     x-cloak>
-                    <div class="bg-white text-emerald-600 rounded-full h-16 w-16 flex items-center justify-center shadow-lg">
-                        <i class="fa-solid fa-check text-3xl font-black"></i>
-                    </div>
-                    <span class="text-sm font-bold uppercase tracking-wider mt-4">Added to Cart</span>
-                </div>
+        <!-- Free Delivery Tag -->
+        @if($this->product->weight_per_piece == 0)
+            <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10">
+                Free Delivery
             </div>
+        @endif
 
-            <!-- Thumbnail Slider -->
-            <div class="flex gap-3 overflow-x-auto pb-2">
-                @foreach($this->product->productImages as $img)
-                    <button @click="activeImg = '{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-600,h-600,fo-auto'"
-                            class="w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all">
-                        <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-300,h-300,fo-auto" class="w-full h-full object-cover">
-                    </button>
-                @endforeach
+        <!-- The Success Overlay -->
+        <div x-show="showSuccessOverlay"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-300"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="absolute inset-0 bg-emerald-600/90 backdrop-blur-sm flex flex-col items-center justify-center text-white z-20"
+             x-cloak>
+            <div class="bg-white text-emerald-600 rounded-full h-16 w-16 flex items-center justify-center shadow-lg">
+                <i class="fa-solid fa-check text-3xl font-black"></i>
             </div>
+            <span class="text-sm font-bold uppercase tracking-wider mt-4">Added to Cart</span>
         </div>
+    </div>
+    
+    <!-- Thumbnail Slider continues... -->
+</div>
 
         <!-- Right: Details -->
         <div class="space-y-6">
             <h1 class="text-3xl font-black text-gray-900">{{ $this->product->name }}</h1>
             
             <!-- Updated Add to Cart Button with temporary overlay trigger -->
-            @if($this->product->is_available)
+            @if($this->product->is_available && $this->product->category->is_available)
                 <div wire:click="addToCart"
                      @click="showSuccessOverlay = true; setTimeout(() => { showSuccessOverlay = false }, 2000)"
                      class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-[1.02] flex items-center gap-2 w-max cursor-pointer">
@@ -122,7 +122,7 @@ new class () extends Component {
                         <p>Add to Cart</p>
                 </div>
             @else
-                <button disabled class="px-8 py-3 bg-gray-300 text-gray-500 font-bold rounded-xl cursor-not-allowed">
+                <button disabled class="px-8 py-3 bg-gray-300 text-gray-500 font-bold rounded-xl cursor-not-allowed border border-gray-400">
                     Currently Unavailable
                 </button>
             @endif

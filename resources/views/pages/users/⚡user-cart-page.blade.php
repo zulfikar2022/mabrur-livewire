@@ -405,15 +405,23 @@ new class () extends Component {
                     </div>
                     <!-- UPDATE: Dynamic Delivery Charge Display -->
                     <div class="flex justify-between items-center text-gray-500">
-                        <span>Shipping Charge</span>
+                        <span>Delivery Charge</span>
                         @if($district_id)
                             <span class="font-semibold text-gray-800 text-base">৳{{ number_format($this->shippingCharge, 2) }}</span>
+                        
                         @else
                             <span class="font-semibold text-gray-800 text-xs text-right max-w-32.5 leading-tight bg-gray-100 p-1.5 rounded-lg border border-gray-200">
                                 Select district to calculate
                             </span>
                         @endif
                     </div>
+                    @if($district_id)
+                        <div>
+                            <span class="text-[10px] text-gray-500">
+                                *ডেলিভারি চার্জ পরিবর্তিত হতে পারে।
+                            </span>
+                        </div>
+                    @endif
                 </div>
                 <div class="pt-4 flex items-baseline justify-between">
                     <span class="text-sm font-bold text-gray-800">Total Payable</span>
