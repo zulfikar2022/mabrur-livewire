@@ -56,7 +56,7 @@ new #[Layout('layouts.admin')] class extends Component {
 <div class="p-6" x-data="{ open: @entangle('showModal') }">
     <div class="flex justify-between mb-6">
         <h1 class="text-2xl font-bold">Manage Categories</h1>
-        <button @click="$wire.openModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:cursor-pointer font-bold">Add Category</button>
+        <a href="{{ route('admin.create-category') }}" wire:navigate class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:cursor-pointer font-bold">Add Category</a>
     </div>
 
     <div class="space-y-4">
@@ -87,9 +87,9 @@ new #[Layout('layouts.admin')] class extends Component {
                 </div>
 
                 <div class="flex justify-start md:block">
-                    <button @click="$wire.openModal({{ $category->id }})" class="text-blue-500 hover:text-blue-700 transition-colors">
+                    <a href="{{ route('admin.update-category', $category->id) }}" wire:navigate class="text-blue-500 hover:text-blue-700 transition-colors">
                         <i class="fa-solid fa-pencil"></i> Edit
-                    </button>
+                    </a >
                 </div>
             </div>
         @endforeach

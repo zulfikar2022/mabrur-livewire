@@ -8,6 +8,9 @@ Route::middleware(['auth','status', 'admin.only'])->prefix('/admin')->group(func
     Route::get('/auth/logout', [GoogleController::class, 'logout'])->name('admin.logout');
 
     Route::livewire('/categories', 'pages::admins.show-all-categories')->name('admin.show-all-categories');
+    Route::livewire('/categories/add', 'pages::admins.create-category')->name('admin.create-category');
+    // Route::livewire('/categories/{id}', 'pages::admins.see-category-details')->name('admin.see-category-details');
+    Route::livewire('/categories/{category}/edit', 'pages::admins.update-category')->name('admin.update-category');
     Route::livewire('/products', 'pages::admins.show-all-products')->name('admin.show-all-products');
     Route::livewire('/products/add', 'pages::admins.add-product')->name('admin.add-product');
     Route::livewire('/products/{id}', 'pages::admins.see-product-details')->name('admin.see-product-details');

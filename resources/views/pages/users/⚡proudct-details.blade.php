@@ -51,9 +51,17 @@ new class () extends Component {
 
     public function orderNow()
     {
-        $this->addToCart();
-        return redirect()->route('user.cart', ['user' => Auth::id()]);
+        // 1. Check Auth first to prevent crashing on Auth::id()
+        if (!Auth::check()) {
+            session()->flash('message', 'Please login to order products.');
+            return redirect()->route('login');
+        }
 
+        // 2. Add to cart
+        $this->addToCart();
+
+        // 3. Redirect to the cart page
+        return redirect()->route('user.cart', ['user' => Auth::id()]);
     }
 };
 ?>

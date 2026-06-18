@@ -22,6 +22,11 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function categoryImage()
+    {
+        return $this->hasOne(CategoryImage::class);
+    }
+
 
 
     #[Override]
