@@ -168,8 +168,9 @@ new class () extends Component {
 
            
         </div>
-         <div class="text-gray-600 leading-relaxed">
-                <h3 class="font-bold text-gray-900 mb-2">Description</h3>
+        <!-- span the context of that page entirely of the parent -->
+         <div class="text-black leading-relaxed col-span-1 md:col-span-2">
+                <h3 class="font-bold text-black mb-2">Description</h3>
                 <div class="prose max-w-none">
                     {!! $this->product->description !!}
                 </div>
