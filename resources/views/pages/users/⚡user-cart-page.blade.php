@@ -287,6 +287,7 @@ new class () extends Component {
             $this->reset(['division_id', 'district_id', 'upazila_id', 'address', 'phone', 'second_phone', 'districts', 'upazilas']);
 
             session()->flash('success', 'Your order has been placed successfully!');
+            return redirect()->route('user.my.orders');
 
         } catch (\Exception $e) {
             DB::rollBack();
