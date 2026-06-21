@@ -17,6 +17,7 @@ new class () extends Component {
     {
         $this->categories = Cache::remember('nav_categories', null, function () {
             return Category::where('is_available', true)
+                ->with('categoryImage')
                 ->orderBy('id', 'desc')
                 ->get()->toJson();
         });

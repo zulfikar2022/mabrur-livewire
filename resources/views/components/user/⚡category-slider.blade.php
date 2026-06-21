@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -8,11 +9,14 @@ new class () extends Component {
     #[Computed]
     public function categories()
     {
-        // Fetch only available categories and eager load their associated image
-        return Category::where('is_available', true)
-            ->with('categoryImage')
-            ->orderBy('id', 'asc') // You can change this to 'created_at', 'desc', etc.
-            ->get();
+        $data = Cache::remember('nav_categories', null, function () {
+            return Category::where('is_available', true)
+                ->with('categoryImage')
+                ->orderBy('id', 'desc')
+                ->get()->toJson();
+        });
+
+        return Category::hydrate(json_decode($data, true));
     }
 };
 ?>
