@@ -95,7 +95,7 @@ new class () extends Component {
         </div>
     </div>
 
-    <div class="flex justify-center">
+    <div class="md:flex md:justify-center">
         <livewire:user.category-slider />
     </div>
 
