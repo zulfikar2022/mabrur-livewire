@@ -123,9 +123,9 @@ new #[Layout('layouts.admin')] class extends Component {
             <span class="md:hidden text-sm font-medium text-gray-500 mr-2">Price:</span>
             <div class="text-sm font-semibold text-gray-800">
                 @if($product->sell_by_piece)
-                    ${{ number_format($product->price_per_piece, 2) }}<span class="text-gray-500 text-xs">/pc</span>
+                    ৳{{ number_format($product->price_per_piece, 2) }}<span class="text-gray-500 text-xs">/pc</span>
                 @elseif($product->sell_by_weight)
-                    ${{ number_format($product->price_per_kg, 2) }}<span class="text-gray-500 text-xs">/kg</span>
+                    ৳{{ number_format($product->price_per_kg, 2) }}<span class="text-gray-500 text-xs">/kg</span>
                 @endif
             </div>
         </div>
