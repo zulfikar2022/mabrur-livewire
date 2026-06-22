@@ -47,27 +47,30 @@ new class () extends Component {
                 <h3 class="font-bold text-gray-800 mb-4">Ordered Items</h3>
                 <div class="space-y-4">
                     @foreach($order->orderedProducts as $item)
-                        <div class="flex items-center gap-4 border-b pb-4 last:border-0 last:pb-0">
-                            <div class="w-16 h-16 rounded-lg bg-gray-50 border overflow-hidden shrink-0">
-                                @php $img = $item->product->productImages->first(); @endphp
-                                @if($img)
-                                    <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">
-                                        No Image
-                                    </div>
+                        <div class="flex flex-col md:flex-row  justify-between gap-4 border-b pb-4 last:border-0 last:pb-0">
+                            
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 rounded-lg bg-gray-50 border overflow-hidden shrink-0">
+                                        @php $img = $item->product->productImages->first(); @endphp
+                                        @if($img)
+                                            <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}" class="w-full h-full object-cover">
+                                        @else
+                                            <div class="w-full h-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold text-sm">
+                                                No Image
+                                            </div>
 
-                                @endif
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-bold text-gray-900">{{ $item->product->name }}</h4>
-                                <p class="text-xs text-gray-500">{{ $item->product->category->name }}</p>
-                                <p class="text-xs font-bold">{{ $item->quantity }} <span class="font-light">{{ $item->product->sell_by_piece ? 'piece':'kg' }}</span> </p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-sm font-semibold text-gray-900">{{ $item->quantity }} x ৳{{ number_format($item->unit_price, 2) }}</p>
-                                <p class="text-base font-black text-blue-600">৳{{ number_format($item->price, 2) }}</p>
-                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-gray-900">{{ $item->product->name }}</h4>
+                                        <p class="text-xs text-gray-500">{{ $item->product->category->name }}</p>
+                                        <p class="text-xs font-bold">{{ $item->quantity }} <span class="font-light">{{ $item->product->sell_by_piece ? 'piece':'kg' }}</span> </p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-semibold text-gray-900">{{ $item->quantity }} x ৳{{ number_format($item->unit_price, 2) }}</p>
+                                    <p class="text-base font-black text-blue-600">৳{{ number_format($item->price, 2) }}</p>
+                                </div>
                         </div>
                     @endforeach
                 </div>
