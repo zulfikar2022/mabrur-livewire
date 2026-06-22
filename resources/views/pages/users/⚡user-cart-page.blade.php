@@ -381,7 +381,7 @@ new class () extends Component {
                                 </div>
 
                                 <button type="button" @click="openItemDeleteModal = {{ $item->id }}; productNameToDelete = '{{ e($item->product->name) }}'" class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-red-50 transition-colors cursor-pointer">
-                                        <i class="fa-solid fa-trash-can text-base"></i>
+                                        <i class="fa-solid fa-trash-can text-base text-red-500"></i>
                                 </button>
                             </div>
                         </div>
