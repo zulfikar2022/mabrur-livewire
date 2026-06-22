@@ -44,37 +44,42 @@ new class () extends Component {
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($this->orders as $order)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $order->id }}    
-                            </td>
-                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $order->created_at->format('d M, Y') }}
-                            </td>
-                            <td class="px-6 py-4 text-gray-600">
-                                {{ $order->orderedProducts->count() }} items
-                            </td>
-                            <td class="px-6 py-4 font-bold text-gray-900">
-                                ৳{{ number_format($order->total_price + $order->total_shipping_charge, 2)  }}
-                            </td>
-                            <td class="px-6 py-4 text-gray-600">
-                                ৳{{ number_format($order->total_shipping_charge, 2) }}
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider 
-                                    {{ $order->orderState->name === OrderState::DELIVERED ? 'bg-emerald-100 text-emerald-700' : 
-                                       ($order->orderState->name === OrderState::CANCELLED ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700') }}">
-                                    {{ str_replace('_', ' ', $order->orderState->name) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-gray-600 text-xs">
-                                {{ $order->orderAddress->district->name ?? 'N/A' }}, 
-                                {{ $order->orderAddress->upazila->name ?? 'N/A' }}
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="{{ route('user.order.details', $order) }}" class="text-blue-600 font-semibold hover:underline">Details</a>
-                            </td>
-                        </tr>
+                        
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    <a href="{{ route('user.order.details', $order->id) }}" wire:navigate>{{ $order->id }}</a>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    <a href="{{ route('user.order.details', $order->id) }}" wire:navigate>{{ $order->created_at->format('d M, Y') }}</a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">
+                                   <a href="{{ route('user.order.details', $order->id) }}" wire:navigate>{{ $order->orderedProducts->count() }} {{ Str::plural('item', $order->orderedProducts->count()) }}</a>
+                                </td>
+                                <td class="px-6 py-4 font-bold text-gray-900">
+                                    <a href="{{ route('user.order.details', $order->id) }}" wire:navigate>৳{{ number_format($order->total_price + $order->total_shipping_charge, 2)  }}</a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">
+                                    <a href="{{ route('user.order.details', $order->id) }}" wire:navigate>৳{{ number_format($order->total_shipping_charge, 2) }}</a>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="{{ route('user.order.details', $order->id) }}" wire:navigate>
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider 
+                                        {{ $order->orderState->name === OrderState::DELIVERED ? 'bg-emerald-100 text-emerald-700' : 
+                                        ($order->orderState->name === OrderState::CANCELLED ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700') }}">
+                                           {{ str_replace('_', ' ', $order->orderState->name) }}
+                                    </span>
+                                </a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600 text-xs">
+                                    <a href="{{ route('user.order.details', $order->id) }}" wire:navigate>
+                                        {{ $order->orderAddress->district->name ?? 'N/A' }}, 
+                                        {{ $order->orderAddress->upazila->name ?? 'N/A' }}
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="{{ route('user.order.details', $order->id) }}" class="text-blue-600 font-semibold hover:underline">Details</a>
+                                </td>
+                            </tr>
                     @empty
                         <tr>
                             <td colspan="7" class="px-6 py-12 text-center text-gray-400">
