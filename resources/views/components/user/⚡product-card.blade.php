@@ -73,7 +73,7 @@ new class () extends Component {
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             </a>
             <span class="absolute bottom-2 left-2 bg-slate-500/70 text-white text-xs font-bold px-2 py-1 rounded">
-                {{ $this->product->category['name'] }}
+                {{ $this->product->category['name'] }}  
             </span>
         @else
             <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-2">
@@ -117,7 +117,7 @@ new class () extends Component {
     <div class="p-2 flex flex-col grow justify-between">
         <div class="space-y-1">
             <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="block">
-                <h3 class="font-semibold text-gray-800 text-base leading-tight hover:text-blue-600 transition-colors line-clamp-2">
+                <h3 class="font-semibold text-[13px] text-gray-800 text-base leading-tight hover:text-blue-600 transition-colors line-clamp-2">
                     {{ $this->product->name }}
                 </h3>
             </a>

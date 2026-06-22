@@ -63,6 +63,11 @@ new class () extends Component {
         // 3. Redirect to the cart page
         return redirect()->route('user.cart', ['user' => Auth::id()]);
     }
+
+    public function redirectToGoogle()
+    {
+        return redirect()->route('auth.google');
+    }
 };
 ?>
 
@@ -157,11 +162,23 @@ new class () extends Component {
                 @endif
             </div>
 
-            @if($this->product->is_available && $this->product->category->is_available)
+            @if(Auth::check() && $this->product->is_available && $this->product->category->is_available)
                 <div wire:click="orderNow"
                     class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-[1.02] flex items-center gap-2 w-full md:w-max cursor-pointer">
                         <i class="fa-solid fa-shopping-bag text-xs "></i>
                         <p>Order Now</p>
+                </div>
+            @else 
+                <div>
+                    <button 
+                        wire:click="redirectToGoogle"
+                        class="flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:cursor-pointer transition duration-200"
+                    >
+                        <!-- The Google Icon -->
+                    <img src="https://res.cloudinary.com/dq7jdy5xy/image/upload/v1781240987/google_ceygiu.jpg"  class="w-5 h-5" alt="Google Logo">
+                        
+                        <span class="font-semibold text-gray-700">পণ্য অর্ডার করতে লগইন করুন</span>
+                    </button>
                 </div>
             @endif
             <div class="w-full">
