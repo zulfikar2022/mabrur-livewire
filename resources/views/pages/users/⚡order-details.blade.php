@@ -25,11 +25,13 @@ new class () extends Component {
 </x-slot>
 
 <div class="max-w-5xl mx-auto p-4 md:p-6 my-6">
-    <a href="{{ route('user.my.orders', Auth::user()) }}" wire:navigate class="text-blue-500 hover:text-blue-700 font-medium">
-    <i class="fas fa-arrow-left mr-2"></i>
-    Go To Orders
-    </a>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+    <div class="mb-3">
+        <a href="{{ route('user.my.orders', Auth::user()) }}" wire:navigate class="text-blue-500 hover:text-blue-700 font-medium ">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Go To Orders
+        </a>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-3">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h2 class="text-xl font-black text-gray-800">Order #{{ $order->id }}</h2>
@@ -41,7 +43,7 @@ new class () extends Component {
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
         <div class="lg:col-span-2 space-y-4">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h3 class="font-bold text-gray-800 mb-4">Ordered Items</h3>
