@@ -164,6 +164,9 @@ new class () extends Component {
                         <p>Order Now</p>
                 </div>
             @endif
+            <div class="w-full">
+                <livewire:user.similar-products-slider :product="$this->product" />
+            </div>
 
 
            
