@@ -327,9 +327,9 @@ new class () extends Component {
         </div>
     @endif
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         
-        <div class="lg:col-span-8 xl:col-span-9 space-y-4">
+        <div class="lg:col-span-8 xl:col-span-9 space-y-2">
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 sm:p-6">
                 <h2 class="text-xl font-black text-gray-800 tracking-tight flex items-center gap-2 mb-6">
                     <i class="fa-solid fa-cart-shopping text-blue-600"></i>
@@ -351,7 +351,7 @@ new class () extends Component {
                                 </div>
 
                                 <div class="space-y-1 min-w-0 pr-2 sm:pr-4"> 
-                                    <p class="font-bold text-gray-900 text-base hover:text-blue-600 transition-colors wrap-break-word leading-tight">
+                                    <p class="font-bold text-[13px] text-gray-900 text-base hover:text-blue-600 transition-colors wrap-break-word leading-tight">
                                         <a wire:navigate href="{{ route('user.product.details', ['product' => $item->product->id, 'productName' => $item->product->nameModifier()]) }}">{{ $item->product->name }}</a>
                                     </p>
                                     <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded mt-0.5">
@@ -360,7 +360,7 @@ new class () extends Component {
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-6 sm:gap-8 shrink-0">
+                            <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 md:gap-6 sm:gap-8 shrink-0">
                                 <div class="flex items-center border border-gray-200 rounded-lg bg-gray-50 p-1 shadow-sm">
                                     <button type="button" wire:click="decrementQuantity({{ $item->id }})" {{ $item->quantity <= ($item->product->sell_by_piece ? 1 : 0.1) ? 'disabled' : '' }} class="w-8 h-8 rounded-md bg-white hover:bg-gray-100 text-gray-600 font-bold flex items-center justify-center transition-colors shadow-sm cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
                                         <i class="fa-solid fa-minus text-xs"></i>
@@ -395,7 +395,7 @@ new class () extends Component {
             </div>
         </div>
 
-        <div class="lg:col-span-4 xl:col-span-3 space-y-4">
+        <div class="lg:col-span-4 xl:col-span-3 space-y-2">
             
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 sm:p-6">
                 <h3 class="text-base font-bold text-gray-800 mb-4 tracking-tight">Order Summary</h3>
