@@ -60,7 +60,7 @@ new class () extends Component {
         // 2. Add to cart
         $this->addToCart();
 
-        // 3. Redirect to the cart page
+        // 3. Redirect to the cart page with the wire:navigate directive for a smooth SPA-like transition
         return redirect()->route('user.cart', ['user' => Auth::id()]);
     }
 
