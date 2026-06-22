@@ -72,7 +72,7 @@ new class () extends Component {
                  alt="{{ $this->product->name }}" 
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             </a>
-            <span class="absolute bottom-2 left-2 bg-slate-500/70 text-white text-[8px] font-bold px-2 py-1 rounded">
+            <span class="absolute bottom-2 left-2 bg-slate-500/70 text-white text-[10px] font-bold px-2 py-1 rounded">
                 {{ $this->product->category['name'] }}  
             </span>
         @else
