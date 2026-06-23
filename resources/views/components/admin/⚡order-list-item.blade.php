@@ -91,7 +91,7 @@ new class () extends Component {
                         </td>
                         
                         <td class="px-5 py-4 text-right">
-                            <a href="{{route('admin.order-details', $order->id)}}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-50 hover:text-blue-600 text-gray-700 text-xs font-bold rounded-lg shadow-sm transition-colors">
+                            <a href="{{route('admin.order-details', $order->id)}}" wire:navigate class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-50 hover:text-blue-600 text-gray-700 text-xs font-bold rounded-lg shadow-sm transition-colors">
                                 <span>Manage</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </a>

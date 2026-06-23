@@ -95,7 +95,7 @@ new #[Layout('layouts.admin')] class extends Component {
             </div>
 
             <div class="flex items-center gap-3">
-                <a href="{{route('admin.update-order', $order->id)}}" class="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2">
+                <a wire:navigate href="{{route('admin.update-order', $order->id)}}" class="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2">
                     <i class="fa-solid fa-pen-to-square"></i> Edit Order
                 </a>
             </div>
