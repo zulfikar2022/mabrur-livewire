@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title wire:navigate.update>{{ $title ?? config('app.name') }}</title>
 
     <meta name="description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '. Shop the best products at the best prices.' }}">
-    
     <meta name="robots" content="{{ $robots ?? 'index, follow' }}">
-    
     <link rel="canonical" href="{{ $canonical ?? request()->url() }}">
 
     <meta property="og:type" content="{{ $ogType ?? 'website' }}" />
@@ -26,9 +25,13 @@
     <meta name="twitter:description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '.' }}">
     <meta name="twitter:image" content="{{ $metaImage ?? asset('images/default-social-share.jpg') }}">
 
+    <link rel="preload" as="image" href="https://ik.imagekit.io/mabrurhut/your-mobile-banner-image-path.jpg?tr=w-800,f-avif,f-webp">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
     
     @if(env('GA_MEASUREMENT_ID'))
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GA_MEASUREMENT_ID') }}"></script>
