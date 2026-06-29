@@ -89,13 +89,13 @@ new class () extends Component {
 
 
 <div class="max-w-6xl mx-auto p-6 my-8" 
-     x-data="{ activeImg: '{{ $activeImage ? config('services.imagekit.url_endpoint') . $activeImage . '?tr=w-600,h-600,fo-auto' : '' }}', showSuccessOverlay: false }">
+     x-data="{ activeImg: '{{ $activeImage ? config('services.imagekit.url_endpoint') . $activeImage . '?tr=w-600,h-600,fo-auto,f-avif,f-webp' : '' }}', showSuccessOverlay: false }">
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         
         <div class="space-y-4">
             <div class="w-full aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm relative">
-                <img :src="activeImg" class="w-full h-full object-cover">
+                <img :src="activeImg" fetchpriority="high" loading="eager" class="w-full h-full object-cover">
 
                 @if($this->product->weight_per_piece == 0)
                     <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10">
@@ -121,9 +121,9 @@ new class () extends Component {
             
             <div class="flex gap-3 overflow-x-auto pb-2">
                 @foreach($this->product->productImages as $img)
-                    <button @click="activeImg = '{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-600,h-600,fo-auto'"
+                    <button @click="activeImg = '{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-600,h-600,fo-auto,f-avif,f-webp'"
                             class="w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent hover:border-blue-500 transition-all flex-shrink-0">
-                        <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-300,h-300,fo-auto" class="w-full h-full object-cover">
+                        <img src="{{ config('services.imagekit.url_endpoint') . $img->image_link }}?tr=w-100,h-100,fo-auto,f-avif,f-webp" loading="lazy" class="w-full h-full object-cover">
                     </button>
                 @endforeach
             </div>
@@ -174,8 +174,7 @@ new class () extends Component {
                         wire:click="redirectToGoogle"
                         class="flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:cursor-pointer transition duration-200"
                     >
-                        <!-- The Google Icon -->
-                    <img src="https://res.cloudinary.com/dq7jdy5xy/image/upload/v1781240987/google_ceygiu.jpg"  class="w-5 h-5" alt="Google Logo">
+                        <img src="https://res.cloudinary.com/dq7jdy5xy/image/upload/v1781240987/google_ceygiu.jpg" loading="lazy" class="w-5 h-5" alt="Google Logo">
                         
                         <span class="font-semibold text-gray-700">পণ্য অর্ডার করতে লগইন করুন</span>
                     </button>
@@ -185,11 +184,8 @@ new class () extends Component {
                 <livewire:user.similar-products-slider :product="$this->product" />
             </div>
 
-
-           
         </div>
-        <!-- span the context of that page entirely of the parent -->
-         <div class="text-black leading-relaxed col-span-1 md:col-span-2">
+        <div class="text-black leading-relaxed col-span-1 md:col-span-2">
                 <h3 class="font-bold text-black mb-2">Description</h3>
                 <div class="prose max-w-none">
                     {!! $this->product->description !!}
