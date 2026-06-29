@@ -56,13 +56,6 @@ new class () extends Component {
          }"
          x-init="startAutoScroll()"
     >
-        <!-- <div class="mb-4 flex items-center justify-between">
-            <h2 class="text-lg md:text-xl font-black text-gray-800 tracking-tight flex items-center gap-2">
-                <i class="fa-solid fa-layer-group text-blue-600"></i>
-                <span>Shop by Category</span>
-            </h2>
-        </div> -->
-
         <div x-ref="slider" 
              @mouseenter="pauseAutoScroll" 
              @mouseleave="startAutoScroll"
@@ -77,8 +70,9 @@ new class () extends Component {
                     
                     <div class="w-20 h-20 md:w-28 md:h-28 rounded-full bg-blue-50 border-2 border-transparent group-hover:border-blue-500 shadow-sm overflow-hidden relative flex items-center justify-center transition-all duration-300">
                         @if($category->categoryImage)
-                            <img src="{{ config('services.imagekit.url_endpoint') . $category->categoryImage->image_link }}?tr=w-200,h-200,fo-auto" 
+                            <img src="{{ config('services.imagekit.url_endpoint') . $category->categoryImage->image_link }}?tr=w-200,h-200,fo-auto,f-avif,f-webp" 
                                  alt="{{ $category->name }}" 
+                                 loading="lazy"
                                  class="w-full h-full object-cover">
                         @else
                             <i class="fa-solid fa-image text-3xl text-blue-200"></i>
