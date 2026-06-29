@@ -14,10 +14,20 @@ new class () extends Component {
         <div class="flex flex-col gap-5 md:gap-15 items-center md:items-start">
             <div class="flex justify-center space-x-4 text-white">
                 <a href="https://www.facebook.com/mabrurhut" target="_blank" class="">
-                <img src="https://ik.imagekit.io/mabrurhut/logos/facebook_logo_qknef0.png" alt="Facebook Icon" class="h-10 w-10 rounded-2xl">
+                    <img src="https://ik.imagekit.io/mabrurhut/logos/facebook_logo_qknef0.png?tr=w-40,h-40,f-avif,f-webp" 
+                         alt="Facebook Icon" 
+                         width="40" 
+                         height="40" 
+                         loading="lazy" 
+                         class="h-10 w-10 rounded-2xl">
                 </a>
                 <a href="https://wa.me/8801677520339" target="_blank" class=" ">
-                    <img src="https://ik.imagekit.io/mabrurhut/logos/whatsapp-logo_e9ncdm.avif" alt="Whatsapp Icon" class="h-10 w-10 rounded-2xl">
+                    <img src="https://ik.imagekit.io/mabrurhut/logos/whatsapp-logo_e9ncdm.avif?tr=w-40,h-40,f-avif,f-webp" 
+                         alt="Whatsapp Icon" 
+                         width="40" 
+                         height="40" 
+                         loading="lazy" 
+                         class="h-10 w-10 rounded-2xl">
                 </a>
             </div>
             <div class="">
@@ -25,7 +35,14 @@ new class () extends Component {
             </div>
         </div>
         <div class="text-sm text-center md:text-left flex flex-col items-center md:items-start">
-            <a href="{{ route('home') }}"><img class="h-20 w-auto"  src="https://ik.imagekit.io/mabrurhut/logos/cropped-mabrur-logo.png" alt="Logo"></a>
+            <a href="{{ route('home') }}">
+                <img class="h-20 w-auto"  
+                     src="https://ik.imagekit.io/mabrurhut/logos/cropped-mabrur-logo.png?tr=h-80,f-avif,f-webp" 
+                     alt="Logo"
+                     height="80"
+                     width="240"
+                     loading="lazy">
+            </a>
             <p class="mt-6">&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
         </div>
     </div>

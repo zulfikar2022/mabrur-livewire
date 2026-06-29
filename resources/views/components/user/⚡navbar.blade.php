@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\Category;
-use App\Models\Cart; // Imported Cart model
+use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Livewire\Attributes\On; // Imported Livewire On Event Attribute Listener
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Attributes\Reactive;
 
@@ -64,7 +64,12 @@ new class () extends Component {
             
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('home') }}" wire:navigate class="font-bold text-xl tracking-wider">
-                    <img src="https://ik.imagekit.io/mabrurhut/logos/final_naviga.png" alt="Site Logo" class="h-14 w-auto">
+                    <img src="https://ik.imagekit.io/mabrurhut/logos/final_naviga.png?tr=h-60,f-avif,f-webp" 
+                         alt="Site Logo" 
+                         height="56"
+                         width="180"
+                         loading="eager"
+                         class="h-14 w-auto">
                 </a>
             </div>
         <div class="flex items-center space-x-2 sm:space-x-4">
@@ -204,8 +209,12 @@ new class () extends Component {
                  x-cloak>
                 
                 <div class="flex items-center justify-between mb-8">
-                    <!-- <span class="font-bold text-xl tracking-wider">MYLOGO</span> -->
-                     <img src="https://ik.imagekit.io/mabrurhut/logos/final_naviga.png" alt="Site Logo" class="h-14 w-auto">
+                    <img src="https://ik.imagekit.io/mabrurhut/logos/final_naviga.png?tr=h-60,f-avif,f-webp" 
+                          alt="Site Logo" 
+                          height="56"
+                          width="180"
+                          loading="lazy"
+                          class="h-14 w-auto">
                     <button @click="openDrawer = false" type="button" class="rounded-full p-2 hover:bg-blue-800 focus:outline-none transition duration-150">
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
