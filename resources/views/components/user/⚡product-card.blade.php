@@ -68,6 +68,8 @@ new class () extends Component {
             <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full block">
                  <img src="{{ config('services.imagekit.url_endpoint') . $firstImage->image_link }}?tr=w-400,h-400,f-avif,f-webp"
                  alt="{{ $this->product->name }}" 
+                 width="400"
+                 height="400"
                  loading="lazy"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             </a>

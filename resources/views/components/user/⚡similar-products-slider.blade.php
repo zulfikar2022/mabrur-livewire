@@ -57,9 +57,11 @@ new class () extends Component {
 
                             @if($firstImage)
                                 <img src="{{ config('services.imagekit.url_endpoint') . $firstImage->image_link }}?tr=w-300,h-300,fo-auto,f-avif,f-webp" 
-                                     alt="{{ $similar->name }}" 
-                                     loading="lazy"
-                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                alt="{{ $similar->name }}" 
+                                width="300"
+                                height="300"
+                                loading="lazy"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             @else
                                 <div class="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-2">
                                     <i class="fa-solid fa-image text-3xl"></i>

@@ -72,6 +72,8 @@ new class () extends Component {
                         @if($category->categoryImage)
                             <img src="{{ config('services.imagekit.url_endpoint') . $category->categoryImage->image_link }}?tr=w-200,h-200,fo-auto,f-avif,f-webp" 
                                  alt="{{ $category->name }}" 
+                                 width="200"
+                                 height="200"
                                  loading="lazy"
                                  class="w-full h-full object-cover">
                         @else
