@@ -25,7 +25,7 @@
     <meta name="twitter:description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '.' }}">
     <meta name="twitter:image" content="{{ $metaImage ?? asset('images/default-social-share.jpg') }}">
 
-    <link rel="preload" as="image" href="https://ik.imagekit.io/mabrurhut/your-mobile-banner-image-path.jpg?tr=w-800,f-avif,f-webp">
+    <link rel="preload" as="image" href="https://ik.imagekit.io/mabrurhut/logos/mabrur-banner.jpg?updatedAt=1781614071640&tr=w-800,f-avif,f-webp">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
