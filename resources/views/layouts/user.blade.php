@@ -16,16 +16,14 @@
     <meta property="og:description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '. Shop the best products at the best prices.' }}" />
     <meta property="og:url" content="{{ request()->url() }}" />
     <meta property="og:site_name" content="{{ config('app.name') }}" />
-    <meta property="og:image" content="{{ $metaImage ?? asset('images/default-social-share.jpg') }}" />
+    <meta property="og:image" content="{{ $metaImage ?? 'https://ik.imagekit.io/mabrurhut/logos/mabrur-banner.jpg?updatedAt=1781614071640&tr=w-1200,h-630,fo-auto' }}" />
     <meta property="og:image:width" content="{{ $imageWidth ?? '1200' }}" />
     <meta property="og:image:height" content="{{ $imageHeight ?? '630' }}" />
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $title ?? config('app.name') }}">
     <meta name="twitter:description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '.' }}">
-    <meta name="twitter:image" content="{{ $metaImage ?? asset('images/default-social-share.jpg') }}">
-
-    <link rel="preload" as="image" href="https://ik.imagekit.io/mabrurhut/logos/mabrur-banner.jpg?updatedAt=1781614071640&tr=w-800,f-avif,f-webp">
+    <meta name="twitter:image" content="{{ $metaImage ?? 'https://ik.imagekit.io/mabrurhut/logos/mabrur-banner.jpg?updatedAt=1781614071640&tr=w-1200,h-630,fo-auto' }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
