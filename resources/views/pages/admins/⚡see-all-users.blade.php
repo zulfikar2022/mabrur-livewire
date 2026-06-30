@@ -52,8 +52,9 @@ new #[Layout('layouts.admin')] class extends Component {
             ->select('id', 'name', 'email', 'profile_image', 'status')
             ->when($searchTerm, function ($query) use ($searchTerm) {
                 $query->where(function ($subQuery) use ($searchTerm) {
-                    $subQuery->where('name', 'like', "%{$searchTerm}%")
-                             ->orWhere('email', 'like', "%{$searchTerm}%");
+                    // Changed 'like' to 'ilike' for PostgreSQL case-insensitive search
+                    $subQuery->where('name', 'ilike', "%{$searchTerm}%")
+                             ->orWhere('email', 'ilike', "%{$searchTerm}%");
                 });
             })
             ->orderBy('name', 'asc')
@@ -64,8 +65,9 @@ new #[Layout('layouts.admin')] class extends Component {
             ->select('id', 'name', 'email', 'profile_image', 'status')
             ->when($searchTerm, function ($query) use ($searchTerm) {
                 $query->where(function ($subQuery) use ($searchTerm) {
-                    $subQuery->where('name', 'like', "%{$searchTerm}%")
-                             ->orWhere('email', 'like', "%{$searchTerm}%");
+                    // Changed 'like' to 'ilike' for PostgreSQL case-insensitive search
+                    $subQuery->where('name', 'ilike', "%{$searchTerm}%")
+                             ->orWhere('email', 'ilike', "%{$searchTerm}%");
                 });
             })
             ->orderBy('name', 'asc')
