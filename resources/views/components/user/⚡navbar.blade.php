@@ -30,12 +30,6 @@ new class () extends Component {
         // Keeping this method blank is correct! It triggers the dynamic UI update cycle.
     }
 
-    #[On('echo:demo-channel,DemoEvent')]
-    public function getTime($event)
-    {
-        $this->time = $event['time'];
-    }
-
     public function getCartCountProperty()
     {
         // If the visitor is anonymous, there are no items to count
