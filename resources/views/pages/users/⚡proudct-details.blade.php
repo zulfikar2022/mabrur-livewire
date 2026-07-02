@@ -194,43 +194,47 @@ new class () extends Component {
                 </div>
         </div>
     </div>
-</div>
 
 
-@push('productDetails')
-<!-- This is a comment to verify that is working -->
+
 @php
-    // 1. Format the image array dynamically from the ProductImage model
+    // 1. Format the image array dynamically
     $schemaImages = $this->product->productImages->map(function($img) {
         return config('services.imagekit.url_endpoint') . $img->image_link . '?tr=w-1200,h-1200,fo-auto';
     })->toArray();
 
-    // 2. Determine the correct price based on your selling logic
+    // 2. Determine the correct price based on selling logic
     $schemaPrice = $this->product->sell_by_piece 
         ? $this->product->price_per_piece 
         : $this->product->price_per_kg;
+
+    // 3. Build the ENTIRE Schema as a clean PHP array
+    $schemaData = [
+        "@context" => "https://schema.org/",
+        "@type" => "Product",
+        "name" => $this->product->name,
+        "image" => $schemaImages,
+        "description" => strip_tags($this->product->description),
+        "sku" => "MABRUR-" . $this->product->id,
+        "brand" => [
+            "@type" => "Brand",
+            "name" => "Mabrur Hut"
+        ],
+        "offers" => [
+            "@type" => "Offer",
+            "url" => request()->url(),
+            "priceCurrency" => "BDT",
+            "price" => number_format($schemaPrice, 2, '.', ''),
+            "itemCondition" => "https://schema.org/NewCondition",
+            "availability" => $this->product->is_available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+        ]
+    ];
 @endphp
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": {{ Js::from($this->product->name) }},
-  "image": @json($schemaImages),
-  "description": {{ Js::from(strip_tags($this->product->description)) }},
-  "sku": {{ Js::from('MABRUR-' . $this->product->id) }},
-  "brand": {
-    "@type": "Brand",
-    "name": "Mabrur Hut"
-  },
-  "offers": {
-    "@type": "Offer",
-    "url": {{ Js::from(request()->url()) }},
-    "priceCurrency": "BDT",
-    "price": {{ Js::from(number_format($schemaPrice, 2, '.', '')) }},
-    "itemCondition": "https://schema.org/NewCondition",
-    "availability": "{{ $this->product->is_available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' }}"
-  }
-}
-</script>
+@push('productDetails')
+        <script type="application/ld+json">
+            {!! json_encode($schemaData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+        </script>
 @endpush
+
+</div>
