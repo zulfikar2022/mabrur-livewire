@@ -24,6 +24,10 @@
     <meta name="twitter:title" content="{{ $title ?? config('app.name') }}">
     <meta name="twitter:description" content="{{ $metaDescription ?? 'Welcome to ' . config('app.name') . '.' }}">
     <meta name="twitter:image" content="{{ $metaImage ?? 'https://ik.imagekit.io/mabrurhut/logos/mabrur-banner.jpg?updatedAt=1781614071640&tr=w-1200,h-630,fo-auto' }}">
+    
+    <!-- Product Details Schema -->
+    @stack('productDetails')
+    @stack('faqSchema')
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles

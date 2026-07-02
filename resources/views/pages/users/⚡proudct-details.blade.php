@@ -71,6 +71,8 @@ new class () extends Component {
 };
 ?>
 
+
+
 <x-slot:title>
     {{ $this->product->name }} - {{ config('app.name') }}
 </x-slot:title>
@@ -193,3 +195,41 @@ new class () extends Component {
         </div>
     </div>
 </div>
+
+
+@push('productDetails')
+@php
+    // 1. Format the image array dynamically from the ProductImage model
+    $schemaImages = $this->product->productImages->map(function($img) {
+        return config('services.imagekit.url_endpoint') . $img->image_link . '?tr=w-1200,h-1200,fo-auto';
+    })->toArray();
+
+    // 2. Determine the correct price based on your selling logic
+    $schemaPrice = $this->product->sell_by_piece 
+        ? $this->product->price_per_piece 
+        : $this->product->price_per_kg;
+@endphp
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ Js::from($this->product->name) }},
+  "image": @json($schemaImages),
+  "description": {{ Js::from(strip_tags($this->product->description)) }},
+  "sku": {{ Js::from('MABRUR-' . $this->product->id) }},
+  "brand": {
+    "@type": "Brand",
+    "name": "Mabrur Hut"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": {{ Js::from(request()->url()) }},
+    "priceCurrency": "BDT",
+    "price": {{ Js::from(number_format($schemaPrice, 2, '.', '')) }},
+    "itemCondition": "https://schema.org/NewCondition",
+    "availability": "{{ $this->product->is_available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' }}"
+  }
+}
+</script>
+@endpush
