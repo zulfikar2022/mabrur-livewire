@@ -40,7 +40,7 @@ class GenerateSitemap extends Command
         $categories = Category::where('is_available', true)->get();
         foreach ($categories as $category) {
             // FIX: Trim trailing spaces from the database and strictly URL-encode the Bengali characters
-            $cleanCategoryName = rawurlencode(trim($category->name));
+            $cleanCategoryName = rawurlencode($category->name);
 
             $sitemap->add(
                 Url::create("/guest/category/{$cleanCategoryName}")
