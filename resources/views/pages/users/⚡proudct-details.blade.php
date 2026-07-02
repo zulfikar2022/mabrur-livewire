@@ -198,6 +198,7 @@ new class () extends Component {
 
 
 @push('productDetails')
+<!-- This is a comment to verify that is working -->
 @php
     // 1. Format the image array dynamically from the ProductImage model
     $schemaImages = $this->product->productImages->map(function($img) {
