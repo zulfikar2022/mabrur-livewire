@@ -28,44 +28,41 @@ class GenerateSitemap extends Command
         $sitemap = Sitemap::create();
 
         // 1. Add the Guest Homepage
+        // Using now() since static pages are technically "current" at generation time
         $sitemap->add(Url::create('/guest')
-            ->setPriority(1.0)
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY));
+            ->setLastModificationDate(now()));
 
-        // add the guest faq page
+        // Add the guest faq page
         $sitemap->add(Url::create('/guest/faq')
-            ->setPriority(0.7)
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
+            ->setLastModificationDate(now()));
 
         // 2. Add Dynamic Categories (under /guest/category/...)
         $categories = Category::where('is_available', true)->get();
         foreach ($categories as $category) {
-            // Note: The Spatie package automatically handles the URL encoding
-            // for Bengali characters (like খেজুর or বাদাম) in the final XML.
+            // FIX: Trim trailing spaces from the database and strictly URL-encode the Bengali characters
+            $cleanCategoryName = rawurlencode(trim($category->name));
+
             $sitemap->add(
-                Url::create("/guest/category/{$category->name}")
-                    ->setPriority(0.8)
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                Url::create("/guest/category/{$cleanCategoryName}")
+                    ->setLastModificationDate($category->updated_at)
             );
         }
 
         // 3. Add Dynamic Products (under /guest/product/...)
-        // add only those products which category is also available
-
-        // $products = Product::where('is_available', true)->get();
         $products = Product::where('is_available', true)
             ->whereHas('category', function ($query) {
                 $query->where('is_available', true);
             })
             ->get();
+
         foreach ($products as $product) {
-            $productUrl = "/guest/product/{$product->id}/{$product->nameModifier()}";
+            // FIX: Trim the slug to prevent any trailing spaces from creeping into the XML
+            $cleanSlug = trim($product->nameModifier());
+            $productUrl = "/guest/product/{$product->id}/{$cleanSlug}";
 
             $sitemap->add(
                 Url::create($productUrl)
                     ->setLastModificationDate($product->updated_at)
-                    ->setPriority(0.9)
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
             );
         }
 
