@@ -32,6 +32,11 @@ class GenerateSitemap extends Command
             ->setPriority(1.0)
             ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY));
 
+        // add the guest faq page
+        $sitemap->add(Url::create('/guest/faq')
+            ->setPriority(0.7)
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
+
         // 2. Add Dynamic Categories (under /guest/category/...)
         $categories = Category::where('is_available', true)->get();
         foreach ($categories as $category) {
