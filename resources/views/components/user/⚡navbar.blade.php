@@ -78,6 +78,8 @@ new class () extends Component {
                             @endphp
                             <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
                         @endforeach
+                        <!-- faq -->
+                        <a href="{{ route('user.faq') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('user.faq') ? 'underline font-bold' : 'font-medium' }}">FAQ</a>
                     @endauth
                     
                     @if (! auth()->check())
@@ -87,6 +89,8 @@ new class () extends Component {
                             @endphp
                             <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
                         @endforeach
+                        <!-- faq page -->
+                        <a href="{{ route('guest.faq') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('guest.faq') ? 'underline font-bold' : 'font-medium' }}">FAQ</a>
                     @endif
 
                     @if (! auth()->check())
@@ -228,6 +232,8 @@ new class () extends Component {
                             @endphp
                             <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
                         @endforeach
+                        <!-- faq -->
+                        <a href="{{ route('user.faq') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('user.faq') ? 'underline font-bold' : 'font-medium' }}">FAQ</a>
                     @endauth
                     
                     @if (! auth()->check())
@@ -237,7 +243,11 @@ new class () extends Component {
                             @endphp
                             <a href="{{ route('guest.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
                         @endforeach
+                         <!-- faq page -->
+                        <a href="{{ route('guest.faq') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('guest.faq') ? 'underline font-bold' : 'font-medium' }}">FAQ</a>
                     @endif
+
+                   
                     
                     @if (! auth()->check())
                         <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base  transition duration-150 flex items-center gap-2 ">
