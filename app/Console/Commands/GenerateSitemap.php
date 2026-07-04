@@ -29,11 +29,11 @@ class GenerateSitemap extends Command
 
         // 1. Add the Guest Homepage
         // Using now() since static pages are technically "current" at generation time
-        $sitemap->add(Url::create('/guest')
+        $sitemap->add(Url::create('/')
             ->setLastModificationDate(now()));
 
         // Add the guest faq page
-        $sitemap->add(Url::create('/guest/faq')
+        $sitemap->add(Url::create('/faq')
             ->setLastModificationDate(now()));
 
         // 2. Add Dynamic Categories (under /guest/category/...)
@@ -43,7 +43,7 @@ class GenerateSitemap extends Command
             $cleanCategoryName = rawurlencode($category->name);
 
             $sitemap->add(
-                Url::create("/guest/category/{$cleanCategoryName}")
+                Url::create("/category/{$cleanCategoryName}")
                     ->setLastModificationDate($category->updated_at)
             );
         }
@@ -58,7 +58,7 @@ class GenerateSitemap extends Command
         foreach ($products as $product) {
             // FIX: Trim the slug to prevent any trailing spaces from creeping into the XML
             $cleanSlug = trim($product->nameModifier());
-            $productUrl = "/guest/product/{$product->id}/{$cleanSlug}";
+            $productUrl = "/product/{$product->id}/{$cleanSlug}";
 
             $sitemap->add(
                 Url::create($productUrl)
