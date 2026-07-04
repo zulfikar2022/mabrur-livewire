@@ -231,11 +231,11 @@ new class () extends Component {
 
                    
                     
-                    
+                    @if (! auth()->check())
                         <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base  transition duration-150 flex items-center gap-2 ">
                             <i class="fa-solid fa-arrow-right-to-bracket text-sm text-blue-300"></i> <span class="{{ request()->routeIs('login') ? 'underline font-bold' : 'font-medium' }}">Login</span>
                         </a>
-                    
+                    @endif
                 </nav>
             </div>
         </div>
