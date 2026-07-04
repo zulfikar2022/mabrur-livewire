@@ -263,7 +263,7 @@ new class () extends Component {
                             class="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 rounded-xl transition-colors hover:cursor-pointer">
                         Cancel
                     </button>
-                    <button @click="window.location.href = '{{ route('user.logout') }}'" 
+                    <button @click="window.location.href = '{{ route('super-admin.logout') }}'" 
                             class="px-6 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-md hover:cursor-pointer">
                         Yes, Log Out
                     </button>
