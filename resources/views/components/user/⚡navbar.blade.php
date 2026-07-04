@@ -84,8 +84,9 @@ new class () extends Component {
                         <a href="{{ route('guest.faq') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('guest.faq') ? 'underline font-bold' : 'font-medium' }}">FAQ</a>
                    
 
-                    
+                    @if (! auth()->check())                    
                         <a href="{{ route('login') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('login') ? 'underline font-bold' : 'font-medium' }}">Login</a>
+                    @endif
                     
                 </div>
 
