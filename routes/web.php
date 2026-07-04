@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Route::livewire('/', 'pages::users.home')->name('home');
-Route::livewire('/guest/login', 'pages::users.auth.login')->name('login');
+Route::livewire('/login', 'pages::users.auth.login')->name('login');
 
 
 
