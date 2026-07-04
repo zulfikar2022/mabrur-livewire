@@ -2,6 +2,7 @@
 
 use App\Models\Product;
 use App\Models\ProductVector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -57,6 +58,18 @@ new class () extends Component {
         });
 
         return Product::hydrate(json_decode($data, true));
+    }
+
+    public function mount()
+    {
+        // check the user's role. If it is the admin or super-admin then redirect to their corresponding dashboard, if it is the user then redirect to the user dashboard
+        if (Auth::check()) {
+            if (Auth::user()->hasRole('super-admin')) {
+                return redirect()->route('super-admin.home');
+            } elseif (Auth::user()->hasRole('admin')) {
+                return redirect()->route('admin.home');
+            }
+        }
     }
 };
 ?>
