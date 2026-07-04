@@ -55,8 +55,13 @@ class GoogleController extends Controller
 
         Auth::login($user);
 
-        // return redirect()->route('home');
-        // check if there is any intended route or not, if the user was intended to go any specific route then redirect them to that route, otherwise send them to the home page
+        // check the role of the user. If it is the admin then redirect to the admin dashboard, if it is the super-admin then redirect to the super-admin dashboard, if it is the user then redirect to the user dashboard
+        if ($user->hasRole('super-admin')) {
+            return redirect()->intended(route('super-admin.home'));
+        } elseif ($user->hasRole('admin')) {
+            return redirect()->intended(route('admin.home'));
+        }
+
         return redirect()->intended(route('guest.home'));
     }
     public function logout(Request $request)
