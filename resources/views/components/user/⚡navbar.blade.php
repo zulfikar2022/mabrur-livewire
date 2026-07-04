@@ -57,7 +57,7 @@ new class () extends Component {
         <div class="flex items-center justify-between h-16">
             
             <div class="shrink-0 flex items-center">
-                <a href="{{ route('home') }}" wire:navigate class="font-bold text-xl tracking-wider">
+                <a href="{{ route('guest.home') }}" wire:navigate class="font-bold text-xl tracking-wider">
                     <img src="https://ik.imagekit.io/mabrurhut/logos/final_naviga.png?tr=h-60,f-avif,f-webp" 
                          alt="Site Logo" 
                          height="56"
@@ -69,18 +69,9 @@ new class () extends Component {
         <div class="flex items-center space-x-2 sm:space-x-4">
                 
                 <div class="hidden md:flex items-center space-x-2 mr-2">
-                    <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ request()->routeIs('user.home') || request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">Home</a>
+                    <a href="{{ route('guest.home') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150 {{ request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">Home</a>
                     
-                    @auth
-                        @foreach ($categories as $category )
-                            @php
-                                $isActive = request()->routeIs('user.category.products') && request()->route('categoryName') === $category->name;
-                            @endphp
-                            <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
-                        @endforeach
-                        <!-- faq -->
-                        <a href="{{ route('user.faq') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('user.faq') ? 'underline font-bold' : 'font-medium' }}">FAQ</a>
-                    @endauth
+                    
                     
                     @if (! auth()->check())
                         @foreach ($categories as $category )
@@ -221,20 +212,11 @@ new class () extends Component {
                 </div>
 
                 <nav class="flex flex-col space-y-3">
-                    <a href="{{ route('home') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium transition duration-150 flex items-center gap-2 {{ request()->routeIs('user.home') || request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">
+                    <a href="{{ route('guest.home') }}" wire:navigate class="hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium transition duration-150 flex items-center gap-2 {{ request()->routeIs('guest.home') ? 'underline font-bold' : '' }}">
                          Home
                     </a>
                     
-                    @auth
-                        @foreach ($categories as $category )
-                            @php
-                                $isActive = request()->routeIs('user.category.products') && request()->route('categoryName') === $category->name;
-                            @endphp
-                            <a href="{{ route('user.category.products', $category->name) }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ $isActive ? 'underline font-bold' : 'font-medium' }}">{{ $category->name }}</a>
-                        @endforeach
-                        <!-- faq -->
-                        <a href="{{ route('user.faq') }}" wire:navigate class="hover:bg-blue-700 px-3 py-2 rounded-md text-sm  transition duration-150 {{ request()->routeIs('user.faq') ? 'underline font-bold' : 'font-medium' }}">FAQ</a>
-                    @endauth
+                    
                     
                     @if (! auth()->check())
                         @foreach ($categories as $category )

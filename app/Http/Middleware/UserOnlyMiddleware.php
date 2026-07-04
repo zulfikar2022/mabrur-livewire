@@ -19,12 +19,12 @@ class UserOnlyMiddleware
         /** @var \App\Models\User $user */
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('home');
+            return redirect()->route('guest.home');
         }
         if ($user->hasRole('user')) {
             return $next($request);
         } else {
-            return redirect()->route('home');
+            return redirect()->route('guest.home');
         }
 
     }

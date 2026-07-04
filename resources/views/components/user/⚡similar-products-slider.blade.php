@@ -42,7 +42,7 @@ new class () extends Component {
             <div class="flex overflow-x-auto gap-4 md:gap-6 pb-4 snap-x snap-mandatory hide-scrollbar scroll-smooth">
                 @foreach($this->similarProducts as $similar)
                     @php
-                        $route = route(Auth::check() ? 'user.product.details' : 'guest.product.details', [
+                        $route = route( 'guest.product.details', [
                             'product' => $similar->id, 
                             'productName' => $similar->nameModifier()
                         ]);

@@ -9,22 +9,22 @@ Route::livewire('/guest/login', 'pages::users.auth.login')->name('login');
 
 
 
-Route::get('/', function () {
+// Route::get('/', function () {
 
-    /** @var \App\Models\User $user */
-    $user = Auth::user();
+//     /** @var \App\Models\User $user */
+//     $user = Auth::user();
 
-    if ($user) {
-        if ($user->hasRole('user')) {
-            return redirect()->route('user.home');
-        } elseif ($user->hasRole('admin')) {
-            return redirect()->route('admin.home');
-        } elseif ($user->hasRole('super-admin')) {
-            return redirect()->route('super-admin.home');
-        }
-    }
-    return redirect()->route('guest.home');
-})->name('home');
+//     if ($user) {
+//         if ($user->hasRole('user')) {
+//             return redirect()->route('guest.home');
+//         } elseif ($user->hasRole('admin')) {
+//             return redirect()->route('admin.home');
+//         } elseif ($user->hasRole('super-admin')) {
+//             return redirect()->route('super-admin.home');
+//         }
+//     }
+//     return redirect()->route('guest.home');
+// })->name('home');
 
 
 

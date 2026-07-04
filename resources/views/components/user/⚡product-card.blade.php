@@ -65,7 +65,7 @@ new class () extends Component {
         @endif
 
         @if($firstImage)
-            <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full block">
+            <a wire:navigate href="{{  route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full block">
                  <img src="{{ config('services.imagekit.url_endpoint') . $firstImage->image_link }}?tr=w-400,h-400,f-avif,f-webp"
                  alt="{{ $this->product->name }}" 
                  width="400"
@@ -77,7 +77,7 @@ new class () extends Component {
                 {{ $this->product->category['name'] }}  
             </span>
         @else
-            <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-2">
+            <a wire:navigate href="{{  route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-2">
                 <i class="fa-solid fa-image text-4xl"></i>
                 <span class="text-xs font-medium text-gray-400">No Image Available</span>
             </a >
@@ -117,7 +117,7 @@ new class () extends Component {
 
     <div class="p-2 flex flex-col grow justify-between">
         <div class="space-y-1">
-            <a wire:navigate href="{{ Auth::check() ? route('user.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) : route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="block">
+            <a wire:navigate href="{{  route('guest.product.details', ['product' => $this->product->id, 'productName' => $this->product->nameModifier()]) }}" class="block">
                 <h3 class="font-semibold text-[13px] text-gray-800 text-base leading-tight hover:text-blue-600 transition-colors line-clamp-2">
                     {{ $this->product->name }}
                 </h3>

@@ -14,12 +14,12 @@ class SuperAdminOnlyMiddleware
         /** @var \App\Models\User $user */
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('home');
+            return redirect()->route('guest.home');
         }
         if ($user->hasRole('super-admin')) {
             return $next($request);
         } else {
-            return redirect()->route('home');
+            return redirect()->route('guest.home');
         }
 
     }

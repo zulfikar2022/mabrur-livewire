@@ -23,7 +23,7 @@
             <h2 class="text-2xl font-bold text-gray-800 mt-4">Page Not Found</h2>
             <p class="text-gray-500 mt-2 mb-8">The page you are looking for might have been removed or is temporarily unavailable.</p>
             
-            <a href="{{ route('home') }}" wire:navigate 
+            <a href="{{ route('guest.home') }}" wire:navigate 
             class="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">
                 Go back Home
             </a>

@@ -57,7 +57,7 @@ class GoogleController extends Controller
 
         // return redirect()->route('home');
         // check if there is any intended route or not, if the user was intended to go any specific route then redirect them to that route, otherwise send them to the home page
-        return redirect()->intended(route('home'));
+        return redirect()->intended(route('guest.home'));
     }
     public function logout(Request $request)
     {
@@ -65,6 +65,6 @@ class GoogleController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('home'); // Send them back to the welcome/login page
+        return redirect()->route('guest.home'); // Send them back to the welcome/login page
     }
 }

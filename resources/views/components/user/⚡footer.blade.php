@@ -38,8 +38,8 @@ new class () extends Component {
             <h3 class="text-lg font-bold mb-2">Quick Links</h3>
             <ul class="space-y-1">
                 @if(Auth::check())
-                    <li><a href="{{ route('user.home') }}" class="hover:underline">Home</a></li>
-                    <li><a href="{{ route('user.faq') }}" class="hover:underline">FAQ</a></li>
+                    <li><a href="{{ route('guest.home') }}" class="hover:underline">Home</a></li>
+                    <li><a href="{{ route('guest.faq') }}" class="hover:underline">FAQ</a></li>
                     <li><a href="{{ route('user.profile') }}" class="hover:underline">Profile</a></li>
                     <li><a href="{{ route('user.my.orders') }}" class="hover:underline">My Orders</a></li>
                 @endif
@@ -56,7 +56,7 @@ new class () extends Component {
             </ul>
         </div>
         <div class="text-sm text-center md:text-left flex flex-col items-center md:items-start">
-            <a href="{{ route('home') }}">
+            <a href="{{ route('guest.home') }}">
                 <img class="h-20 w-auto"  
                      src="https://ik.imagekit.io/mabrurhut/logos/cropped-mabrur-logo.png?tr=h-80,f-avif,f-webp" 
                      alt="Logo"

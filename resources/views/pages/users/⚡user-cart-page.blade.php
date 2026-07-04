@@ -62,7 +62,7 @@ new class () extends Component {
 
         if ($user->id !== Auth::id()) {
             session()->flash('error', 'Unauthorized access! You cannot view another user\'s shopping cart.');
-            return redirect()->route('home');
+            return redirect()->route('guest.home');
         }
 
         $this->user = $user;
@@ -352,7 +352,7 @@ new class () extends Component {
 
                                 <div class="space-y-1 min-w-0 pr-2 sm:pr-4"> 
                                     <p class="font-bold text-[13px] text-gray-900 text-base hover:text-blue-600 transition-colors wrap-break-word leading-tight">
-                                        <a wire:navigate href="{{ route('user.product.details', ['product' => $item->product->id, 'productName' => $item->product->nameModifier()]) }}">{{ $item->product->name }}</a>
+                                        <a wire:navigate href="{{ route('guest.product.details', ['product' => $item->product->id, 'productName' => $item->product->nameModifier()]) }}">{{ $item->product->name }}</a>
                                     </p>
                                     <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded mt-0.5">
                                         {{ $item->product->category->name }}

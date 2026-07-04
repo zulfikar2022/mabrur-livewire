@@ -64,7 +64,7 @@ new class () extends Component {
              class="flex overflow-x-auto gap-4 md:gap-6 pb-4 snap-x snap-mandatory hide-scrollbar scroll-smooth">
             
             @foreach($this->categories as $category)
-                <a href="{{ route(Auth::check() ? 'user.category.products' : 'guest.category.products', ['categoryName' => $category->name]) }}" 
+                <a href="{{ route( 'guest.category.products', ['categoryName' => $category->name]) }}" 
                    wire:navigate
                    class="snap-start shrink-0 flex flex-col items-center group w-24 md:w-32 cursor-pointer transition-transform hover:-translate-y-1">
                     

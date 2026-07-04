@@ -14,13 +14,13 @@ class AdminOnlyMiddleware
         /** @var \App\Models\User $user */
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('home');
+            return redirect()->route('guest.home');
         }
         // here in this middleware the user is already authenticated and we just need to check if the user is admin or not. If the user is not admin then we will return the home page and if the user is admin then we will allow the user to access the admin panel.
         if ($user->hasRole('admin')) {
             return $next($request);
         } else {
-            return redirect()->route('home');
+            return redirect()->route('guest.home');
         }
 
     }

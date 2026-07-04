@@ -24,7 +24,7 @@
             <h2 class="text-2xl font-bold text-gray-800 mt-4">Service Unavailable</h2>
             <p class="text-gray-500 mt-2 mb-8">The server is currently unable to handle the request due to temporary overloading or maintenance of the server.</p>
             
-            <a href="{{ route('home') }}" wire:navigate 
+            <a href="{{ route('guest.home') }}" wire:navigate 
             class="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">
                 Go back Home
             </a>
