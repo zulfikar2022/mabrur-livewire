@@ -26,7 +26,7 @@ new #[Layout('layouts::super-admin')] class extends Component {
 };
 ?>
 
-<div class="max-w-6xl mx-auto my-6 px-4 bg-red-600">
+<div class="max-w-6xl mx-auto my-6 px-4 ">
     <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-slate-100">User Management</h1>
