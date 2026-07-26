@@ -116,13 +116,14 @@ new #[Layout('layouts.admin')] class extends Component {
             );
 
             foreach ($this->images as $image) {
-                $uploadResult = $imageKit->upload([
-                    'file' => base64_encode(file_get_contents($image->getRealPath())),
+                // Fixed: using uploadFile() and Laravel's ->get()
+                $uploadResult = $imageKit->uploadFile([
+                    'file' => base64_encode($image->get()),
                     'fileName' => $image->getClientOriginalName(),
                     'folder' => '/products'
                 ]);
 
-                if ($uploadResult->error === null) {
+                if (empty($uploadResult->error)) {
                     ProductImage::create([
                         'product_id' => $this->product->id,
                         'image_link' => $uploadResult->result->filePath,
@@ -308,6 +309,12 @@ new #[Layout('layouts.admin')] class extends Component {
                     <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Choose New Images
                 </label>
             </div>
+            
+            <!-- Added File Upload Loading Indicator -->
+            <div wire:loading wire:target="images" class="mt-3 text-sm font-bold text-blue-600 flex items-center">
+                <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Uploading large files to server... Please wait.
+            </div>
+
             @error('images.*') <span class="text-xs text-red-500 mt-2 block">{{ $message }}</span> @enderror
 
             <template x-if="localPreviews.length > 0">
@@ -328,8 +335,27 @@ new #[Layout('layouts.admin')] class extends Component {
             <a href="{{ route('admin.show-all-products') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-2.5 rounded-lg transition-colors cursor-pointer text-center text-sm shadow-sm border">
                 Cancel
             </a>
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors cursor-pointer text-sm shadow-sm flex items-center">
-                <i class="fa-solid fa-floppy-disk mr-2"></i> Update Product Specification
+            
+            <!-- Replaced Static Submit Button with Multi-State Loading Button -->
+            <button type="submit" 
+                    wire:loading.attr="disabled"
+                    wire:target="images, save"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors cursor-pointer text-sm shadow-sm flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+                
+                <!-- Default State: Shows when neither uploading images nor saving -->
+                <span wire:loading.remove wire:target="images, save">
+                    <i class="fa-solid fa-floppy-disk mr-2"></i> Update Product Specification
+                </span>
+
+                <!-- Image Upload State: Shows ONLY while Livewire is uploading images to tmp directory -->
+                <span wire:loading wire:target="images">
+                    <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Uploading Images...
+                </span>
+
+                <!-- Form Submit State: Shows ONLY when the save method is running -->
+                <span wire:loading wire:target="save">
+                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Updating...
+                </span>
             </button>
         </div>
     </form>
