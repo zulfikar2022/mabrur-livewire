@@ -57,6 +57,54 @@ new #[Layout('layouts.admin')] class extends Component {
         array_splice($this->images, $index, 1);
     }
 
+    // public function save()
+    // {
+    //     $this->validate();
+
+    //     // 1. Create the product record first
+    //     $product = Product::create([
+    //         'category_id' => $this->category_id,
+    //         'name' => $this->name,
+    //         'description' => $this->description,
+    //         'available_quantity' => $this->available_quantity,
+    //         'sell_by_piece' => $this->sell_type === 'piece',
+    //         'sell_by_weight' => $this->sell_type === 'weight',
+    //         'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
+    //         'price_per_kg' => $this->sell_type === 'weight' ? $this->price_per_kg : null,
+    //         'is_available' => $this->is_available,
+    //         'weight_per_piece' => $this->weight_per_piece ?: null, // Save the new field
+    //         'is_mango' => $this->is_mango,                         // Save the new field
+    //     ]);
+
+    //     // 2. Initialize ImageKit
+    //     $imageKit = new ImageKit(
+    //         config('services.imagekit.public_key'),
+    //         config('services.imagekit.private_key'),
+    //         config('services.imagekit.url_endpoint')
+    //     );
+
+    //     // 3. Handle batch image uploads
+    //     foreach ($this->images as $image) {
+    //         $uploadResult = $imageKit->upload([
+    //             'file' => base64_encode(file_get_contents($image->getRealPath())),
+    //             'fileName' => $image->getClientOriginalName(),
+    //             'folder' => '/products'
+    //         ]);
+
+    //         if ($uploadResult->error === null) {
+    //             ProductImage::create([
+    //                 'product_id' => $product->id,
+    //                 'image_link' => $uploadResult->result->filePath,
+    //             ]);
+    //         } else {
+    //             \Illuminate\Support\Facades\Log::error('ImageKit Upload Failed: ', (array) $uploadResult->error);
+    //         }
+    //     }
+
+    //     session()->flash('success', 'Product created successfully!');
+    //     CreateEmbedding::dispatch($product);
+    //     return redirect()->route('admin.show-all-products');
+    // }
     public function save()
     {
         $this->validate();
@@ -72,8 +120,8 @@ new #[Layout('layouts.admin')] class extends Component {
             'price_per_piece' => $this->sell_type === 'piece' ? $this->price_per_piece : null,
             'price_per_kg' => $this->sell_type === 'weight' ? $this->price_per_kg : null,
             'is_available' => $this->is_available,
-            'weight_per_piece' => $this->weight_per_piece ?: null, // Save the new field
-            'is_mango' => $this->is_mango,                         // Save the new field
+            'weight_per_piece' => $this->weight_per_piece ?: null,
+            'is_mango' => $this->is_mango,
         ]);
 
         // 2. Initialize ImageKit
@@ -83,15 +131,19 @@ new #[Layout('layouts.admin')] class extends Component {
             config('services.imagekit.url_endpoint')
         );
 
-        // 3. Handle batch image uploads
+        // 3. Handle batch image uploads safely
         foreach ($this->images as $image) {
-            $uploadResult = $imageKit->upload([
-                'file' => base64_encode(file_get_contents($image->getRealPath())),
+
+            // Use uploadFile() instead of upload()
+            // Safely grab the file content using Laravel's ->get()
+            $uploadResult = $imageKit->uploadFile([
+                'file' => base64_encode($image->get()),
                 'fileName' => $image->getClientOriginalName(),
                 'folder' => '/products'
             ]);
 
-            if ($uploadResult->error === null) {
+            // Ensure we strictly check if the error is empty
+            if (empty($uploadResult->error)) {
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_link' => $uploadResult->result->filePath,
