@@ -311,9 +311,17 @@ new #[Layout('layouts.admin')] class extends Component {
             wire:target="images, save"
             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors cursor-pointer shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
         
-        <span wire:loading.remove wire:target="save">
+        <!-- Default State: Shows when neither uploading images nor saving -->
+        <span wire:loading.remove wire:target="images, save">
             <i class="fa-solid fa-floppy-disk mr-2"></i> Save Product
         </span>
+
+        <!-- Image Upload State: Shows ONLY while Livewire is uploading images to tmp directory -->
+        <span wire:loading wire:target="images">
+            <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Uploading Images...
+        </span>
+
+        <!-- Form Submit State: Shows ONLY when the save method is running -->
         <span wire:loading wire:target="save">
             <i class="fa-solid fa-spinner fa-spin mr-2"></i> Saving...
         </span>
