@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Route;
 // Route::livewire('/', 'pages::users.home')->name('home');
 Route::livewire('/login', 'pages::users.auth.login')->name('login');
 
-
-
 // Route::get('/', function () {
 
 //     /** @var \App\Models\User $user */
@@ -25,8 +23,6 @@ Route::livewire('/login', 'pages::users.auth.login')->name('login');
 //     }
 //     return redirect()->route('guest.home');
 // })->name('home');
-
-
 
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('auth.google');
 

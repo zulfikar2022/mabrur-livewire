@@ -29,8 +29,9 @@ class CleanupOrphanedImages extends Command
     public function handle()
     {
         // check the environment before proceeding. if the environment is not production, we will not run this command to prevent accidental data loss.
-        if (!app()->environment('production')) {
+        if (! app()->environment('production')) {
             $this->error('This command can only be run in the production environment to prevent accidental data loss.');
+
             return Command::FAILURE;
         }
 
@@ -47,22 +48,24 @@ class CleanupOrphanedImages extends Command
         // Note: By default, this fetches up to 1000 files.
         $response = $imageKit->listFiles([
             'path' => '/products',
-            'limit' => 1000
+            'limit' => 1000,
         ]);
 
         // THE FIX: Check if error is NOT null
         if ($response->error !== null) {
-            $this->error('ImageKit API request failed: ' . json_encode($response->error));
+            $this->error('ImageKit API request failed: '.json_encode($response->error));
+
             return Command::FAILURE;
         }
 
         if (empty($response->result)) {
             $this->info('The ImageKit products directory is completely empty. Nothing to clean.');
+
             return Command::SUCCESS;
         }
 
         $remoteFiles = $response->result;
-        $this->info('Found ' . count($remoteFiles) . ' files in ImageKit /products directory.');
+        $this->info('Found '.count($remoteFiles).' files in ImageKit /products directory.');
 
         // 3. Build a high-performance lookup collection from the database
         // We include tracing for soft-deleted entries using withTrashed()
@@ -75,7 +78,7 @@ class CleanupOrphanedImages extends Command
                 $standardizedPath = Str::start($record->image_link, '/');
 
                 return [$standardizedPath => [
-                    'is_soft_deleted' => !is_null($record->deleted_at)
+                    'is_soft_deleted' => ! is_null($record->deleted_at),
                 ]];
             })->toArray();
 
@@ -87,10 +90,11 @@ class CleanupOrphanedImages extends Command
             $fileId = $remoteFile->fileId;     // e.g., "64a2b1..." required for deletion
 
             // Case A: Image does not exist in the database table at all
-            if (!array_key_exists($filePath, $dbImageRecords)) {
+            if (! array_key_exists($filePath, $dbImageRecords)) {
                 $imageKit->deleteFile($fileId);
                 $deletedCount++;
                 $this->line("Deleted Orphaned File: {$filePath} (Reason: Missing DB record)");
+
                 continue;
             }
 

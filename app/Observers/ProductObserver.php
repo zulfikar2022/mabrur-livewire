@@ -13,7 +13,6 @@ class ProductObserver
         // clear the entire cache
         // Cache::flush();
 
-
         // 1. Always clear the homepage cache
         Cache::forget('home_products');
 
@@ -26,16 +25,17 @@ class ProductObserver
 
         if ($product->category) {
             $catName = strtolower(str_replace(' ', '_', $product->category->name));
-            Cache::forget('products_category_' . $catName);
+            Cache::forget('products_category_'.$catName);
         }
         if ($product->isDirty('category_id')) {
             $oldCat = Category::find($product->getOriginal('category_id'));
             if ($oldCat) {
                 $oldCatName = strtolower(str_replace(' ', '_', $oldCat->name));
-                Cache::forget('products_category_' . $oldCatName);
+                Cache::forget('products_category_'.$oldCatName);
             }
         }
     }
+
     /**
      * Handle the Product "created" event.
      */

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProductImage extends Model
 {
     use SoftDeletes;
+
     protected $fillable = [
         'product_id',
         'image_link',

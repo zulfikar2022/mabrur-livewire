@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'is_for_department' =>  env('IS_FOR_DEPARTMENT', false),
-    'default_role' =>  env('DEFAULT_ROLE', 'user'),
+    'is_for_department' => env('IS_FOR_DEPARTMENT', false),
+    'default_role' => env('DEFAULT_ROLE', 'user'),
 
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
@@ -58,7 +58,7 @@ return [
         'first_half_kg_osd' => env('FIRST_HALF_KG_OSD', 115),
         'first_kg_osd' => env('FIRST_KG_OSD', 135),
         'later_kgs_osd' => env('LATER_KGS_OSD', 20),
-        'mango_delivery_charge_per_kg' => env('MANGO_DELIVERY_CHARGE_PER_KG', 15)
-    ]
+        'mango_delivery_charge_per_kg' => env('MANGO_DELIVERY_CHARGE_PER_KG', 15),
+    ],
 
 ];

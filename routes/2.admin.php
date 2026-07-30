@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth','status', 'admin.only'])->prefix('/admin')->group(function () {
+Route::middleware(['auth', 'status', 'admin.only'])->prefix('/admin')->group(function () {
     Route::livewire('/', 'pages::admins.home')->name('admin.home');
     Route::get('/auth/logout', [GoogleController::class, 'logout'])->name('admin.logout');
 

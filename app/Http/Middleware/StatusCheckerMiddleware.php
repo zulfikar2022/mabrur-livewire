@@ -20,6 +20,7 @@ class StatusCheckerMiddleware
 
         if ($status !== 'active') {
             Auth::logout();
+
             return redirect()->route('login')->with('error', 'Your account is disabled. Please contact support.');
         }
 

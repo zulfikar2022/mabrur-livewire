@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,9 +12,9 @@ class SuperAdminOnlyMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('guest.home');
         }
         if ($user->hasRole('super-admin')) {

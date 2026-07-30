@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.only' => AdminOnlyMiddleware::class,
             'user.only' => UserOnlyMiddleware::class,
             'super-admin.only' => SuperAdminOnlyMiddleware::class,
-            'status' => StatusCheckerMiddleware::class
+            'status' => StatusCheckerMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

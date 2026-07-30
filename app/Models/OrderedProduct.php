@@ -15,7 +15,7 @@ class OrderedProduct extends Model
         'unit_price',
         'quantity',
         'price',
-        'shipping_charge'
+        'shipping_charge',
     ];
 
     public function order()

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\District;
 use App\Models\Upazila;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UpazilaSeeder extends Seeder
@@ -96,7 +95,6 @@ class UpazilaSeeder extends Seeder
             'শেরপুর' => ['শেরপুর সদর', 'ঝিনাইগাতী', 'নকলা', 'নালিতাবাড়ী', 'শ্রীবরদী'],
         ];
 
-
         if (Upazila::count() > 0) {
             return;
         }
@@ -106,7 +104,7 @@ class UpazilaSeeder extends Seeder
                 foreach ($upazilaNames as $upazilaName) {
                     Upazila::create([
                         'district_id' => $district->id,
-                        'name' => $upazilaName
+                        'name' => $upazilaName,
                     ]);
                 }
             }

@@ -15,9 +15,8 @@ class Order extends Model
         'total_price',
         'total_shipping_charge',
         'weight_for_mango',
-        'weight_for_non_mango'
+        'weight_for_non_mango',
     ];
-
 
     public function user()
     {

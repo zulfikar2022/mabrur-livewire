@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
@@ -32,10 +31,10 @@ class GoogleController extends Controller
         // 1. Look for an existing user by email
         $user = User::where('email', $googleUser->email)->first();
 
-        if (!$user) {
+        if (! $user) {
             $response = Http::get($googleUser->getAvatar());
             if ($response->successful()) {
-                $filename = 'avatars/' . Str::slug($googleUser->name) . '_' . $googleUser->id . '.jpg';
+                $filename = 'avatars/'.Str::slug($googleUser->name).'_'.$googleUser->id.'.jpg';
                 Storage::disk('public')->put($filename, $response->body());
             } else {
                 $filename = 'avatars/default.jpg';
@@ -52,7 +51,6 @@ class GoogleController extends Controller
             $user->assignRole($defaultRole);
         }
 
-
         Auth::login($user);
 
         // check the role of the user. If it is the admin then redirect to the admin dashboard, if it is the super-admin then redirect to the super-admin dashboard, if it is the user then redirect to the user dashboard
@@ -64,6 +62,7 @@ class GoogleController extends Controller
 
         return redirect()->intended(route('guest.home'));
     }
+
     public function logout(Request $request)
     {
         Auth::logout();

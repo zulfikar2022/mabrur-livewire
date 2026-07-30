@@ -12,10 +12,10 @@ use Override;
 class Category extends Model
 {
     use SoftDeletes;
-    protected $fillable = [
-      'name', 'deleted_at', 'is_available'
-    ];
 
+    protected $fillable = [
+        'name', 'deleted_at', 'is_available',
+    ];
 
     public function products()
     {
@@ -26,8 +26,6 @@ class Category extends Model
     {
         return $this->hasOne(CategoryImage::class);
     }
-
-
 
     #[Override]
     public function casts()

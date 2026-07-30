@@ -10,6 +10,7 @@ use Override;
 class ProductVector extends Model
 {
     use SoftDeletes;
+
     protected $fillable = [
         'product_id',
         'category_id',
@@ -34,5 +35,4 @@ class ProductVector extends Model
             'embedding' => 'array',
         ];
     }
-
 }

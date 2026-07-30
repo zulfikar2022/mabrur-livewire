@@ -5,15 +5,13 @@ namespace App\Observers;
 use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
 
-use function Laravel\Prompts\clear;
-
 class CategoryObserver
 {
     private function clearCache(Category $category)
     {
         Cache::forget('nav_categories');
         Cache::forget('home_products');
-        Cache::forget('products_category_' . strtolower(str_replace(' ', '_', $category->name)));
+        Cache::forget('products_category_'.strtolower(str_replace(' ', '_', $category->name)));
         // invalidate all the individual product caches that belong to this category
 
         $category->load('products');
@@ -22,6 +20,7 @@ class CategoryObserver
         // }
 
     }
+
     /**
      * Handle the Category "created" event.
      */

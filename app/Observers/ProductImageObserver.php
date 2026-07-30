@@ -20,11 +20,12 @@ class ProductImageObserver
             if ($category) {
                 $categoryName = $category->name;
                 $modifiedCategoryName = strtolower(str_replace(' ', '_', $categoryName));
-                Cache::forget('products_category_' . $modifiedCategoryName);
+                Cache::forget('products_category_'.$modifiedCategoryName);
             }
         }
 
     }
+
     /**
      * Handle the ProductImage "created" event.
      */
