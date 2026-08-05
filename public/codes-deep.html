@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OS Algorithms in C</title>
+        <style>
+            :root {
+                --bg-color: #1a1a1e;
+                --text-color: #d4d4d4;
+                --code-bg: #2b2b36;
+                --border-color: #3e3e4a;
+                --btn-color: #3a3a4a;
+                --btn-hover: #4a4a5a;
+                --accent-color: #4fc1ff;
+                --heading-color: #ffffff;
+            }
+
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Helvetica, Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                line-height: 1.6;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            h1 {
+                color: var(--heading-color);
+                border-bottom: 2px solid var(--accent-color);
+                padding-bottom: 10px;
+            }
+
+            h2 {
+                color: var(--accent-color);
+                margin-top: 40px;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 5px;
+            }
+
+            h3 {
+                color: var(--heading-color);
+                margin-bottom: 5px;
+            }
+
+            .algo-card {
+                background: var(--code-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 15px 20px;
+                margin-bottom: 25px;
+                position: relative;
+            }
+
+            .description {
+                font-size: 0.95rem;
+                margin-bottom: 15px;
+                color: #a0a0b0;
+            }
+
+            pre {
+                background: #1e1e24;
+                padding: 15px;
+                border-radius: 6px;
+                overflow-x: auto;
+                margin-bottom: 10px;
+                border: 1px solid #3e3e4a;
+            }
+
+            code {
+                font-family: "Consolas", "Courier New", monospace;
+                font-size: 0.9rem;
+                color: #dcdcdc;
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+
+            /* Basic manual syntax highlighting */
+            .keyword {
+                color: #569cd6;
+                font-weight: bold;
+            }
+            .function {
+                color: #dcdcaa;
+            }
+            .string {
+                color: #ce9178;
+            }
+            .comment {
+                color: #6a9955;
+            }
+            .number {
+                color: #b5cea8;
+            }
+            .preproc {
+                color: #c586c0;
+            }
+
+            .copy-btn {
+                background-color: var(--btn-color);
+                color: var(--text-color);
+                border: none;
+                padding: 6px 14px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 0.8rem;
+                transition: background 0.2s ease;
+                position: absolute;
+                top: 15px;
+                right: 20px;
+                z-index: 10;
+            }
+
+            .copy-btn:hover {
+                background-color: var(--btn-hover);
+            }
+
+            .copy-btn.copied {
+                background-color: #28a745;
+                color: white;
+            }
+
+            @media (max-width: 600px) {
+                body {
+                    padding: 10px;
+                }
+                .algo-card {
+                    padding: 10px;
+                }
+                .copy-btn {
+                    position: relative;
+                    top: auto;
+                    right: auto;
+                    display: inline-block;
+                    margin-top: 10px;
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Operating System Algorithms in C</h1>
+            <p>
+                This page contains complete C implementations of Operating
+                System algorithms. Use the "Copy Code" button on each card to
+                copy the snippet to your clipboard.
+            </p>
+
+            <!-- SECTION: CPU SCHEDULING -->
+            <h2>* CPU Scheduling</h2>
+
+            <div class="algo-card" id="fcfs">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>FCFS (First-Come, First-Served)</h3>
+                <div class="description">
+                    FCFS is the simplest scheduling algorithm where the process
+                    that arrives first is executed first. It calculates the
+                    waiting time and turnaround time for a fixed set of burst
+                    times.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+                
+int main() {
+    int n = 4, bt[] = {6, 8, 7, 3};
+    int wt[4], tat[4];
+    float total_wt = 0, total_tat = 0;
+
+    // Waiting time for first process is 0
+    wt[0] = 0;
+
+    // Calculate waiting time
+    for (int i = 1; i &lt; n; i++) {
+        wt[i] = bt[i-1] + wt[i-1];
+    }
+
+    // Calculate turnaround time and totals
+    for (int i = 0; i &lt; n; i++) {
+        tat[i] = bt[i] + wt[i];
+        total_wt += wt[i];
+        total_tat += tat[i];
+    }
+
+    printf("Process\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\n", i+1, bt[i], wt[i], tat[i]);
+    }
+    printf("Average Waiting Time: %.2f\n", total_wt / n);
+    printf("Average Turnaround Time: %.2f\n", total_tat / n);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="sjf">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>SJF (Shortest Job First - Non-Preemptive)</h3>
+                <div class="description">
+                    Non-preemptive SJF selects the process with the shortest
+                    burst time next. This implementation sorts the processes by
+                    burst time and calculates wait/turnaround times.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int p[] = {1, 2, 3, 4};
+    int bt[] = {8, 4, 6, 3};
+    int wt[4], tat[4];
+    float total_wt = 0, total_tat = 0;
+    int n = 4, temp;
+
+    // Sort processes by burst time
+    for (int i = 0; i &lt; n; i++) {
+        for (int j = 0; j &lt; n - i - 1; j++) {
+            if (bt[j] &gt; bt[j + 1]) {
+                temp = bt[j]; bt[j] = bt[j + 1]; bt[j + 1] = temp;
+                temp = p[j]; p[j] = p[j + 1]; p[j + 1] = temp;
+            }
+        }
+    }
+
+    // Calculate times
+    wt[0] = 0;
+    for (int i = 1; i &lt; n; i++) {
+        wt[i] = bt[i-1] + wt[i-1];
+        total_wt += wt[i];
+    }
+    for (int i = 0; i &lt; n; i++) {
+        tat[i] = bt[i] + wt[i];
+        total_tat += tat[i];
+    }
+
+    printf("Process\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\n", p[i], bt[i], wt[i], tat[i]);
+    }
+    printf("Average Waiting Time: %.2f\n", total_wt / n);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="priority">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>Priority Scheduling (Non-Preemptive)</h3>
+                <div class="description">
+                    In Priority scheduling, processes are executed based on
+                    their assigned priority. This example assumes lower number =
+                    higher priority. It sorts the processes by priority number.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int p[] = {1, 2, 3, 4};
+    int bt[] = {8, 4, 6, 3};
+    int pr[] = {2, 3, 1, 4}; // Lower number = Higher priority
+    int wt[4], tat[4];
+    float total_wt = 0, total_tat = 0;
+    int n = 4, temp;
+
+    // Sort by priority
+    for (int i = 0; i &lt; n; i++) {
+        for (int j = 0; j &lt; n - i - 1; j++) {
+            if (pr[j] &gt; pr[j + 1]) {
+                temp = pr[j]; pr[j] = pr[j + 1]; pr[j + 1] = temp;
+                temp = bt[j]; bt[j] = bt[j + 1]; bt[j + 1] = temp;
+                temp = p[j]; p[j] = p[j + 1]; p[j + 1] = temp;
+            }
+        }
+    }
+
+    wt[0] = 0;
+    for (int i = 1; i &lt; n; i++) {
+        wt[i] = bt[i-1] + wt[i-1];
+        total_wt += wt[i];
+    }
+    for (int i = 0; i &lt; n; i++) {
+        tat[i] = bt[i] + wt[i];
+        total_tat += tat[i];
+    }
+
+    printf("Process\tBurst Time\tPriority\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\t\t%d\n", p[i], bt[i], pr[i], wt[i], tat[i]);
+    }
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="rr">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>Round Robin (RR)</h3>
+                <div class="description">
+                    Round Robin assigns a fixed time quantum to each process and
+                    cycles through them. This implementation maintains a
+                    circular queue and updates the remaining burst times until
+                    all processes finish.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#define MAX 100
+
+int main() {
+    int n = 4, quantum = 2;
+    int bt[] = {6, 8, 7, 3};
+    int rt[4];
+    int wt[4] = {0}, tat[4];
+    float total_wt = 0, total_tat = 0;
+    int queue[MAX], front = 0, rear = 0, current = 0;
+    int visited[4] = {0};
+
+    // Initialize remaining time and queue
+    for (int i = 0; i &lt; n; i++) {
+        rt[i] = bt[i];
+        queue[rear++] = i;
+    }
+
+    // Round Robin Loop
+    while (front &lt; rear) {
+        int p = queue[front++];
+        if (rt[p] > quantum) {
+            rt[p] -= quantum;
+            current += quantum;
+            // If not in queue, add to rear
+            queue[rear++] = p;
+        } else {
+            current += rt[p];
+            rt[p] = 0;
+            tat[p] = current;
+            wt[p] = tat[p] - bt[p];
+            total_wt += wt[p];
+            total_tat += tat[p];
+        }
+    }
+
+    printf("Process\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\n", i+1, bt[i], wt[i], tat[i]);
+    }
+    printf("Average Turnaround Time: %.2f\n", total_tat / n);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="srjf">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>SRJF (Shortest Remaining Job First - Preemptive)</h3>
+                <div class="description">
+                    SRJF is the preemptive version of SJF where a process can be
+                    interrupted if a new process arrives with a shorter
+                    remaining time.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+int main() {
+    int n = 4;
+    int at[] = {0, 1, 2, 3};
+    int bt[] = {8, 4, 9, 5};
+    int rt[4], wt[4], tat[4];
+    int complete = 0, t = 0, minm = INT_MAX, shortest = 0, finish_time;
+    float total_wt = 0, total_tat = 0;
+    
+    for (int i = 0; i &lt; n; i++) rt[i] = bt[i];
+    
+    // Process until all processes complete
+    while (complete != n) {
+        minm = INT_MAX;
+        for (int i = 0; i &lt; n; i++) {
+            if (at[i] <= t && rt[i] < minm && rt[i] > 0) {
+                minm = rt[i];
+                shortest = i;
+            }
+        }
+        if (minm == INT_MAX) {
+            t++;
+            continue;
+        }
+        rt[shortest]--;
+        t++;
+        if (rt[shortest] == 0) {
+            complete++;
+            finish_time = t;
+            tat[shortest] = finish_time - at[shortest];
+            wt[shortest] = tat[shortest] - bt[shortest];
+            total_wt += wt[shortest];
+            total_tat += tat[shortest];
+        }
+    }
+
+    printf("Process\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\n", i+1, bt[i], wt[i], tat[i]);
+    }
+    printf("Average Waiting Time: %.2f\n", total_wt / n);
+    return 0;
+}</code></pre>
+            </div>
+
+            <!-- SECTION: PAGE REPLACEMENT -->
+            <h2>* Page Replacement</h2>
+
+            <div class="algo-card" id="fifo_pr">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>FIFO (First-In-First-Out) Page Replacement</h3>
+                <div class="description">
+                    When a page fault occurs, FIFO removes the page that has
+                    been in the memory frames for the longest time.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+int main() {
+    int pages[] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1};
+    int n = 20, frames = 3, frame[3];
+    int front = 0, page_faults = 0;
+    
+    for (int i = 0; i &lt; frames; i++) frame[i] = -1;
+    
+    for (int i = 0; i &lt; n; i++) {
+        bool found = false;
+        for (int j = 0; j &lt; frames; j++) {
+            if (frame[j] == pages[i]) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            frame[front] = pages[i];
+            front = (front + 1) % frames;
+            page_faults++;
+        }
+        printf("Frame: ");
+        for (int j = 0; j &lt; frames; j++) {
+            if (frame[j] != -1) printf("%d ", frame[j]);
+            else printf("- ");
+        }
+        printf("\n");
+    }
+    printf("Total Page Faults: %d\n", page_faults);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="optimal">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>Optimal Page Replacement</h3>
+                <div class="description">
+                    The optimal page replacement algorithm replaces the page
+                    that will not be used for the longest period of time in the
+                    future.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;limits.h&gt;
+
+int findOptimal(int pages[], int n, int frame[], int frames, int current) {
+    int res = -1, farthest = -1;
+    for (int i = 0; i &lt; frames; i++) {
+        int j;
+        for (j = current + 1; j &lt; n; j++) {
+            if (frame[i] == pages[j]) {
+                if (j > farthest) {
+                    farthest = j;
+                    res = i;
+                }
+                break;
+            }
+        }
+        if (j == n) return i; // This page won't be used again
+    }
+    return (res == -1) ? 0 : res;
+}
+
+int main() {
+    int pages[] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1};
+    int n = 20, frames = 3, frame[3];
+    int page_faults = 0;
+    
+    for (int i = 0; i &lt; frames; i++) frame[i] = -1;
+    
+    for (int i = 0; i &lt; n; i++) {
+        bool found = false;
+        for (int j = 0; j &lt; frames; j++) {
+            if (frame[j] == pages[i]) {
+                found = true; break;
+            }
+        }
+        if (!found) {
+            if (i < frames) {
+                frame[i] = pages[i];
+            } else {
+                int replace_idx = findOptimal(pages, n, frame, frames, i);
+                frame[replace_idx] = pages[i];
+            }
+            page_faults++;
+        }
+        printf("Frame: ");
+        for (int j = 0; j &lt; frames; j++) {
+            if (frame[j] != -1) printf("%d ", frame[j]);
+            else printf("- ");
+        }
+        printf("\n");
+    }
+    printf("Total Page Faults: %d\n", page_faults);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="lru">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>LRU (Least Recently Used) Page Replacement</h3>
+                <div class="description">
+                    LRU replaces the page that has not been used for the longest
+                    period of time. It uses a timestamp or counter to track page
+                    usage.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;limits.h&gt;
+
+int findLRU(int time[], int frames) {
+    int min = time[0], pos = 0;
+    for (int i = 1; i &lt; frames; i++) {
+        if (time[i] < min) {
+            min = time[i];
+            pos = i;
+        }
+    }
+    return pos;
+}
+
+int main() {
+    int pages[] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1};
+    int n = 20, frames = 3, frame[3];
+    int time[3];
+    int page_faults = 0, counter = 0;
+    
+    for (int i = 0; i &lt; frames; i++) { frame[i] = -1; time[i] = 0; }
+
+    for (int i = 0; i &lt; n; i++) {
+        bool found = false;
+        for (int j = 0; j &lt; frames; j++) {
+            if (frame[j] == pages[i]) {
+                found = true;
+                time[j] = ++counter;
+                break;
+            }
+        }
+        if (!found) {
+            if (i < frames) {
+                frame[i] = pages[i];
+                time[i] = ++counter;
+            } else {
+                int replace_idx = findLRU(time, frames);
+                frame[replace_idx] = pages[i];
+                time[replace_idx] = ++counter;
+            }
+            page_faults++;
+        }
+        printf("Frame: ");
+        for (int j = 0; j &lt; frames; j++) {
+            if (frame[j] != -1) printf("%d ", frame[j]);
+            else printf("- ");
+        }
+        printf("\n");
+    }
+    printf("Total Page Faults: %d\n", page_faults);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="mru">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>MRU (Most Recently Used) Page Replacement</h3>
+                <div class="description">
+                    MRU replaces the page that has been used most recently. It
+                    uses a timestamp, and on a page fault, it replaces the frame
+                    with the maximum timestamp.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;limits.h&gt;
+
+int findMRU(int time[], int frames) {
+    int max = time[0], pos = 0;
+    for (int i = 1; i &lt; frames; i++) {
+        if (time[i] > max) {
+            max = time[i];
+            pos = i;
+        }
+    }
+    return pos;
+}
+
+int main() {
+    int pages[] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1};
+    int n = 20, frames = 3, frame[3];
+    int time[3];
+    int page_faults = 0, counter = 0;
+    
+    for (int i = 0; i &lt; frames; i++) { frame[i] = -1; time[i] = 0; }
+
+    for (int i = 0; i &lt; n; i++) {
+        bool found = false;
+        for (int j = 0; j &lt; frames; j++) {
+            if (frame[j] == pages[i]) {
+                found = true;
+                time[j] = ++counter; // Update MRU time
+                break;
+            }
+        }
+        if (!found) {
+            if (i < frames) {
+                frame[i] = pages[i];
+                time[i] = ++counter;
+            } else {
+                int replace_idx = findMRU(time, frames);
+                frame[replace_idx] = pages[i];
+                time[replace_idx] = ++counter;
+            }
+            page_faults++;
+        }
+        printf("Frame: ");
+        for (int j = 0; j &lt; frames; j++) {
+            if (frame[j] != -1) printf("%d ", frame[j]);
+            else printf("- ");
+        }
+        printf("\n");
+    }
+    printf("Total Page Faults: %d\n", page_faults);
+    return 0;
+}</code></pre>
+            </div>
+
+            <!-- SECTION: FIT ALGORITHMS (MEMORY ALLOCATION) -->
+            <h2>* Fit Algorithms (Memory Allocation)</h2>
+
+            <div class="algo-card" id="bestfit">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>Best Fit</h3>
+                <div class="description">
+                    Best Fit searches the entire list of available memory blocks
+                    and allocates the smallest block that is large enough for
+                    the process.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+void bestFit(int blockSize[], int m, int processSize[], int n) {
+    int allocation[n];
+    for (int i = 0; i &lt; n; i++) allocation[i] = -1;
+    
+    for (int i = 0; i &lt; n; i++) {
+        int bestIdx = -1;
+        for (int j = 0; j &lt; m; j++) {
+            if (blockSize[j] >= processSize[i]) {
+                if (bestIdx == -1 || blockSize[j] < blockSize[bestIdx]) {
+                    bestIdx = j;
+                }
+            }
+        }
+        if (bestIdx != -1) {
+            allocation[i] = bestIdx;
+            blockSize[bestIdx] -= processSize[i];
+        }
+    }
+    
+    printf("\nProcess No.\tProcess Size\tBlock no.\n");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d\t\t%d\t\t", i+1, processSize[i]);
+        if (allocation[i] != -1) printf("%d\n", allocation[i] + 1);
+        else printf("Not Allocated\n");
+    }
+}
+
+int main() {
+    int blockSize[] = {100, 500, 200, 300, 600};
+    int processSize[] = {212, 417, 112, 426};
+    int m = 5, n = 4;
+    bestFit(blockSize, m, processSize, n);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="firstfit">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>First Fit</h3>
+                <div class="description">
+                    First Fit allocates a process to the first available memory
+                    block that is large enough. It is faster than Best Fit but
+                    may waste more memory.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+
+void firstFit(int blockSize[], int m, int processSize[], int n) {
+    int allocation[n];
+    for (int i = 0; i &lt; n; i++) allocation[i] = -1;
+    
+    for (int i = 0; i &lt; n; i++) {
+        for (int j = 0; j &lt; m; j++) {
+            if (blockSize[j] >= processSize[i]) {
+                allocation[i] = j;
+                blockSize[j] -= processSize[i];
+                break;
+            }
+        }
+    }
+    
+    printf("\nProcess No.\tProcess Size\tBlock no.\n");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d\t\t%d\t\t", i+1, processSize[i]);
+        if (allocation[i] != -1) printf("%d\n", allocation[i] + 1);
+        else printf("Not Allocated\n");
+    }
+}
+
+int main() {
+    int blockSize[] = {100, 500, 200, 300, 600};
+    int processSize[] = {212, 417, 112, 426};
+    int m = 5, n = 4;
+    firstFit(blockSize, m, processSize, n);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algo-card" id="worstfit">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>Worst Fit</h3>
+                <div class="description">
+                    Worst Fit searches the entire list of available memory
+                    blocks and allocates the largest available block to the
+                    process.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+void worstFit(int blockSize[], int m, int processSize[], int n) {
+    int allocation[n];
+    for (int i = 0; i &lt; n; i++) allocation[i] = -1;
+    
+    for (int i = 0; i &lt; n; i++) {
+        int wstIdx = -1;
+        for (int j = 0; j &lt; m; j++) {
+            if (blockSize[j] >= processSize[i]) {
+                if (wstIdx == -1 || blockSize[j] > blockSize[wstIdx]) {
+                    wstIdx = j;
+                }
+            }
+        }
+        if (wstIdx != -1) {
+            allocation[i] = wstIdx;
+            blockSize[wstIdx] -= processSize[i];
+        }
+    }
+    
+    printf("\nProcess No.\tProcess Size\tBlock no.\n");
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d\t\t%d\t\t", i+1, processSize[i]);
+        if (allocation[i] != -1) printf("%d\n", allocation[i] + 1);
+        else printf("Not Allocated\n");
+    }
+}
+
+int main() {
+    int blockSize[] = {100, 500, 200, 300, 600};
+    int processSize[] = {212, 417, 112, 426};
+    int m = 5, n = 4;
+    worstFit(blockSize, m, processSize, n);
+    return 0;
+}</code></pre>
+            </div>
+
+            <!-- SECTION: OTHER -->
+            <h2>* Other</h2>
+
+            <div class="algo-card" id="bankers">
+                <button class="copy-btn" onclick="copyCode(this)">
+                    Copy Code
+                </button>
+                <h3>Banker's Algorithm (Deadlock Avoidance)</h3>
+                <div class="description">
+                    The Banker's Algorithm checks for a safe state to avoid
+                    deadlock. It calculates the Need matrix, runs the Safety
+                    Algorithm, and finds a safe execution sequence if one
+                    exists.
+                </div>
+                <pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#define P 5 // Number of processes
+#define R 3 // Number of resources
+
+int main() {
+    int avail[] = {3, 3, 2};
+    int max[P][R] = {{7, 5, 3}, {3, 2, 2}, {9, 0, 2}, {2, 2, 2}, {4, 3, 3}};
+    int alloc[P][R] = {{0, 1, 0}, {2, 0, 0}, {3, 0, 2}, {2, 1, 1}, {0, 0, 2}};
+    int need[P][R];
+    bool finish[P] = {false};
+    int safeSeq[P];
+    int count = 0;
+    
+    // Calculate Need Matrix
+    for (int i = 0; i &lt; P; i++) {
+        for (int j = 0; j &lt; R; j++) {
+            need[i][j] = max[i][j] - alloc[i][j];
+        }
+    }
+    
+    // Safety Algorithm
+    while (count &lt; P) {
+        bool found = false;
+        for (int p = 0; p &lt; P; p++) {
+            if (!finish[p]) {
+                bool can_alloc = true;
+                for (int j = 0; j &lt; R; j++) {
+                    if (need[p][j] > avail[j]) {
+                        can_alloc = false;
+                        break;
+                    }
+                }
+                if (can_alloc) {
+                    for (int k = 0; k &lt; R; k++) {
+                        avail[k] += alloc[p][k];
+                    }
+                    safeSeq[count++] = p;
+                    finish[p] = true;
+                    found = true;
+                }
+            }
+        }
+        if (!found) {
+            printf("System is not in a safe state!\n");
+            return 0;
+        }
+    }
+    
+    printf("System is in a safe state.\nSafe Sequence: ");
+    for (int i = 0; i &lt; P; i++) {
+        printf("P%d ", safeSeq[i]);
+    }
+    printf("\n");
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <script>
+            function copyCode(btn) {
+                // Find the code block relative to the button
+                const preBlock = btn.parentElement.querySelector("pre code");
+                const text = preBlock.innerText;
+
+                btn.classList.add("copied");
+                const originalText = btn.innerText;
+                btn.innerText = "Copied!";
+
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(text).catch((err) => {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
+
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove("copied");
+                }, 2000);
+            }
+
+            function fallbackCopy(text) {
+                const textarea = document.createElement("textarea");
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand("copy");
+                } catch (err) {
+                    console.error("Fallback copy failed", err);
+                }
+                document.body.removeChild(textarea);
+            }
+        </script>
+    </body>
+</html>
