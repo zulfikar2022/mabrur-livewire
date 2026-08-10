@@ -22,6 +22,7 @@
         "spatie/laravel-sitemap": "^8.0"
     },
     "require-dev": {
+        "albertoarena/laravel-truss": "^1.8",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.0.6",

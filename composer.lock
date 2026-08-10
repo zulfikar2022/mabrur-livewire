@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "86905f1545c247b49a539111dafbbd25",
+    "content-hash": "c408d023a09c538ebc4510e17202b880",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -8437,6 +8437,87 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "albertoarena/laravel-truss",
+            "version": "v1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/albertoarena/laravel-truss.git",
+                "reference": "8659d8809034c11e5cb4ac7f73b5e5cf41fb7a19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/albertoarena/laravel-truss/zipball/8659d8809034c11e5cb4ac7f73b5e5cf41fb7a19",
+                "reference": "8659d8809034c11e5cb4ac7f73b5e5cf41fb7a19",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "php": "^8.3",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "laravel/mcp": "^0.9",
+                "laravel/pint": "^1.18",
+                "orchestra/testbench": "^10.0 || ^11.0",
+                "pestphp/pest": "^3.5"
+            },
+            "suggest": {
+                "laravel/mcp": "Enables the optional read-only, structure-only Truss MCP server (Truss as AI context). Opt in with `composer require laravel/mcp`. Needs Laravel >= 12.41.1 or 13."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AlbertoArena\\Truss\\TrussServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AlbertoArena\\Truss\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alberto Arena",
+                    "email": "arena.alberto@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A live database structure viewer for Laravel. Renders your schema (never data) as a scrollable, zoomable ER diagram.",
+            "homepage": "https://trussphp.com",
+            "keywords": [
+                "DBML",
+                "data-dictionary",
+                "database",
+                "database-diagram",
+                "er-diagram",
+                "erd",
+                "introspection",
+                "laravel",
+                "mermaid",
+                "migrations",
+                "schema"
+            ],
+            "support": {
+                "docs": "https://trussphp.com",
+                "issues": "https://github.com/albertoarena/laravel-truss/issues",
+                "source": "https://github.com/albertoarena/laravel-truss"
+            },
+            "funding": [
+                {
+                    "url": "https://ko-fi.com/albertoarena",
+                    "type": "ko-fi"
+                }
+            ],
+            "time": "2026-08-10T12:46:09+00:00"
+        },
         {
             "name": "brianium/paratest",
             "version": "v7.20.0",
