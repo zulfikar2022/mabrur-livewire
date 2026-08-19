@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lex/Flex laboratory programs with descriptions and copy buttons.">
+  <title>Lex / Flex Lab Programs</title>
+
+  <style>
+    :root {
+      --primary: #1a63fb;
+      --primary-dark: #1450d2;
+      --primary-light: #eaf1ff;
+      --secondary: #cad5e2;
+      --secondary-light: #eef2f6;
+      --text: #172033;
+      --muted: #64748b;
+      --white: #ffffff;
+      --code-bg: #101a2e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: #f7f9fc;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 72px 0 52px;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 85% 20%, rgba(255,255,255,.16), transparent 28%),
+        radial-gradient(circle at 10% 90%, rgba(255,255,255,.08), transparent 30%),
+        var(--primary);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      right: -130px;
+      bottom: -190px;
+      border: 55px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 6px 11px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .hero h1 {
+      max-width: 800px;
+      margin: 0;
+      font-size: clamp(2.3rem, 6vw, 4.2rem);
+      line-height: 1.04;
+      letter-spacing: -.035em;
+    }
+
+    .hero-text {
+      max-width: 720px;
+      margin: 20px 0 0;
+      color: rgba(255,255,255,.9);
+      font-size: 1.06rem;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 30px;
+    }
+
+    .quick-links a {
+      padding: 8px 13px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(255,255,255,.08);
+      text-decoration: none;
+      font-size: .88rem;
+      transition: .2s ease;
+    }
+
+    .quick-links a:hover {
+      background: #fff;
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* ---------- Content ---------- */
+
+    .content {
+      padding: 46px 0 72px;
+    }
+
+    .intro {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      align-items: end;
+      margin-bottom: 28px;
+      padding: 24px;
+      border: 1px solid var(--secondary);
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fff, #f5f8fc);
+    }
+
+    .intro h2 {
+      margin: 0 0 6px;
+      font-size: 1.65rem;
+    }
+
+    .intro p {
+      max-width: 750px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .intro-badge {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: .8rem;
+      font-weight: 800;
+    }
+
+    code {
+      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    }
+
+    .intro code {
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: var(--secondary-light);
+      color: var(--primary-dark);
+    }
+
+    /* ---------- Code cards ---------- */
+
+    .code-card {
+      margin: 24px 0;
+      overflow: hidden;
+      border: 1px solid var(--secondary);
+      border-radius: 15px;
+      background: var(--white);
+      box-shadow: 0 8px 30px rgba(23,32,51,.055);
+      scroll-margin-top: 20px;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .code-card:hover {
+      border-color: #9dbcfb;
+      box-shadow: 0 12px 34px rgba(26,99,251,.09);
+      transform: translateY(-1px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px;
+    }
+
+    .title-area {
+      min-width: 0;
+    }
+
+    .number {
+      color: var(--primary);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+
+    .card-header h2 {
+      margin: 2px 0 5px;
+      font-size: 1.35rem;
+    }
+
+    .card-header p {
+      max-width: 770px;
+      margin: 0;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      flex: 0 0 auto;
+      min-width: 90px;
+      padding: 9px 14px;
+      border: 1px solid #a9c4fb;
+      border-radius: 9px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 750;
+      transition: .2s ease;
+    }
+
+    .copy-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .copy-btn.copied {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .copy-icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .filename {
+      padding: 9px 22px;
+      border-top: 1px solid var(--secondary);
+      border-bottom: 1px solid var(--secondary);
+      background: #f5f8fc;
+      color: #475569;
+      font-family: Consolas, monospace;
+      font-size: .83rem;
+    }
+
+    .filename span {
+      margin-right: 6px;
+      color: var(--primary);
+      font-size: .7rem;
+    }
+
+    pre {
+      margin: 0;
+      padding: 22px;
+      overflow-x: auto;
+      background: var(--code-bg);
+      color: #e8eef8;
+      font-size: .87rem;
+      line-height: 1.65;
+      tab-size: 4;
+    }
+
+    pre code {
+      white-space: pre;
+    }
+
+    /* ---------- Footer ---------- */
+
+    footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--secondary);
+      background: #fff;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    /* ---------- Toast ---------- */
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 10;
+      padding: 11px 16px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 9px;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(26,99,251,.28);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- Mobile ---------- */
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 20px, 1100px);
+      }
+
+      .hero {
+        padding: 50px 0 38px;
+      }
+
+      .hero-text {
+        font-size: .98rem;
+      }
+
+      .quick-links {
+        gap: 7px;
+      }
+
+      .quick-links a {
+        padding: 7px 10px;
+        font-size: .82rem;
+      }
+
+      .content {
+        padding: 30px 0 55px;
+      }
+
+      .intro {
+        display: block;
+        padding: 19px;
+      }
+
+      .intro-badge {
+        display: inline-block;
+        margin-top: 14px;
+      }
+
+      .card-header {
+        flex-direction: column;
+        padding: 18px;
+      }
+
+      .copy-btn {
+        width: 100%;
+      }
+
+      .filename {
+        padding: 8px 18px;
+      }
+
+      pre {
+        padding: 18px;
+        font-size: .79rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="container hero-content">
+      <span class="eyebrow">CSE • Compiler Design • Lex/Flex</span>
+
+      <h1>Lex / Flex Lab Programs</h1>
+
+      <p class="hero-text">
+        A collection of simple Lex programs for laboratory practice.
+        Each program includes a short description and a one-click copy button.
+      </p>
+
+      <nav class="quick-links" aria-label="Program navigation">
+        <a href="#second">Second</a><a href="#third">Third</a><a href="#fourth">Fourth</a><a href="#sixsth">Sixsth</a><a href="#seventh">Seventh</a><a href="#eighth">Eighth</a><a href="#ninth">Ninth</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container content">
+    <section class="intro">
+      <div>
+        <h2>Practice Programs</h2>
+        <p>
+          These examples are intentionally kept simple for lab and viva preparation.
+          Save each code block as a <code>.l</code> file and run it with Flex.
+        </p>
+      </div>
+      <span class="intro-badge">7 PROGRAMS</span>
+    </section>
+
+    
+    <article class="code-card" id="second">
+      <div class="card-header">
+        <div class="title-area">
+          <div class="number">PROGRAM 01</div>
+          <h2>Second</h2>
+          <p>Identifies selected keywords, integers, and alphabetic words from the input. Other characters are echoed unchanged.</p>
+        </div>
+        <button class="copy-btn" type="button" data-target="code-1">
+          <span class="copy-icon">⧉</span> Copy
+        </button>
+      </div>
+      <div class="filename"><span>●</span> second.l</div>
+      <pre><code id="code-1">/* A lex program to identify some keywords, numbers and words */
+%{
+#include&lt;stdio.h&gt;
+%}
+
+%%
+if|else|printf {printf(&quot;%s is a keyword\n&quot;, yytext);}
+[0-9]+ {printf(&quot;%s is a number\n&quot;, yytext);}
+[a-zA-Z]+ {printf(&quot;%s is a word\n&quot;, yytext);}
+.|\n {ECHO;}
+%%
+
+int main()
+{
+    printf(&quot;Enter your input string: &quot;);
+    yylex();
+}
+
+int yywrap()
+{
+    return 1;
+}</code></pre>
+    </article>
+
+    <article class="code-card" id="third">
+      <div class="card-header">
+        <div class="title-area">
+          <div class="number">PROGRAM 02</div>
+          <h2>Third</h2>
+          <p>Identifies and prints sequences of uppercase letters when they are followed by whitespace or a newline.</p>
+        </div>
+        <button class="copy-btn" type="button" data-target="code-2">
+          <span class="copy-icon">⧉</span> Copy
+        </button>
+      </div>
+      <div class="filename"><span>●</span> third.l</div>
+      <pre><code id="code-2">/*A program to identify capital words from a string input*/
+
+%{ 
+#include&lt;stdio.h&gt;
+%}
+
+%%
+[A-Z]+[ \t\n] {printf(&quot;%s&quot;, yytext);}
+. ;
+%%
+
+int main()
+{
+    printf(&quot;Enter your string: &quot;);
+    yylex();
+}
+
+int yywrap()
+{
+    return 1;
+}</code></pre>
+    </article>
+
+    <article class="code-card" id="fourth">
+      <div class="card-header">
+        <div class="title-area">
+          <div class="number">PROGRAM 03</div>
+          <h2>Fourth</h2>
+          <p>Counts vowels and consonants in the input. Whitespace is ignored.</p>
+        </div>
+        <button class="copy-btn" type="button" data-target="code-3">
+          <span class="copy-icon">⧉</span> Copy
+        </button>
+      </div>
+      <div class="filename"><span>●</span> fourth.l</div>
+      <pre><code id="code-3">%{
+#include&lt;stdio.h&gt;
+int v=0, c=0;
+%}
+
+%%
+[ \t\n]+ ;
+[aeiouAEIOU] {v++;}
+[b-df-hj-np-tv-zB-DF-HJ-NP-TV-Z] {c++;}
+%%
+
+int main()
+{
+    printf(&quot;Enter a string input: &quot;);
+    yylex();
+    printf(&quot;Consonent count: %d\n&quot;, c);
+    printf(&quot;Vowel     count: %d\n&quot;, v);
+}
+
+int yywrap()
+{
+    return 1;
+}</code></pre>
+    </article>
+
+    <article class="code-card" id="sixsth">
+      <div class="card-header">
+        <div class="title-area">
+          <div class="number">PROGRAM 04</div>
+          <h2>Sixsth</h2>
+          <p>Checks whether a sentence contains selected conjunctions such as and, or, because, but, if, then, or nevertheless.</p>
+        </div>
+        <button class="copy-btn" type="button" data-target="code-4">
+          <span class="copy-icon">⧉</span> Copy
+        </button>
+      </div>
+      <div class="filename"><span>●</span> sixsth.l</div>
+      <pre><code id="code-4">/* a program to check if a sentence is compund or not. */
+
+%{
+#include&lt;stdio.h&gt;
+int isCompund = 0;
+%}
+
+%%
+and|or|because|but|if|then|nevertheless {isCompund=1;}
+. ;
+\n {return 0;}
+%%
+
+int main()
+{
+    printf(&quot;Enter Your Sentence: &quot;);
+    yylex();
+    if(isCompund == 1)  printf(&quot;The Sentence is a compund sentence.\n&quot;);
+    else printf(&quot;The sentence is not a compund sentence\n&quot;);
+}
+int yywrap()
+{
+    return 1;
+}</code></pre>
+    </article>
+
+    <article class="code-card" id="seventh">
+      <div class="card-header">
+        <div class="title-area">
+          <div class="number">PROGRAM 05</div>
+          <h2>Seventh</h2>
+          <p>Counts lines, whitespace spaces/tabs, words, and total characters using yyleng.</p>
+        </div>
+        <button class="copy-btn" type="button" data-target="code-5">
+          <span class="copy-icon">⧉</span> Copy
+        </button>
+      </div>
+      <div class="filename"><span>●</span> seventh.l</div>
+      <pre><code id="code-5">/* Cunting number of lines, words, spaces and characters in a sentenc */ 
+%{
+#include&lt;stdio.h&gt;
+int line_count = 0, word_count = 0, space_count = 0, character_count = 0;
+%}
+
+%%
+\n              { line_count++; character_count += yyleng; }
+[ \t]           { space_count++; character_count += yyleng; }
+[^ \t\n]+       { word_count++; character_count += yyleng; }
+%%
+
+int main()
+{
+    printf(&quot;Enter your sentenc: &quot;);
+    yylex();
+    printf(&quot;Number of lines: %d\n&quot;, line_count);
+    printf(&quot;Number of words: %d\n&quot;, word_count);
+    printf(&quot;Number of space: %d\n&quot;, space_count);
+    printf(&quot;Number of characters: %d\n&quot;, character_count);
+
+}
+
+int yywrap()
+{
+    return 1;
+}</code></pre>
+    </article>
+
+    <article class="code-card" id="eighth">
+      <div class="card-header">
+        <div class="title-area">
+          <div class="number">PROGRAM 06</div>
+          <h2>Eighth</h2>
+          <p>Attempts to count single-line and multi-line C comments. This is a simple lab exercise rather than a complete C comment lexer.</p>
+        </div>
+        <button class="copy-btn" type="button" data-target="code-6">
+          <span class="copy-icon">⧉</span> Copy
+        </button>
+      </div>
+      <div class="filename"><span>●</span> eighth.l</div>
+      <pre><code id="code-6">/* number of comment line i a C program  */
+
+%{
+#include&lt;stdio.h&gt;
+int count = 0;
+%}
+
+%%
+[//] {count++;}
+&quot;/*&quot;[a-zA-Z0-9 \t\n]*&quot;*/&quot; {count++;}
+&quot;//&quot;[a-zA-Z0-9 \t]*&quot;\n&quot; {count++;}
+%%
+
+int main()
+{
+    printf(&quot;Enter the C code: \n&quot;);
+    yylex();
+    printf(&quot;Numbe of comments in the code is: %d\n&quot;, count);
+}
+
+int yywrap()
+{
+    return 1;
+}</code></pre>
+    </article>
+
+    <article class="code-card" id="ninth">
+      <div class="card-header">
+        <div class="title-area">
+          <div class="number">PROGRAM 07</div>
+          <h2>Ninth</h2>
+          <p>Checks a simple arithmetic expression made from numbers and the + and * operators, then lists the numbers and operators found.</p>
+        </div>
+        <button class="copy-btn" type="button" data-target="code-7">
+          <span class="copy-icon">⧉</span> Copy
+        </button>
+      </div>
+      <div class="filename"><span>●</span> ninth.l</div>
+      <pre><code id="code-7">/* Recognize a valid arithmetic expression and recognize the identifiers only numbers and operators only + 
+and * present */
+
+%{
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+int identifier_count = 0, operator_count = 0, k, flag=0;
+char identifiers[10][10], operators[10][10];
+%}
+
+%%
+[0-9]+ {flag++; strcpy(identifiers[identifier_count], yytext); identifier_count++;}
+[+*] {flag--; strcpy(operators[operator_count], yytext); operator_count++;}
+%%
+
+int main()
+{
+    printf(&quot;Enter the arithmetic expression: &quot;);
+    yylex();
+    if(flag != 1) printf(&quot;Invalid Expression\n&quot;);
+    else {
+        printf(&quot;\nIdentifiers: \n&quot;);
+        for(k = 0; k&lt;identifier_count; k++){
+            printf(&quot;%s\n&quot;, identifiers[k]);
+        }
+
+        printf(&quot;\nOperators: \n&quot;);
+        for(k = 0; k&lt;operator_count; k++){
+            printf(&quot;%s\n&quot;, operators[k]);
+        }
+    }
+}
+
+int yywrap()
+{
+    return 1;
+}</code></pre>
+    </article>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Lex / Flex Lab Practice</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied!</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const toast = document.getElementById("toast");
+
+      document.querySelectorAll(".copy-btn").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const code = document.getElementById(button.dataset.target);
+
+          try {
+            await navigator.clipboard.writeText(code.textContent);
+            showCopied(button);
+          } catch (error) {
+            const range = document.createRange();
+            range.selectNodeContents(code);
+
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            try {
+              document.execCommand("copy");
+              showCopied(button);
+            } catch (fallbackError) {
+              alert("Copy failed. Please select and copy the code manually.");
+            }
+
+            selection.removeAllRanges();
+          }
+        });
+      });
+
+      function showCopied(button) {
+        const originalText = button.innerHTML;
+
+        button.innerHTML = "✓ Copied!";
+        button.classList.add("copied");
+        toast.classList.add("show");
+
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.classList.remove("copied");
+          toast.classList.remove("show");
+        }, 1400);
+      }
+    });
+  </script>
+</body>
+</html>
