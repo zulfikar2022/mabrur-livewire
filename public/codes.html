@@ -41,8 +41,6 @@
       margin: 0 auto;
     }
 
-    /* ---------- Hero ---------- */
-
     .hero {
       position: relative;
       overflow: hidden;
@@ -132,8 +130,6 @@
       transform: translateY(-1px);
     }
 
-    /* ---------- Content ---------- */
-
     .content {
       padding: 46px 0 72px;
     }
@@ -181,8 +177,6 @@
       background: var(--secondary-light);
       color: var(--primary-dark);
     }
-
-    /* ---------- Code cards ---------- */
 
     .code-card {
       margin: 24px 0;
@@ -298,8 +292,6 @@
       white-space: pre;
     }
 
-    /* ---------- Footer ---------- */
-
     footer {
       padding: 30px 0;
       border-top: 1px solid var(--secondary);
@@ -311,8 +303,6 @@
     footer p {
       margin: 0;
     }
-
-    /* ---------- Toast ---------- */
 
     .toast {
       position: fixed;
@@ -335,8 +325,6 @@
       opacity: 1;
       transform: translateY(0);
     }
-
-    /* ---------- Mobile ---------- */
 
     @media (max-width: 640px) {
       .container {
@@ -399,16 +387,14 @@
   <header class="hero">
     <div class="container hero-content">
       <span class="eyebrow">CSE • Compiler Design • Lex/Flex</span>
-
       <h1>Lex / Flex Lab Programs</h1>
-
       <p class="hero-text">
         A collection of simple Lex programs for laboratory practice.
         Each program includes a short description and a one-click copy button.
       </p>
 
       <nav class="quick-links" aria-label="Program navigation">
-        <a href="#second">Second</a><a href="#third">Third</a><a href="#fourth">Fourth</a><a href="#sixsth">Sixsth</a><a href="#seventh">Seventh</a><a href="#eighth">Eighth</a><a href="#ninth">Ninth</a>
+        <a href="#program-1">Keyword, Number &amp; Word Identifier</a><a href="#program-2">Uppercase Letter Sequence Identifier</a><a href="#program-3">Vowel &amp; Consonant Counter</a><a href="#program-4">Conjunction Detector</a><a href="#program-5">Line, Word, Space &amp; Character Counter</a><a href="#program-6">C Comment Counter</a><a href="#program-7">Simple Arithmetic Expression Analyzer</a>
       </nav>
     </div>
   </header>
@@ -426,12 +412,12 @@
     </section>
 
     
-    <article class="code-card" id="second">
+    <article class="code-card" id="program-1">
       <div class="card-header">
         <div class="title-area">
           <div class="number">PROGRAM 01</div>
-          <h2>Second</h2>
-          <p>Identifies selected keywords, integers, and alphabetic words from the input. Other characters are echoed unchanged.</p>
+          <h2>Keyword, Number &amp; Word Identifier</h2>
+          <p>Identifies selected keywords, numbers, and alphabetic words from the input. Other characters are echoed unchanged.</p>
         </div>
         <button class="copy-btn" type="button" data-target="code-1">
           <span class="copy-icon">⧉</span> Copy
@@ -462,12 +448,12 @@ int yywrap()
 }</code></pre>
     </article>
 
-    <article class="code-card" id="third">
+    <article class="code-card" id="program-2">
       <div class="card-header">
         <div class="title-area">
           <div class="number">PROGRAM 02</div>
-          <h2>Third</h2>
-          <p>Identifies and prints sequences of uppercase letters when they are followed by whitespace or a newline.</p>
+          <h2>Uppercase Letter Sequence Identifier</h2>
+          <p>Detects sequences of uppercase letters when they are followed by whitespace or a newline.</p>
         </div>
         <button class="copy-btn" type="button" data-target="code-2">
           <span class="copy-icon">⧉</span> Copy
@@ -497,12 +483,12 @@ int yywrap()
 }</code></pre>
     </article>
 
-    <article class="code-card" id="fourth">
+    <article class="code-card" id="program-3">
       <div class="card-header">
         <div class="title-area">
           <div class="number">PROGRAM 03</div>
-          <h2>Fourth</h2>
-          <p>Counts vowels and consonants in the input. Whitespace is ignored.</p>
+          <h2>Vowel &amp; Consonant Counter</h2>
+          <p>Counts vowels and consonants in the input while ignoring whitespace.</p>
         </div>
         <button class="copy-btn" type="button" data-target="code-3">
           <span class="copy-icon">⧉</span> Copy
@@ -534,11 +520,11 @@ int yywrap()
 }</code></pre>
     </article>
 
-    <article class="code-card" id="sixsth">
+    <article class="code-card" id="program-4">
       <div class="card-header">
         <div class="title-area">
           <div class="number">PROGRAM 04</div>
-          <h2>Sixsth</h2>
+          <h2>Conjunction Detector</h2>
           <p>Checks whether a sentence contains selected conjunctions such as and, or, because, but, if, then, or nevertheless.</p>
         </div>
         <button class="copy-btn" type="button" data-target="code-4">
@@ -572,12 +558,12 @@ int yywrap()
 }</code></pre>
     </article>
 
-    <article class="code-card" id="seventh">
+    <article class="code-card" id="program-5">
       <div class="card-header">
         <div class="title-area">
           <div class="number">PROGRAM 05</div>
-          <h2>Seventh</h2>
-          <p>Counts lines, whitespace spaces/tabs, words, and total characters using yyleng.</p>
+          <h2>Line, Word, Space &amp; Character Counter</h2>
+          <p>Counts lines, spaces/tabs, words, and total characters using Lex/Flex matching and yyleng.</p>
         </div>
         <button class="copy-btn" type="button" data-target="code-5">
           <span class="copy-icon">⧉</span> Copy
@@ -613,12 +599,12 @@ int yywrap()
 }</code></pre>
     </article>
 
-    <article class="code-card" id="eighth">
+    <article class="code-card" id="program-6">
       <div class="card-header">
         <div class="title-area">
           <div class="number">PROGRAM 06</div>
-          <h2>Eighth</h2>
-          <p>Attempts to count single-line and multi-line C comments. This is a simple lab exercise rather than a complete C comment lexer.</p>
+          <h2>C Comment Counter</h2>
+          <p>Counts single-line and multi-line C-style comments. This is a simple lab exercise.</p>
         </div>
         <button class="copy-btn" type="button" data-target="code-6">
           <span class="copy-icon">⧉</span> Copy
@@ -651,12 +637,12 @@ int yywrap()
 }</code></pre>
     </article>
 
-    <article class="code-card" id="ninth">
+    <article class="code-card" id="program-7">
       <div class="card-header">
         <div class="title-area">
           <div class="number">PROGRAM 07</div>
-          <h2>Ninth</h2>
-          <p>Checks a simple arithmetic expression made from numbers and the + and * operators, then lists the numbers and operators found.</p>
+          <h2>Simple Arithmetic Expression Analyzer</h2>
+          <p>Analyzes a simple arithmetic expression containing numbers and the + and * operators, then identifies the numbers and operators.</p>
         </div>
         <button class="copy-btn" type="button" data-target="code-7">
           <span class="copy-icon">⧉</span> Copy
