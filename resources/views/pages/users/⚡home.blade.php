@@ -74,6 +74,7 @@ new class () extends Component {
 };
 ?>
 
+
 <x-slot:title>
     Welcome to {{ config('app.name') }} - Best Products Online
 </x-slot:title>
