@@ -50,7 +50,7 @@ new class () extends Component {
                         })
                         ->select('product_id')
                         ->orderByRaw('embedding <=> ?::vector', [$queryEmbedding])
-                        ->limit(5)
+                        ->limit(10)
                         ->pluck('product_id')
                         ->unique();
 
