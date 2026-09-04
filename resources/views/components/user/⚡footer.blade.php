@@ -74,7 +74,7 @@ new class () extends Component {
             <p class="text-center">All rights reserved</p>
         @else
             <div class="container mx-auto text-center text-sm">
-                This website is developed by <a href="https://github.com/zulfikar2022" target="_blank" class="underline">Sayed Zulfikar Mahmud and </a> and  <a href="https://github.com/ADIBA-ANJUM-HSTU" target="_blank" class="underline">Adiba Anjum</a>
+                This website is developed by <a href="https://github.com/zulfikar2022" target="_blank" class="underline">Sayed Zulfikar Mahmud and </a> | Whatsapp: <a href="https://wa.me/8801309417042" target="_blank" class="underline">+8801309417042</a>
             </div>
         @endif
     </div>
