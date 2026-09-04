@@ -69,7 +69,7 @@ new class () extends Component {
     </div>
     @endif
     
-    <div data-key="{{ ! config('services.is_for_department') }}" class="bg-red-800 text-white py-1">
+    <div data-key="{{ ! config('services.is_for_department') }}" class="bg-slate-800 text-white py-1">
         @if (config('services.is_for_department'))
             <p class="text-center">All rights reserved</p>
         @else
