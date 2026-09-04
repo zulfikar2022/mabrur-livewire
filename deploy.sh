@@ -17,7 +17,7 @@ composer install --no-dev --optimize-autoloader --no-interaction
 
 # 3. Build frontend assets with Vite
 echo "🎨 Compiling assets with Vite..."
-npm install
+#npm install
 npm run build
 
 
