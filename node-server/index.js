@@ -1,6 +1,14 @@
 import express from "express";
 import cors from "cors";
 import { pipeline } from "@huggingface/transformers";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const logFile = path.join(__dirname, "node.logs");
 
 const app = express();
 const PORT = 5000;
@@ -50,6 +58,14 @@ app.post("/embed", async (req, res) => {
                 `Model output dimension expected 384, but got ${embedding.length}`,
             );
         }
+        // there is a node.logs file at the same directory where this index.js file resides.
+        // your task is to append the following log message to that file: "Embedding generated successfully for content: [content] with dimension: [dimension]". Replace [content] and [dimension] with the actual values.
+
+        const logMessage = `Embedding generated successfully for content: ${content} with dimension: ${embedding.length}\n`;
+        fs.appendFileSync(
+            logFile,
+            `Embedding generated successfully for content: ${content} with dimension: ${embedding.length}\n`,
+        );
 
         return res.json({
             success: true,
@@ -73,3 +89,4 @@ initializeModel().then(() => {
         );
     });
 });
+
